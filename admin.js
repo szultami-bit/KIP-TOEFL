@@ -1,8 +1,10 @@
+(function(){
+"use strict";
 const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
     const SUPABASE_URL = cfg.SUPABASE_URL || cfg.url || "";
     const SUPABASE_ANON_KEY = cfg.SUPABASE_ANON_KEY || cfg.anonKey || "";
 
-    let supabase = null;
+    let sbClient = null;
     let allRows = [];
     let filteredRows = [];
 
@@ -223,14 +225,14 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
         let error = null;
 
         // Try ordered query
-        ({ data, error } = await supabase
+        ({ data, error } = await sbClient
           .from("test_attempts")
           .select("*")
           .order("created_at", { ascending:false }));
 
         // fallback if created_at does not exist
         if(error){
-          ({ data, error } = await supabase
+          ({ data, error } = await sbClient
             .from("test_attempts")
             .select("*"));
         }
@@ -272,7 +274,7 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
       loginBtn.textContent = "Signing in...";
 
       try{
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
         if(error) throw error;
         if(!data || !data.session) throw new Error("Login berhasil tetapi session tidak terbentuk.");
 
@@ -292,7 +294,7 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
       signOutBtn.disabled = true;
       signOutBtn.textContent = "Signing out...";
       try{
-        await supabase.auth.signOut();
+        await sbClient.auth.signOut();
       }catch(err){
         console.error(err);
       }finally{
@@ -305,7 +307,7 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
       const diagBox = document.getElementById("diagBox");
 
       try{
-        if(diagBox) diagBox.textContent = "Diagnostic: JavaScript aktif";
+        if(diagBox) diagBox.textContent = "Diagnostic: JS V1603 aktif";
 
         if(!SUPABASE_URL || !SUPABASE_ANON_KEY){
           showLogin();
@@ -321,10 +323,10 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
           return;
         }
 
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        if(diagBox) diagBox.textContent = "Diagnostic: JS OK • CONFIG OK • SDK OK";
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        if(diagBox) diagBox.textContent = "Diagnostic: V1603 • JS OK • CONFIG OK • SDK OK";
 
-        const { data, error } = await supabase.auth.getSession();
+        const { data, error } = await sbClient.auth.getSession();
         if(error) throw error;
 
         if(data?.session){
@@ -349,7 +351,7 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
         return;
       }
 
-      if(!supabase){
+      if(!sbClient){
         showMessage("error", "Supabase belum siap. Lihat kotak Diagnostic di bawah.");
         return;
       }
@@ -367,3 +369,5 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
     searchInput.addEventListener("input", applyFilter);
 
     init();
+
+})();
