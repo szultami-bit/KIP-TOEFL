@@ -582,9 +582,12 @@
               <input id="password" class="input" type="password" placeholder="Masukkan password" autocomplete="new-password" required />
             </div>
 
-            <button id="loginBtn" class="primary-btn" type="submit">Sign In</button>
+            <button id="loginBtn" class="primary-btn" type="button">Sign In</button>
 
             <div id="loginMessage" class="message"></div>
+            <div id="diagBox" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:#f8fafc;border:1px solid #d7deea;font-size:12px;color:#475569;font-weight:700;">
+              Diagnostic: JS belum aktif
+            </div>
           </form>
         </div>
       </div>
@@ -973,41 +976,64 @@
     }
 
     async function init(){
-      if(!SUPABASE_URL || !SUPABASE_ANON_KEY){
+      const diagBox = document.getElementById("diagBox");
+
+      try{
+        if(diagBox) diagBox.textContent = "Diagnostic: JavaScript aktif";
+
+        if(!SUPABASE_URL || !SUPABASE_ANON_KEY){
+          showLogin();
+          showMessage("error", "Supabase config belum terbaca. Cek config.js.");
+          if(diagBox) diagBox.textContent = "Diagnostic: JS OK • CONFIG GAGAL";
+          return;
+        }
+
+        if(!window.supabase || typeof window.supabase.createClient !== "function"){
+          showLogin();
+          showMessage("error", "Supabase JavaScript SDK gagal dimuat.");
+          if(diagBox) diagBox.textContent = "Diagnostic: JS OK • CONFIG OK • SDK GAGAL";
+          return;
+        }
+
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        if(diagBox) diagBox.textContent = "Diagnostic: JS OK • CONFIG OK • SDK OK";
+
+        const { data, error } = await supabase.auth.getSession();
+        if(error) throw error;
+
+        if(data?.session){
+          await showDashboard();
+        }else{
+          showLogin();
+        }
+      }catch(err){
+        console.error("INIT ERROR:", err);
         showLogin();
-        showMessage("error", "Supabase config belum terbaca. Cek file config.js.");
-        return;
-      }
-
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-      supabase.auth.onAuthStateChange((_event, session) => {
-        setTimeout(() => {
-          if(session){
-            showDashboard();
-          }else{
-            showLogin();
-          }
-        }, 0);
-      });
-
-      const { data, error } = await supabase.auth.getSession();
-      if(error){
-        console.error(error);
-      }
-
-      if(data?.session){
-        await showDashboard();
-      }else{
-        showLogin();
+        showMessage("error", "Init error: " + (err.message || "Unknown error"));
+        if(diagBox) diagBox.textContent = "Diagnostic: INIT ERROR";
       }
     }
 
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    loginBtn.addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
+
+      if(!email || !password){
+        showMessage("error", "Isi email dan password terlebih dahulu.");
+        return;
+      }
+
+      if(!supabase){
+        showMessage("error", "Supabase belum siap. Lihat kotak Diagnostic di bawah.");
+        return;
+      }
+
       await signIn(email, password);
+    });
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      loginBtn.click();
     });
 
     signOutBtn.addEventListener("click", signOut);
