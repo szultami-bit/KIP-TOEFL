@@ -20,6 +20,11 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
     const footerNote = document.getElementById("footerNote");
     const toolbarInfo = document.getElementById("toolbarInfo");
     const statusNote = document.getElementById("statusNote");
+    const detailModal = document.getElementById("detailModal");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailSubtitle = document.getElementById("detailSubtitle");
+    const detailBody = document.getElementById("detailBody");
+    const detailCloseBtn = document.getElementById("detailCloseBtn");
 
     const statTotal = document.getElementById("statTotal");
     const statRaw = document.getElementById("statRaw");
@@ -152,6 +157,123 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
       statTime.textContent = formatTime(avgTime);
     }
 
+
+    function getItemResults(row){
+      let items = row?.source?.item_results ?? [];
+      if(typeof items === "string"){
+        try{ items = JSON.parse(items); }catch(_e){ items = []; }
+      }
+      return Array.isArray(items) ? items : [];
+    }
+
+    function buildWeaknesses(items){
+      const missed = items.filter(item => item && item.is_correct !== true);
+      const map = new Map();
+
+      missed.forEach(item => {
+        const topic = item.topic || "Other";
+        map.set(topic, (map.get(topic) || 0) + 1);
+      });
+
+      return [...map.entries()]
+        .sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    }
+
+    function openDetail(index){
+      const row = allRows[index];
+      if(!row) return;
+
+      const items = getItemResults(row);
+      const weaknesses = buildWeaknesses(items);
+
+      detailTitle.textContent = row.participant || "Participant Detail";
+      detailSubtitle.textContent = `${row.dateText} • Version ${row.version || "-"} • ${row.whatsapp || "-"}`;
+
+      const summary = `
+        <div class="detail-summary">
+          <div class="detail-stat"><span>Raw Score</span><strong>${row.rawScore}/40</strong></div>
+          <div class="detail-stat"><span>Part A</span><strong>${row.partAScore}/15</strong></div>
+          <div class="detail-stat"><span>Part B</span><strong>${row.partBScore}/25</strong></div>
+          <div class="detail-stat"><span>Section 2</span><strong>${row.section2Score}/68</strong></div>
+          <div class="detail-stat"><span>Accuracy</span><strong>${row.accuracy}%</strong></div>
+        </div>
+      `;
+
+      let weaknessHtml = "";
+      if(items.length){
+        weaknessHtml = `
+          <div class="weakness-box">
+            <h4>Topics needing attention</h4>
+            <div class="weakness-list">
+              ${
+                weaknesses.length
+                  ? weaknesses.map(([topic,count]) =>
+                      `<span class="weakness-chip">${escapeHtml(topic)} · ${count} missed</span>`
+                    ).join("")
+                  : `<span class="weakness-chip">No incorrect items in this attempt</span>`
+              }
+            </div>
+          </div>
+        `;
+      }
+
+      let tableHtml = "";
+      if(items.length){
+        tableHtml = `
+          <div class="detail-table-wrap">
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Part</th>
+                  <th>Topic</th>
+                  <th>Difficulty</th>
+                  <th>Selected</th>
+                  <th>Correct</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${items.map(item => {
+                  const selected = item.selected ?? "—";
+                  const correct = item.correct ?? "—";
+                  const unanswered = item.selected === null || item.selected === undefined || item.selected === "";
+                  const resultText = unanswered ? "Unanswered" : (item.is_correct === true ? "Correct" : "Incorrect");
+                  const resultClass = unanswered ? "result-unanswered" : (item.is_correct === true ? "result-correct" : "result-wrong");
+                  return `
+                    <tr>
+                      <td><strong>${escapeHtml(item.item_no ?? "-")}</strong></td>
+                      <td>${escapeHtml(item.part ?? "-")}</td>
+                      <td>${escapeHtml(item.topic ?? "-")}</td>
+                      <td>${escapeHtml(item.difficulty ?? "-")}</td>
+                      <td>${escapeHtml(selected)}</td>
+                      <td>${escapeHtml(correct)}</td>
+                      <td class="${resultClass}">${resultText}</td>
+                    </tr>
+                  `;
+                }).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }else{
+        tableHtml = `
+          <div class="empty" style="border:1px solid var(--line);border-radius:16px">
+            Detailed item data is not available for this older record.
+          </div>
+        `;
+      }
+
+      detailBody.innerHTML = summary + weaknessHtml + tableHtml;
+      detailModal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDetail(){
+      detailModal.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
     function renderTable(rows){
       if(!rows.length){
         resultsBody.innerHTML = `
@@ -183,6 +305,7 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
             <td>${formatTime(row.timeSeconds)}</td>
             <td>${row.unanswered}</td>
             <td>${statusBadge}</td>
+            <td><button class="detail-btn" type="button" data-attempt-id="${escapeHtml(row.id)}">View</button></td>
           </tr>
         `;
       }).join("");
@@ -304,27 +427,21 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
     }
 
     async function init(){
-      const diagBox = document.getElementById("diagBox");
-
-      try{
-        if(diagBox) diagBox.textContent = "Diagnostic: JS V1603 aktif";
+try{
 
         if(!SUPABASE_URL || !SUPABASE_ANON_KEY){
           showLogin();
           showMessage("error", "Supabase config belum terbaca. Cek config.js.");
-          if(diagBox) diagBox.textContent = "Diagnostic: JS OK • CONFIG GAGAL";
           return;
         }
 
         if(!window.supabase || typeof window.supabase.createClient !== "function"){
           showLogin();
           showMessage("error", "Supabase JavaScript SDK gagal dimuat.");
-          if(diagBox) diagBox.textContent = "Diagnostic: JS OK • CONFIG OK • SDK GAGAL";
           return;
         }
 
         sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        if(diagBox) diagBox.textContent = "Diagnostic: V1603 • JS OK • CONFIG OK • SDK OK";
 
         const { data, error } = await sbClient.auth.getSession();
         if(error) throw error;
@@ -338,7 +455,6 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
         console.error("INIT ERROR:", err);
         showLogin();
         showMessage("error", "Init error: " + (err.message || "Unknown error"));
-        if(diagBox) diagBox.textContent = "Diagnostic: INIT ERROR";
       }
     }
 
@@ -352,7 +468,7 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
       }
 
       if(!sbClient){
-        showMessage("error", "Supabase belum siap. Lihat kotak Diagnostic di bawah.");
+        showMessage("error", "Supabase belum siap. Muat ulang halaman lalu coba lagi.");
         return;
       }
 
@@ -367,6 +483,23 @@ const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
     signOutBtn.addEventListener("click", signOut);
     refreshBtn.addEventListener("click", loadResults);
     searchInput.addEventListener("input", applyFilter);
+
+    resultsBody.addEventListener("click", (event) => {
+      const btn = event.target.closest(".detail-btn");
+      if(!btn) return;
+
+      const attemptId = btn.dataset.attemptId;
+      const index = allRows.findIndex(row => String(row.id) === String(attemptId));
+      if(index >= 0) openDetail(index);
+    });
+
+    detailCloseBtn.addEventListener("click", closeDetail);
+    detailModal.addEventListener("click", (event) => {
+      if(event.target === detailModal) closeDetail();
+    });
+    document.addEventListener("keydown", (event) => {
+      if(event.key === "Escape" && !detailModal.classList.contains("hidden")) closeDetail();
+    });
 
     init();
 
