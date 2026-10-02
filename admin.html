@@ -943,11 +943,15 @@
       loginBtn.textContent = "Signing in...";
 
       try{
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if(error) throw error;
+        if(!data || !data.session) throw new Error("Login berhasil tetapi session tidak terbentuk.");
+
         showMessage("success", "Login berhasil. Memuat dashboard...");
+        await showDashboard();
       }catch(err){
         console.error(err);
+        showLogin();
         showMessage("error", err.message || "Login gagal.");
       }finally{
         loginBtn.disabled = false;
@@ -977,12 +981,14 @@
 
       supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      supabase.auth.onAuthStateChange(async (_event, session) => {
-        if(session){
-          await showDashboard();
-        }else{
-          showLogin();
-        }
+      supabase.auth.onAuthStateChange((_event, session) => {
+        setTimeout(() => {
+          if(session){
+            showDashboard();
+          }else{
+            showLogin();
+          }
+        }, 0);
       });
 
       const { data, error } = await supabase.auth.getSession();
