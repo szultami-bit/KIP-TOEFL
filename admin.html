@@ -521,6 +521,107 @@
       .brand-text h1{font-size:17px}
       .brand-text p{font-size:12px}
     }
+
+    /* ===== PARTICIPANT DETAIL MODAL ===== */
+    .detail-btn{
+      border:1px solid #c7d7fe;
+      background:#eef4ff;
+      color:#1d4ed8;
+      font-weight:900;
+      border-radius:12px;
+      padding:8px 12px;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .detail-btn:hover{background:#e0eaff}
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(11,23,54,.62);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+      z-index:1000;
+    }
+    .modal-card{
+      width:min(1120px, 96vw);
+      max-height:92vh;
+      overflow:hidden;
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 28px 90px rgba(11,23,54,.30);
+      display:flex;
+      flex-direction:column;
+    }
+    .modal-head{
+      padding:20px 22px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:flex-start;
+      background:#f8fbff;
+    }
+    .modal-head h3{margin:0;font-size:24px}
+    .modal-head p{margin:5px 0 0;color:var(--muted);font-weight:600}
+    .modal-close{
+      border:1px solid var(--line);
+      background:#fff;
+      width:40px;height:40px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:22px;
+      line-height:1;
+      color:#334155;
+      flex:0 0 auto;
+    }
+    .modal-body{padding:20px 22px 26px;overflow:auto}
+    .detail-summary{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:10px;
+      margin-bottom:18px;
+    }
+    .detail-stat{
+      border:1px solid var(--line);
+      border-radius:15px;
+      padding:13px 14px;
+      background:#fff;
+    }
+    .detail-stat span{display:block;font-size:11px;color:var(--muted);font-weight:800;margin-bottom:4px}
+    .detail-stat strong{font-size:18px}
+    .weakness-box{
+      border:1px solid #fed7aa;
+      background:#fff7ed;
+      border-radius:16px;
+      padding:15px 16px;
+      margin-bottom:18px;
+    }
+    .weakness-box h4{margin:0 0 9px;font-size:15px;color:#9a3412}
+    .weakness-list{display:flex;gap:8px;flex-wrap:wrap}
+    .weakness-chip{
+      display:inline-flex;
+      padding:7px 10px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #fed7aa;
+      font-size:12px;
+      font-weight:800;
+      color:#9a3412;
+    }
+    .detail-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px}
+    .detail-table{min-width:820px}
+    .detail-table th,.detail-table td{padding:11px 12px;font-size:13px}
+    .result-correct{color:#166534;font-weight:900}
+    .result-wrong{color:#be123c;font-weight:900}
+    .result-unanswered{color:#b45309;font-weight:900}
+    @media(max-width:760px){
+      .detail-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .modal-backdrop{padding:10px}
+      .modal-head,.modal-body{padding:16px}
+    }
+
   </style>
 </head>
 <body>
@@ -585,9 +686,6 @@
             <button id="loginBtn" class="primary-btn" type="button">Sign In</button>
 
             <div id="loginMessage" class="message"></div>
-            <div id="diagBox" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:#f8fafc;border:1px solid #d7deea;font-size:12px;color:#475569;font-weight:700;">
-              Diagnostic: JS belum aktif
-            </div>
           </form>
         </div>
       </div>
@@ -658,10 +756,11 @@
                 <th>Time</th>
                 <th>Unanswered</th>
                 <th>Status</th>
+                <th>Details</th>
               </tr>
             </thead>
             <tbody id="resultsBody">
-              <tr><td colspan="13" class="loading">Loading assessment data...</td></tr>
+              <tr><td colspan="14" class="loading">Loading assessment data...</td></tr>
             </tbody>
           </table>
         </div>
