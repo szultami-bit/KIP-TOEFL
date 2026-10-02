@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KIP Assessment Admin - V1.6.1</title>
+  <title>KIP Assessment Admin - V1.6</title>
 
   <script src="config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -545,7 +545,7 @@
       </div>
 
       <div class="topbar-right">
-        <div class="pill">V1.6.1 · Admin Dashboard</div>
+        <div class="pill">V1.6 · Admin Dashboard</div>
         <button id="signOutBtn" class="ghost-btn hidden">Sign Out</button>
       </div>
     </header>
@@ -571,15 +571,15 @@
           <h3>Administrator Login</h3>
           <p>Masuk menggunakan akun admin yang sudah dibuat di Supabase Authentication.</p>
 
-          <form id="loginForm">
+          <form id="loginForm" autocomplete="off">
             <div class="field">
               <label for="email">Email</label>
-              <input id="email" class="input" type="email" placeholder="admin@contoh.com" required />
+              <input id="email" class="input" type="email" placeholder="admin@contoh.com" autocomplete="off" autocapitalize="none" spellcheck="false" required />
             </div>
 
             <div class="field">
               <label for="password">Password</label>
-              <input id="password" class="input" type="password" placeholder="Masukkan password" required />
+              <input id="password" class="input" type="password" placeholder="Masukkan password" autocomplete="new-password" required />
             </div>
 
             <button id="loginBtn" class="primary-btn" type="submit">Sign In</button>
