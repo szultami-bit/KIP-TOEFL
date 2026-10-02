@@ -1,608 +1,1014 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KIP Assessment Admin — V1.6</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KIP Assessment Admin - V1.6.1</title>
 
-<script src="config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
-:root{
-  --navy:#0f172a;
-  --blue:#2563eb;
-  --bg:#f4f7fb;
-  --card:#fff;
-  --line:#e2e8f0;
-  --muted:#64748b;
-  --green:#16a34a;
-  --red:#dc2626;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
-  background:var(--bg);
-  color:#172033;
-}
-.hidden{display:none!important}
-.topbar{
-  height:72px;
-  background:var(--navy);
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 28px;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-weight:800;
-}
-.logo{
-  width:42px;
-  height:42px;
-  background:#fff;
-  color:var(--navy);
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  font-weight:900;
-}
-.version{
-  font-size:12px;
-  padding:7px 11px;
-  border:1px solid rgba(255,255,255,.2);
-  border-radius:999px;
-  background:rgba(255,255,255,.1);
-}
-.container{
-  max-width:1400px;
-  margin:auto;
-  padding:30px 20px 60px;
-}
-.card{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:18px;
-  box-shadow:0 12px 34px rgba(15,23,42,.07);
-}
-.login-wrap{
-  max-width:430px;
-  margin:70px auto;
-  padding:30px;
-}
-.login-wrap h1{
-  margin:0 0 8px;
-}
-.login-wrap p{
-  color:var(--muted);
-  line-height:1.6;
-}
-label{
-  display:block;
-  margin:18px 0 7px;
-  font-size:13px;
-  font-weight:750;
-}
-input{
-  width:100%;
-  padding:13px 14px;
-  border:1px solid #cbd5e1;
-  border-radius:11px;
-  font:inherit;
-}
-button{
-  border:0;
-  cursor:pointer;
-  font:inherit;
-  font-weight:800;
-}
-.btn{
-  padding:13px 16px;
-  border-radius:11px;
-}
-.primary{
-  background:var(--blue);
-  color:#fff;
-}
-.ghost{
-  background:#fff;
-  border:1px solid var(--line);
-}
-.login-wrap .primary{
-  width:100%;
-  margin-top:20px;
-}
-.message{
-  margin-top:14px;
-  font-size:13px;
-  line-height:1.5;
-}
-.error{color:var(--red)}
-.success{color:var(--green)}
+  <style>
+    :root{
+      --navy:#0b1736;
+      --navy2:#12224d;
+      --red:#d7193f;
+      --blue:#2451e6;
+      --bg:#eef3fb;
+      --card:#ffffff;
+      --text:#16213e;
+      --muted:#64748b;
+      --line:#d7deea;
+      --soft:#f7f9fd;
+      --green:#16a34a;
+      --green-soft:#e9f9ef;
+      --warn:#f59e0b;
+      --danger:#dc2626;
+      --shadow:0 10px 25px rgba(11,23,54,.08);
+      --radius:22px;
+    }
 
-.dashboard-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  margin-bottom:22px;
-}
-.dashboard-head h1{margin:0}
-.dashboard-head p{
-  margin:5px 0 0;
-  color:var(--muted);
-}
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-  margin-bottom:20px;
-}
-.stat{
-  padding:20px;
-}
-.stat small{
-  color:var(--muted);
-  display:block;
-}
-.stat strong{
-  font-size:30px;
-  display:block;
-  margin-top:7px;
-}
-.toolbar{
-  padding:16px;
-  display:flex;
-  gap:12px;
-  align-items:center;
-  margin-bottom:16px;
-}
-.toolbar input{
-  max-width:420px;
-}
-.table-card{
-  overflow:hidden;
-}
-.table-scroll{
-  overflow:auto;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:1100px;
-}
-th,td{
-  padding:13px 14px;
-  border-bottom:1px solid var(--line);
-  text-align:left;
-  white-space:nowrap;
-  font-size:13px;
-}
-th{
-  background:#f8fafc;
-  color:#475569;
-  position:sticky;
-  top:0;
-}
-.name{
-  font-weight:750;
-}
-.score{
-  font-weight:900;
-  color:var(--blue);
-}
-.empty{
-  padding:40px;
-  text-align:center;
-  color:var(--muted);
-}
-.status{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:10px;
-}
-@media(max-width:800px){
-  .stats{grid-template-columns:1fr 1fr}
-  .dashboard-head{align-items:flex-start;flex-direction:column}
-}
-</style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg, #f6f8fc 0%, #eef3fb 100%);
+    }
+
+    .hidden{display:none !important}
+    .wrap{min-height:100vh}
+
+    /* ===== TOP BAR ===== */
+    .topbar{
+      background:linear-gradient(135deg, var(--navy) 0%, #09142d 100%);
+      color:#fff;
+      padding:14px 24px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      position:sticky;
+      top:0;
+      z-index:20;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width:0;
+    }
+
+    .brand-logo{
+      width:60px;
+      height:60px;
+      border-radius:16px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      flex:0 0 auto;
+      box-shadow:0 4px 18px rgba(0,0,0,.18);
+    }
+
+    .brand-logo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      background:#fff;
+    }
+
+    .brand-fallback{
+      width:100%;
+      height:100%;
+      display:none;
+      place-items:center;
+      font-weight:800;
+      color:var(--navy);
+      font-size:22px;
+    }
+
+    .brand-text{
+      min-width:0;
+      line-height:1.15;
+    }
+
+    .brand-text h1{
+      margin:0;
+      font-size:19px;
+      font-weight:800;
+      letter-spacing:.1px;
+    }
+
+    .brand-text p{
+      margin:2px 0 0;
+      font-size:13px;
+      color:rgba(255,255,255,.82);
+      font-weight:600;
+    }
+
+    .topbar-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 16px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      font-size:14px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#22c55e;
+      box-shadow:0 0 0 3px rgba(34,197,94,.2);
+    }
+
+    .ghost-btn{
+      border:none;
+      background:#fff;
+      color:var(--navy);
+      font-weight:800;
+      font-size:15px;
+      border-radius:16px;
+      padding:12px 18px;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+
+    .ghost-btn:hover{transform:translateY(-1px)}
+    .ghost-btn:disabled{opacity:.5; cursor:not-allowed; transform:none}
+
+    /* ===== PAGE ===== */
+    .page{
+      max-width:1500px;
+      margin:0 auto;
+      padding:28px 24px 50px;
+    }
+
+    .hero{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:flex-start;
+      margin-bottom:22px;
+      flex-wrap:wrap;
+    }
+
+    .hero h2{
+      margin:0;
+      font-size:34px;
+      line-height:1.05;
+      letter-spacing:-.03em;
+    }
+
+    .hero p{
+      margin:8px 0 0;
+      font-size:18px;
+      color:var(--muted);
+      font-weight:500;
+    }
+
+    .status-note{
+      font-size:14px;
+      font-weight:700;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    /* ===== LOGIN ===== */
+    .login-shell{
+      max-width:460px;
+      margin:46px auto;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .login-head{
+      background:linear-gradient(135deg, var(--navy), var(--navy2));
+      color:#fff;
+      padding:22px 24px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .login-head .mini-logo{
+      width:58px;
+      height:58px;
+      border-radius:18px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+
+    .login-head .mini-logo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .login-body{
+      padding:24px;
+    }
+
+    .login-body h3{
+      margin:0 0 8px;
+      font-size:28px;
+      letter-spacing:-.03em;
+    }
+
+    .login-body p{
+      margin:0 0 20px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    .field{
+      margin-bottom:14px;
+    }
+
+    .field label{
+      display:block;
+      font-weight:800;
+      font-size:14px;
+      margin-bottom:8px;
+      color:#24324b;
+    }
+
+    .input{
+      width:100%;
+      padding:15px 16px;
+      border:1.5px solid var(--line);
+      border-radius:16px;
+      font-size:15px;
+      outline:none;
+      background:#fff;
+      color:var(--text);
+    }
+
+    .input:focus{
+      border-color:#7aa2ff;
+      box-shadow:0 0 0 4px rgba(36,81,230,.1);
+    }
+
+    .primary-btn{
+      width:100%;
+      border:none;
+      background:linear-gradient(135deg, var(--red), #c81439);
+      color:#fff;
+      font-weight:800;
+      font-size:16px;
+      border-radius:16px;
+      padding:14px 18px;
+      cursor:pointer;
+      box-shadow:0 10px 18px rgba(215,25,63,.25);
+    }
+
+    .primary-btn:hover{transform:translateY(-1px)}
+    .primary-btn:disabled{opacity:.65; cursor:not-allowed; transform:none}
+
+    .message{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:600;
+      line-height:1.45;
+      display:none;
+    }
+
+    .message.show{display:block}
+    .message.error{
+      background:#fff1f2;
+      color:#9f1239;
+      border:1px solid #fecdd3;
+    }
+
+    .message.success{
+      background:#ecfdf5;
+      color:#166534;
+      border:1px solid #bbf7d0;
+    }
+
+    /* ===== DASHBOARD ===== */
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:18px;
+      margin-bottom:22px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .stat-card{
+      padding:26px 28px;
+      min-height:142px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .stat-label{
+      font-size:14px;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .stat-value{
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.03em;
+      line-height:1.05;
+    }
+
+    .toolbar{
+      padding:22px;
+      margin-bottom:22px;
+    }
+
+    .toolbar-row{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .search-box{
+      flex:1 1 420px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .search-box .input{
+      flex:1 1 300px;
+      min-width:260px;
+    }
+
+    .secondary-btn{
+      border:1.5px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      font-weight:800;
+      font-size:15px;
+      border-radius:16px;
+      padding:14px 22px;
+      cursor:pointer;
+    }
+
+    .secondary-btn:hover{
+      background:#f8fbff;
+    }
+
+    .table-card{
+      overflow:hidden;
+    }
+
+    .table-wrap{
+      width:100%;
+      overflow:auto;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:1180px;
+    }
+
+    th, td{
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:middle;
+    }
+
+    th{
+      background:#f8fbff;
+      font-size:13.5px;
+      text-transform:none;
+      letter-spacing:.01em;
+      color:#475569;
+      font-weight:900;
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+
+    td{
+      font-size:14px;
+      color:#1f2a44;
+      font-weight:600;
+    }
+
+    tbody tr:hover{
+      background:#fbfdff;
+    }
+
+    .score-link{
+      color:var(--blue);
+      font-weight:900;
+      text-decoration:none;
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .empty{
+      padding:36px 22px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    .footer-note{
+      margin-top:14px;
+      font-size:14px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .badge-soft{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      border:1px solid var(--line);
+      background:#fff;
+      white-space:nowrap;
+    }
+
+    .badge-green{
+      background:var(--green-soft);
+      color:#166534;
+      border-color:#bbf7d0;
+    }
+
+    .badge-blue{
+      background:#eef4ff;
+      color:#1d4ed8;
+      border-color:#c7d7fe;
+    }
+
+    .badge-red{
+      background:#fff1f2;
+      color:#be123c;
+      border-color:#fecdd3;
+    }
+
+    .loading{
+      padding:26px 22px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .mini{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    @media (max-width:1100px){
+      .stats-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+
+    @media (max-width:760px){
+      .topbar{
+        padding:14px 16px;
+        align-items:flex-start;
+      }
+
+      .page{padding:18px 14px 40px}
+      .hero h2{font-size:28px}
+      .hero p{font-size:16px}
+      .stats-grid{grid-template-columns:1fr}
+      .search-box{flex-direction:column}
+      .search-box .input{min-width:0}
+      .brand-logo{width:52px;height:52px}
+      .brand-text h1{font-size:17px}
+      .brand-text p{font-size:12px}
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
 
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">KIP</div>
-    <div>
-      KIP Assessment
-      <div style="font-size:12px;font-weight:500;opacity:.7">
-        Administrator Dashboard
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo">
+          <img
+            src="kip-logo.jpg"
+            alt="KIP Logo"
+            onerror="this.style.display='none'; document.getElementById('brandFallback').style.display='grid';"
+          />
+          <div id="brandFallback" class="brand-fallback">KIP</div>
+        </div>
+
+        <div class="brand-text">
+          <h1>KIP Assessment</h1>
+          <p>Administrator Dashboard</p>
+        </div>
       </div>
-    </div>
+
+      <div class="topbar-right">
+        <div class="pill">V1.6.1 · Admin Dashboard</div>
+        <button id="signOutBtn" class="ghost-btn hidden">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- LOGIN -->
+    <section id="loginSection" class="page">
+      <div class="login-shell">
+        <div class="login-head">
+          <div class="mini-logo">
+            <img
+              src="kip-logo.jpg"
+              alt="KIP Logo"
+              onerror="this.style.display='none';"
+            />
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:900;">KIP Assessment</div>
+            <div style="font-size:13px;opacity:.86;font-weight:600;">Admin secure login</div>
+          </div>
+        </div>
+
+        <div class="login-body">
+          <h3>Administrator Login</h3>
+          <p>Masuk menggunakan akun admin yang sudah dibuat di Supabase Authentication.</p>
+
+          <form id="loginForm">
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" class="input" type="email" placeholder="admin@contoh.com" required />
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" class="input" type="password" placeholder="Masukkan password" required />
+            </div>
+
+            <button id="loginBtn" class="primary-btn" type="submit">Sign In</button>
+
+            <div id="loginMessage" class="message"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboardSection" class="page hidden">
+      <div class="hero">
+        <div>
+          <h2>Assessment Dashboard</h2>
+          <p>Structure &amp; Written Expression participant results</p>
+          <div id="statusNote" class="status-note">Connected to Supabase</div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="card stat-card">
+          <div class="stat-label">Total Attempts</div>
+          <div id="statTotal" class="stat-value">0</div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-label">Average Raw Score</div>
+          <div id="statRaw" class="stat-value">0.0/40</div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-label">Average Section 2</div>
+          <div id="statSection2" class="stat-value">0.0</div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-label">Average Time</div>
+          <div id="statTime" class="stat-value">0:00</div>
+        </div>
+      </div>
+
+      <div class="card toolbar">
+        <div class="toolbar-row">
+          <div class="search-box">
+            <input
+              id="searchInput"
+              class="input"
+              type="text"
+              placeholder="Search participant, WhatsApp, or institution..."
+            />
+            <button id="refreshBtn" class="secondary-btn" type="button">Refresh</button>
+          </div>
+          <div id="toolbarInfo" class="mini">Ready</div>
+        </div>
+      </div>
+
+      <div class="card table-card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Participant</th>
+                <th>WhatsApp</th>
+                <th>Institution</th>
+                <th>Version</th>
+                <th>Raw</th>
+                <th>Part A</th>
+                <th>Part B</th>
+                <th>Section 2</th>
+                <th>Accuracy</th>
+                <th>Time</th>
+                <th>Unanswered</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody">
+              <tr><td colspan="13" class="loading">Loading assessment data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="footerNote" class="footer-note">0 assessment record(s) loaded.</div>
+    </section>
   </div>
-  <div class="version">V1.6 · Admin Dashboard</div>
-</header>
 
-<main class="container">
+  <script>
+    const cfg = window.KIP_CONFIG || window.KIP_SUPABASE || {};
+    const SUPABASE_URL = cfg.SUPABASE_URL || cfg.url || "";
+    const SUPABASE_ANON_KEY = cfg.SUPABASE_ANON_KEY || cfg.anonKey || "";
 
-<section id="loginScreen" class="card login-wrap">
-  <h1>Admin Login</h1>
-  <p>
-    Sign in with an authorized KIP Assessment administrator account.
-  </p>
+    let supabase = null;
+    let allRows = [];
+    let filteredRows = [];
 
-  <label>Email</label>
-  <input id="email" type="email" placeholder="admin@kip...">
+    const loginSection = document.getElementById("loginSection");
+    const dashboardSection = document.getElementById("dashboardSection");
+    const signOutBtn = document.getElementById("signOutBtn");
+    const loginForm = document.getElementById("loginForm");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginMessage = document.getElementById("loginMessage");
+    const searchInput = document.getElementById("searchInput");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const resultsBody = document.getElementById("resultsBody");
+    const footerNote = document.getElementById("footerNote");
+    const toolbarInfo = document.getElementById("toolbarInfo");
+    const statusNote = document.getElementById("statusNote");
 
-  <label>Password</label>
-  <input id="password" type="password" placeholder="••••••••">
+    const statTotal = document.getElementById("statTotal");
+    const statRaw = document.getElementById("statRaw");
+    const statSection2 = document.getElementById("statSection2");
+    const statTime = document.getElementById("statTime");
 
-  <button id="loginBtn" class="btn primary">Sign In</button>
+    function showMessage(type, text){
+      loginMessage.className = "message show " + type;
+      loginMessage.textContent = text;
+    }
 
-  <div id="loginMessage" class="message"></div>
-</section>
+    function hideMessage(){
+      loginMessage.className = "message";
+      loginMessage.textContent = "";
+    }
 
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
-<section id="dashboard" class="hidden">
+    function toNumber(value){
+      const n = Number(value);
+      return Number.isFinite(n) ? n : 0;
+    }
 
-  <div class="dashboard-head">
-    <div>
-      <h1>Assessment Dashboard</h1>
-      <p>Structure & Written Expression participant results</p>
-    </div>
+    function average(list){
+      if(!list.length) return 0;
+      return list.reduce((a,b)=>a+b,0) / list.length;
+    }
 
-    <button id="logoutBtn" class="btn ghost">Sign Out</button>
-  </div>
+    function formatDate(value){
+      if(!value) return "-";
+      const d = new Date(value);
+      if(Number.isNaN(d.getTime())) return "-";
+      return d.toLocaleString("en-GB", {
+        day:"2-digit",
+        month:"short",
+        year:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+    }
 
-  <div class="stats">
+    function formatTime(seconds){
+      const total = Math.max(0, Math.round(toNumber(seconds)));
+      const mm = Math.floor(total / 60);
+      const ss = total % 60;
+      return `${mm}:${String(ss).padStart(2,"0")}`;
+    }
 
-    <div class="card stat">
-      <small>Total Attempts</small>
-      <strong id="totalAttempts">0</strong>
-    </div>
+    function getField(row, names, fallback=""){
+      for(const name of names){
+        if(row && row[name] !== undefined && row[name] !== null && row[name] !== ""){
+          return row[name];
+        }
+      }
+      return fallback;
+    }
 
-    <div class="card stat">
-      <small>Average Raw Score</small>
-      <strong id="avgRaw">—</strong>
-    </div>
+    function normalizeAttempt(row){
+      const createdAt = getField(row, [
+        "created_at", "submitted_at", "finished_at", "completed_at", "ended_at", "inserted_at"
+      ], "");
 
-    <div class="card stat">
-      <small>Average Section 2</small>
-      <strong id="avgScaled">—</strong>
-    </div>
+      const rawScore = toNumber(getField(row, ["raw_score", "total_correct", "score_raw"], 0));
+      const partAScore = toNumber(getField(row, ["part_a_score", "score_part_a"], 0));
+      const partBScore = toNumber(getField(row, ["part_b_score", "score_part_b"], 0));
+      const section2Score = toNumber(getField(row, ["section2_score", "estimated_section2", "scaled_score"], 0));
 
-    <div class="card stat">
-      <small>Average Time</small>
-      <strong id="avgTime">—</strong>
-    </div>
+      let accuracy = getField(row, ["accuracy_percent", "accuracy", "raw_accuracy"], "");
+      if(accuracy === "" && rawScore){
+        accuracy = Math.round((rawScore / 40) * 100);
+      }
+      accuracy = toNumber(accuracy);
 
-  </div>
+      const timeSeconds = toNumber(getField(row, [
+        "time_used_seconds", "elapsed_seconds", "duration_seconds", "time_seconds"
+      ], 0));
 
-  <div class="card toolbar">
-    <input
-      id="searchInput"
-      type="search"
-      placeholder="Search participant, WhatsApp, or institution..."
-    >
-    <button id="refreshBtn" class="btn ghost">Refresh</button>
-  </div>
+      let unanswered = getField(row, ["unanswered_count", "unanswered", "blank_count"], "");
+      if(unanswered === "" && rawScore >= 0){
+        unanswered = Math.max(0, 40 - rawScore);
+      }
+      unanswered = toNumber(unanswered);
 
-  <div class="card table-card">
+      const autoSubmitted = getField(row, ["auto_submitted"], null);
 
-    <div class="table-scroll">
+      return {
+        id: getField(row, ["id"], ""),
+        dateRaw: createdAt,
+        dateText: formatDate(createdAt),
+        participant: getField(row, ["participant_name", "name"], "-"),
+        whatsapp: getField(row, ["whatsapp", "phone", "whatsapp_number"], "-"),
+        institution: getField(row, ["institution", "school", "school_institution"], "-"),
+        version: getField(row, ["version"], "-"),
+        rawScore,
+        partAScore,
+        partBScore,
+        section2Score,
+        accuracy,
+        timeSeconds,
+        unanswered,
+        autoSubmitted,
+        source: row
+      };
+    }
 
-      <table>
-        <thead>
+    function sortRows(rows){
+      return [...rows].sort((a,b) => {
+        const ad = a.dateRaw ? new Date(a.dateRaw).getTime() : 0;
+        const bd = b.dateRaw ? new Date(b.dateRaw).getTime() : 0;
+        return bd - ad;
+      });
+    }
+
+    function renderStats(rows){
+      statTotal.textContent = rows.length;
+
+      const avgRaw = average(rows.map(r => r.rawScore));
+      const avgSec2 = average(rows.map(r => r.section2Score));
+      const avgTime = average(rows.map(r => r.timeSeconds));
+
+      statRaw.textContent = `${avgRaw.toFixed(1)}/40`;
+      statSection2.textContent = avgSec2.toFixed(1);
+      statTime.textContent = formatTime(avgTime);
+    }
+
+    function renderTable(rows){
+      if(!rows.length){
+        resultsBody.innerHTML = `
           <tr>
-            <th>Date</th>
-            <th>Participant</th>
-            <th>WhatsApp</th>
-            <th>Institution</th>
-            <th>Raw</th>
-            <th>Part A</th>
-            <th>Part B</th>
-            <th>Section 2</th>
-            <th>Accuracy</th>
-            <th>Time</th>
-            <th>Unanswered</th>
+            <td colspan="13" class="empty">No assessment data found.</td>
           </tr>
-        </thead>
-
-        <tbody id="resultRows"></tbody>
-      </table>
-
-    </div>
-
-    <div id="emptyState" class="empty hidden">
-      No assessment records found.
-    </div>
-
-  </div>
-
-  <div id="dashboardStatus" class="status"></div>
-
-</section>
-
-</main>
-
-
-<script>
-
-const cfg = window.KIP_CONFIG || {};
-
-const db = window.supabase.createClient(
-  cfg.SUPABASE_URL,
-  cfg.SUPABASE_ANON_KEY
-);
-
-let records = [];
-
-const $ = id => document.getElementById(id);
-
-function formatTime(seconds){
-  seconds = Number(seconds || 0);
-
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-
-  return `${m}:${String(s).padStart(2,'0')}`;
-}
-
-function formatDate(value){
-
-  if(!value) return '—';
-
-  return new Date(value).toLocaleString('en-GB',{
-    day:'2-digit',
-    month:'short',
-    year:'numeric',
-    hour:'2-digit',
-    minute:'2-digit'
-  });
-
-}
-
-function showLogin(){
-
-  $('loginScreen').classList.remove('hidden');
-  $('dashboard').classList.add('hidden');
-
-}
-
-function showDashboard(){
-
-  $('loginScreen').classList.add('hidden');
-  $('dashboard').classList.remove('hidden');
-
-}
-
-async function login(){
-
-  const email = $('email').value.trim();
-  const password = $('password').value;
-
-  $('loginMessage').textContent = 'Signing in...';
-  $('loginMessage').className = 'message';
-
-  const {data,error} =
-    await db.auth.signInWithPassword({email,password});
-
-  if(error){
-
-    $('loginMessage').textContent = error.message;
-    $('loginMessage').className = 'message error';
-
-    return;
-
-  }
-
-  $('loginMessage').textContent = '';
-
-  showDashboard();
-
-  await loadResults();
-
-}
-
-async function logout(){
-
-  await db.auth.signOut();
-
-  showLogin();
-
-}
-
-async function loadResults(){
-
-  $('dashboardStatus').textContent = 'Loading assessment data...';
-
-  const {data,error} = await db
-    .from('test_attempts')
-    .select('*')
-    .order('submitted_at',{ascending:false})
-    .limit(500);
-
-  if(error){
-
-    $('dashboardStatus').textContent =
-      'Database access denied or not configured: ' + error.message;
-
-    records = [];
-
-    renderRows([]);
-
-    return;
-
-  }
-
-  records = data || [];
-
-  $('dashboardStatus').textContent =
-    `${records.length} assessment record(s) loaded.`;
-
-  updateStats(records);
-
-  renderRows(records);
-
-}
-
-function updateStats(data){
-
-  $('totalAttempts').textContent = data.length;
-
-  if(!data.length){
-
-    $('avgRaw').textContent = '—';
-    $('avgScaled').textContent = '—';
-    $('avgTime').textContent = '—';
-
-    return;
-
-  }
-
-  const avgRaw =
-    data.reduce((a,r)=>a + Number(r.raw_score || 0),0) / data.length;
-
-  const avgScaled =
-    data.reduce((a,r)=>a + Number(r.estimated_section2 || 0),0) / data.length;
-
-  const avgTime =
-    data.reduce((a,r)=>a + Number(r.elapsed_seconds || 0),0) / data.length;
-
-  $('avgRaw').textContent = avgRaw.toFixed(1) + '/40';
-
-  $('avgScaled').textContent = avgScaled.toFixed(1);
-
-  $('avgTime').textContent = formatTime(Math.round(avgTime));
-
-}
-
-function renderRows(data){
-
-  const body = $('resultRows');
-
-  body.innerHTML = '';
-
-  $('emptyState').classList.toggle('hidden',data.length > 0);
-
-  data.forEach(r=>{
-
-    const tr = document.createElement('tr');
-
-    tr.innerHTML = `
-      <td>${formatDate(r.submitted_at)}</td>
-      <td class="name">${escapeHtml(r.participant_name || '')}</td>
-      <td>${escapeHtml(r.whatsapp || '')}</td>
-      <td>${escapeHtml(r.institution || '—')}</td>
-
-      <td>
-        <span class="score">${r.raw_score}/40</span>
-      </td>
-
-      <td>${r.part_a_score}/15</td>
-
-      <td>${r.part_b_score}/25</td>
-
-      <td>
-        <span class="score">${r.estimated_section2}/68</span>
-      </td>
-
-      <td>${r.accuracy}%</td>
-
-      <td>${formatTime(r.elapsed_seconds)}</td>
-
-      <td>${r.unanswered}</td>
-    `;
-
-    body.appendChild(tr);
-
-  });
-
-}
-
-function escapeHtml(value){
-
-  return String(value)
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;')
-    .replaceAll('"','&quot;')
-    .replaceAll("'","&#039;");
-
-}
-
-function filterRecords(){
-
-  const q = $('searchInput')
-    .value
-    .trim()
-    .toLowerCase();
-
-  if(!q){
-
-    renderRows(records);
-
-    return;
-
-  }
-
-  const filtered = records.filter(r =>
-
-    String(r.participant_name || '')
-      .toLowerCase()
-      .includes(q)
-
-    ||
-
-    String(r.whatsapp || '')
-      .toLowerCase()
-      .includes(q)
-
-    ||
-
-    String(r.institution || '')
-      .toLowerCase()
-      .includes(q)
-
-  );
-
-  renderRows(filtered);
-
-}
-
-$('loginBtn').onclick = login;
-$('logoutBtn').onclick = logout;
-$('refreshBtn').onclick = loadResults;
-$('searchInput').oninput = filterRecords;
-
-$('password').addEventListener('keydown',e=>{
-  if(e.key === 'Enter') login();
-});
-
-(async()=>{
-
-  const {data} = await db.auth.getSession();
-
-  if(data.session){
-
-    showDashboard();
-
-    await loadResults();
-
-  }else{
-
-    showLogin();
-
-  }
-
-})();
-
-</script>
-
+        `;
+        footerNote.textContent = "0 assessment record(s) loaded.";
+        return;
+      }
+
+      resultsBody.innerHTML = rows.map(row => {
+        const statusBadge = row.autoSubmitted === true
+          ? `<span class="badge-soft badge-red">Auto-submitted</span>`
+          : `<span class="badge-soft badge-green">Completed</span>`;
+
+        return `
+          <tr>
+            <td>${escapeHtml(row.dateText)}</td>
+            <td><strong>${escapeHtml(row.participant)}</strong></td>
+            <td>${escapeHtml(row.whatsapp)}</td>
+            <td>${escapeHtml(row.institution)}</td>
+            <td><span class="badge-soft badge-blue">${escapeHtml(row.version || "-")}</span></td>
+            <td><a href="#" class="score-link">${row.rawScore}/40</a></td>
+            <td>${row.partAScore}/15</td>
+            <td>${row.partBScore}/25</td>
+            <td><a href="#" class="score-link">${row.section2Score}/68</a></td>
+            <td>${row.accuracy}%</td>
+            <td>${formatTime(row.timeSeconds)}</td>
+            <td>${row.unanswered}</td>
+            <td>${statusBadge}</td>
+          </tr>
+        `;
+      }).join("");
+
+      footerNote.textContent = `${rows.length} assessment record(s) loaded.`;
+    }
+
+    function applyFilter(){
+      const keyword = searchInput.value.trim().toLowerCase();
+
+      if(!keyword){
+        filteredRows = [...allRows];
+      } else {
+        filteredRows = allRows.filter(row => {
+          const haystack = [
+            row.participant,
+            row.whatsapp,
+            row.institution,
+            row.version,
+            row.dateText
+          ].join(" ").toLowerCase();
+
+          return haystack.includes(keyword);
+        });
+      }
+
+      renderStats(filteredRows);
+      renderTable(filteredRows);
+      toolbarInfo.textContent = keyword
+        ? `Filtered result: ${filteredRows.length} row(s)`
+        : `Showing all results: ${filteredRows.length} row(s)`;
+    }
+
+    async function loadResults(){
+      toolbarInfo.textContent = "Loading data...";
+      resultsBody.innerHTML = `<tr><td colspan="13" class="loading">Loading assessment data...</td></tr>`;
+
+      try{
+        let data = null;
+        let error = null;
+
+        // Try ordered query
+        ({ data, error } = await supabase
+          .from("test_attempts")
+          .select("*")
+          .order("created_at", { ascending:false }));
+
+        // fallback if created_at does not exist
+        if(error){
+          ({ data, error } = await supabase
+            .from("test_attempts")
+            .select("*"));
+        }
+
+        if(error) throw error;
+
+        allRows = sortRows((data || []).map(normalizeAttempt));
+        applyFilter();
+        toolbarInfo.textContent = `Last refresh: ${new Date().toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", second:"2-digit"})}`;
+      }catch(err){
+        console.error(err);
+        resultsBody.innerHTML = `
+          <tr>
+            <td colspan="13" class="empty">Failed to load data: ${escapeHtml(err.message || "Unknown error")}</td>
+          </tr>
+        `;
+        footerNote.textContent = "Failed to load records.";
+        toolbarInfo.textContent = "Load failed";
+      }
+    }
+
+    async function showDashboard(){
+      loginSection.classList.add("hidden");
+      dashboardSection.classList.remove("hidden");
+      signOutBtn.classList.remove("hidden");
+      statusNote.textContent = "Connected to Supabase";
+      await loadResults();
+    }
+
+    function showLogin(){
+      dashboardSection.classList.add("hidden");
+      loginSection.classList.remove("hidden");
+      signOutBtn.classList.add("hidden");
+    }
+
+    async function signIn(email, password){
+      hideMessage();
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Signing in...";
+
+      try{
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if(error) throw error;
+        showMessage("success", "Login berhasil. Memuat dashboard...");
+      }catch(err){
+        console.error(err);
+        showMessage("error", err.message || "Login gagal.");
+      }finally{
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Sign In";
+      }
+    }
+
+    async function signOut(){
+      signOutBtn.disabled = true;
+      signOutBtn.textContent = "Signing out...";
+      try{
+        await supabase.auth.signOut();
+      }catch(err){
+        console.error(err);
+      }finally{
+        signOutBtn.disabled = false;
+        signOutBtn.textContent = "Sign Out";
+      }
+    }
+
+    async function init(){
+      if(!SUPABASE_URL || !SUPABASE_ANON_KEY){
+        showLogin();
+        showMessage("error", "Supabase config belum terbaca. Cek file config.js.");
+        return;
+      }
+
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      supabase.auth.onAuthStateChange(async (_event, session) => {
+        if(session){
+          await showDashboard();
+        }else{
+          showLogin();
+        }
+      });
+
+      const { data, error } = await supabase.auth.getSession();
+      if(error){
+        console.error(error);
+      }
+
+      if(data?.session){
+        await showDashboard();
+      }else{
+        showLogin();
+      }
+    }
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      await signIn(email, password);
+    });
+
+    signOutBtn.addEventListener("click", signOut);
+    refreshBtn.addEventListener("click", loadResults);
+    searchInput.addEventListener("input", applyFilter);
+
+    init();
+  </script>
 </body>
 </html>
