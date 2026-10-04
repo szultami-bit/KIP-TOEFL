@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>KIP Listening QA Admin V1.3</title>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --navy:#0b1736;--navy2:#07122a;--blue:#2451e6;--red:#c8102e;
+  --green:#15803d;--amber:#b45309;--bg:#eef3fb;--card:#fff;
+  --line:#d7deea;--text:#16213e;--muted:#64748b;--soft:#f8fbff;
+  --shadow:0 12px 30px rgba(11,23,54,.08)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(180deg,#f7f9fd,#edf3fb);color:var(--text)}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.topbar{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:11px}.brand img{width:45px;height:45px;border-radius:11px;background:#fff;object-fit:contain}.brand h1{margin:0;font-size:17px}.brand p{margin:2px 0 0;font-size:11px;opacity:.76;font-weight:750}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pill{padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(255,255,255,.08);font-size:11px;font-weight:850}
+.btn{border:1px solid var(--line);background:#fff;color:#24324b;border-radius:10px;padding:9px 12px;font-weight:850}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.red{background:var(--red);border-color:var(--red);color:#fff}.btn.green{background:#eaf8ee;color:#166534;border-color:#bfe8c9}.btn.small{padding:6px 8px;font-size:11px}
+.page{max-width:1600px;margin:0 auto;padding:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.login{max-width:460px;margin:42px auto;padding:24px}.login h2{margin:0 0 6px}.login p{margin:0 0 16px;color:var(--muted);line-height:1.5}
+.field{margin-top:11px}.field label{display:block;font-size:12px;font-weight:850;margin-bottom:6px}.input,.select,.textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 11px;outline:none;background:#fff}.textarea{min-height:82px;resize:vertical}
+.message{display:none;margin-top:12px;padding:10px 12px;border-radius:10px;font-size:12px}.message.show{display:block}.message.error{background:#fff1f2;color:#9f1239;border:1px solid #fecdd3}.message.ok{background:#effcf3;color:#166534;border:1px solid #bbf7d0}
+.hero{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:13px}.hero h2{margin:0;font-size:26px}.hero p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:10px;margin-bottom:13px}.stat{padding:14px}.stat span{display:block;font-size:10px;color:var(--muted);font-weight:900;text-transform:uppercase}.stat strong{display:block;margin-top:5px;font-size:21px}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:13px}
+.sidebar{padding:13px;align-self:start;position:sticky;top:82px;max-height:calc(100vh - 100px);overflow:auto}.side-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px}.side-head h3{margin:0;font-size:14px}.qgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.qbtn{height:38px;border-radius:9px;border:1px solid var(--line);background:#fff;font-weight:900;color:#334155;position:relative}.qbtn.active{border:2px solid var(--blue);background:#eef4ff;color:#1d4ed8}.qbtn.playing{border:2px solid #f59e0b;background:#fff7ed;color:#9a3412;box-shadow:0 0 0 3px rgba(245,158,11,.16)}.qbtn.playing:before{content:"▶";position:absolute;left:4px;top:3px;font-size:7px;color:#f59e0b}.qbtn.verified{background:#ecfdf3;border-color:#a7e1b7;color:#166534}.qbtn.partial:after{content:"";position:absolute;right:4px;top:4px;width:6px;height:6px;border-radius:50%;background:#f59e0b}.qbtn.noTranscript{color:#94a3b8}
+.main{min-width:0}
+.qa-head{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}.qa-head h3{margin:0}.qa-head p{margin:3px 0 0;font-size:11px;color:var(--muted)}.badge{display:inline-flex;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:900}.badge.review{background:#fff7ed;color:#b45309}.badge.verified{background:#ecfdf3;color:#166534}.badge.part{background:#eef4ff;color:#1d4ed8}
+.qa-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(340px,.82fr);gap:12px}
+.panel{padding:15px}.panel h4{margin:0 0 10px;font-size:13px}.subhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.muted{color:var(--muted);font-size:11px}
+.audio-wrap{background:#f8fafc;border:1px solid var(--line);border-radius:13px;padding:12px;margin-bottom:12px}.audio-title{font-size:11px;font-weight:900;margin-bottom:7px}.audio-path{font-size:10px;color:var(--muted);word-break:break-all;margin-top:6px}audio{width:100%}
+.audio-buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.leadbox{border:1px solid #cbd5e1;background:#f8fafc;border-radius:12px;padding:10px 12px;margin-bottom:10px;transition:.12s}.leadbox.active{border-color:#f59e0b;background:#fffbeb;box-shadow:0 0 0 2px rgba(245,158,11,.10)}.lead-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.lead-label{font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:950;color:#64748b}.lead-text{font-size:13px;font-weight:900;color:#1e293b}.lead-time{font-size:10px;color:#94a3b8}.conversation-label{font-size:10px;font-weight:950;color:#475569;margin:2px 0 7px;text-transform:uppercase;letter-spacing:.06em}.cues{display:flex;flex-direction:column;gap:7px}.cue{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff;transition:.12s}.cue.active{border-color:#f59e0b;background:#fffbeb;box-shadow:0 0 0 2px rgba(245,158,11,.10)}.cue.selected:not(.active){border-color:#60a5fa;box-shadow:0 0 0 2px rgba(59,130,246,.08)}.cue-top{display:grid;grid-template-columns:92px 1fr 85px 85px auto;gap:7px;align-items:center}.speaker{font-size:10px;font-weight:950;color:#475569}.cue input{width:100%;border:1px solid #dbe3ef;border-radius:8px;padding:7px 8px;font-size:11px}.cue-text{font-size:12px}.cue-play{border:1px solid #c7d7fe;background:#eef4ff;color:#1d4ed8;border-radius:8px;padding:7px 8px;font-weight:900}
+.question-card{border:1px solid var(--line);border-radius:14px;padding:13px}.question-title{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px}.question-title h4{margin:0}.narrator{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:12px;margin-bottom:10px}.options{display:flex;flex-direction:column;gap:7px}.option{border:1px solid var(--line);border-radius:10px;padding:10px 11px;font-size:12px;display:flex;gap:9px;align-items:flex-start}.option.correct{border-color:#86d69d;background:#f0fdf4;color:#166534;font-weight:800}.letter{font-weight:950;min-width:18px}
+.qa-checks{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.check{border:1px solid var(--line);border-radius:10px;padding:9px;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800}.check input{width:17px;height:17px}
+.note{margin-top:11px}
+.save-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:11px}.save-state{font-size:11px;color:var(--muted)}
+.empty{padding:20px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:1100px){.qa-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:820px){.layout{grid-template-columns:1fr}.sidebar{position:static;max-height:none}.qgrid{grid-template-columns:repeat(10,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.page{padding:10px}.qgrid{grid-template-columns:repeat(5,1fr)}.cue-top{grid-template-columns:70px 1fr}.cue-top .time,.cue-top .cue-play{grid-column:auto}.stats{grid-template-columns:1fr 1fr}}
+
+/* Part B Q31-Q38: transcript-first view */
+.text-focus .time{display:none!important}
+.text-focus .cue-meta{display:none!important}
+.text-focus .lead-time{display:none!important}
+.text-focus .cue-top{
+  grid-template-columns:76px minmax(0,1fr) 44px!important;
+  gap:10px;
+  align-items:start;
+}
+.text-focus .cue-text{
+  width:100%;
+  min-height:58px;
+  resize:vertical;
+  line-height:1.45;
+  font-size:13px!important;
+  padding:10px 12px!important;
+  border:1px solid #dbe3ef;
+  border-radius:9px;
+  font-family:inherit;
+  background:#fff;
+  color:#0f172a;
+}
+.text-focus .speaker{padding-top:10px;font-size:11px}
+.text-focus .cue-play{margin-top:4px}
+.text-focus .cue{padding:12px}
+.text-focus .group-head{margin-top:10px}
+
+
+/* V0.8 global clean transcript mode */
+.text-focus .cue-text{
+  min-height:54px;
+}
+.text-focus .leadbox{
+  padding-top:12px;
+  padding-bottom:12px;
+}
+.text-focus .lead-text{
+  font-size:14px;
+  line-height:1.45;
+}
+
+
+/* V0.9 — Part C single-box word-follow transcript */
+.partc-karaoke{
+  border:1px solid #cbd8ee;
+  border-radius:16px;
+  background:#fff;
+  padding:16px 18px 18px;
+  margin:8px 0 12px;
+}
+.partc-karaoke-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+.partc-karaoke-title{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#475569;
+}
+.partc-karaoke-sub{
+  font-size:10px;
+  color:#94a3b8;
+  margin-top:3px;
+}
+.partc-talk-play{
+  flex:0 0 auto;
+  border:1px solid #b9cdf8;
+  background:#eef4ff;
+  color:#1d4ed8;
+  border-radius:11px;
+  padding:9px 12px;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+.partc-karaoke-text{
+  max-height:340px;
+  overflow:auto;
+  padding:18px 20px;
+  border:1px solid #e2e8f0;
+  border-radius:14px;
+  background:#f8fafc;
+  font-size:18px;
+  line-height:1.9;
+  color:#172033;
+  scroll-behavior:smooth;
+}
+.partc-karaoke-text .kw{
+  display:inline;
+  border-radius:5px;
+  padding:1px 2px;
+  transition:background .06s linear,color .06s linear,box-shadow .06s linear;
+}
+.partc-karaoke-text .kw.active{
+  background:#fbbf24;
+  color:#111827;
+  box-shadow:0 0 0 2px rgba(245,158,11,.16);
+}
+.partc-karaoke-text .cue-break{
+  display:block;
+  height:9px;
+}
+.partc-question-block{
+  margin-top:12px;
+}
+.partc-question-block .cue-text{
+  min-height:54px;
+}
+.partc-note{
+  font-size:10px;
+  color:#64748b;
+  margin-top:9px;
+}
+
+
+/* V1.0 — manual scroll no longer fights auto-follow */
+.partc-head-actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.partc-follow{
+  border:1px solid #cbd5e1;
+  background:#fff;
+  color:#475569;
+  border-radius:11px;
+  padding:9px 11px;
+  font-size:10.5px;
+  font-weight:900;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.partc-follow.on{
+  border-color:#86efac;
+  background:#f0fdf4;
+  color:#166534;
+}
+.partc-follow.off{
+  border-color:#fdba74;
+  background:#fff7ed;
+  color:#9a3412;
+}
+.partc-karaoke-text:focus{
+  outline:2px solid #bfdbfe;
+  outline-offset:2px;
+}
+
+
+/* V1.1 — phrase spotlight */
+.partc-karaoke-text .kp{
+  display:inline;
+  border-radius:7px;
+  padding:2px 4px;
+  margin:0 1px;
+  transition:background .08s linear,color .08s linear,box-shadow .08s linear;
+}
+.partc-karaoke-text .kp.active{
+  background:#fde68a;
+  color:#111827;
+  box-shadow:0 0 0 2px rgba(245,158,11,.14);
+}
+
+
+/* V1.2 — Part C actual-audio Directions review */
+.partc-dir-card{
+  border:1px solid #cbd8ee;
+  border-radius:16px;
+  background:#fff;
+  padding:15px 17px 17px;
+  margin:0 0 14px;
+}
+.partc-dir-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:10px;
+}
+.partc-dir-title{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#475569;
+}
+.partc-dir-sub{
+  margin-top:3px;
+  color:#94a3b8;
+  font-size:10px;
+}
+.partc-dir-play{
+  border:1px solid #b9cdf8;
+  background:#eef4ff;
+  color:#1d4ed8;
+  border-radius:11px;
+  padding:9px 12px;
+  font-size:10.5px;
+  font-weight:900;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.partc-dir-text{
+  max-height:310px;
+  overflow:auto;
+  padding:15px 17px;
+  border:1px solid #e2e8f0;
+  border-radius:13px;
+  background:#f8fafc;
+  font-size:14px;
+  line-height:1.7;
+  scroll-behavior:smooth;
+}
+.partc-dir-line{
+  display:block;
+  padding:5px 8px;
+  border-radius:7px;
+  margin:2px 0;
+  transition:background .08s linear,color .08s linear;
+}
+.partc-dir-line.active{
+  background:#fde68a;
+  color:#111827;
+}
+.partc-dir-line.choice{
+  margin-left:16px;
+}
+.partc-dir-line.example{
+  border-left:3px solid #c7d7fe;
+  padding-left:10px;
+}
+
+
+/* V1.3 — include Part C narrator direction inside the full-talk box */
+.partc-karaoke-text .kp.direction{
+  font-style:italic;
+  color:#334155;
+}
+.partc-karaoke-text .kp.direction.active{
+  background:#bfdbfe;
+  color:#0f172a;
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <img src="kip-logo.jpg" alt="KIP" onerror="this.style.display='none'">
+    <div><h1>KIP Listening QA Center</h1><p>Audio · Subtitle · Question · Answer Key · Verification</p></div>
+  </div>
+  <div class="actions">
+    <span class="pill">Pilot V1.3</span>
+    <span id="userPill" class="pill hidden"></span>
+    <button id="signOutBtn" class="btn hidden">Sign Out</button>
+  </div>
+</header>
+
+<section id="loginSection" class="page">
+  <div class="card login">
+    <h2>Administrator Login</h2>
+    <p>Gunakan akun admin Supabase KIP. Audio tetap private dan hanya dibuatkan signed URL setelah login.</p>
+    <div class="field"><label>Email</label><input id="email" class="input" type="email" autocomplete="username"></div>
+    <div class="field"><label>Password</label><input id="password" class="input" type="password" autocomplete="current-password"></div>
+    <button id="loginBtn" class="btn red" style="width:100%;margin-top:14px">Sign In</button>
+    <div id="loginMessage" class="message"></div>
+  </div>
+</section>
+
+<section id="dashboardSection" class="page hidden">
+  <div class="hero">
+    <div><h2 id="testTitle">Complete Test Five</h2><p id="testMeta">Loading test data…</p></div>
+    <div><span id="draftBadge" class="badge review">DRAFT / QA ONLY</span></div>
+  </div>
+
+  <div class="stats">
+    <div class="card stat"><span>Audio Files</span><strong id="statAudio">0/10</strong></div>
+    <div class="card stat"><span>Questions</span><strong id="statQuestions">0/50</strong></div>
+    <div class="card stat"><span>Answer Keys</span><strong id="statKeys">0/50</strong></div>
+    <div class="card stat"><span>Transcript Ready</span><strong id="statTranscript">0/50</strong></div>
+    <div class="card stat"><span>Verified</span><strong id="statVerified">0/50</strong></div>
+  </div>
+
+  <div class="layout">
+    <aside class="card sidebar">
+      <div class="side-head"><h3>Questions</h3><button id="refreshBtn" class="btn small">Refresh</button></div>
+      <div id="qgrid" class="qgrid"></div>
+      <div style="margin-top:11px;font-size:10px;color:#64748b;line-height:1.5">
+        <strong>Blue</strong> = selected · <strong>Green</strong> = verified · orange dot = partial QA · grey = no transcript yet.
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="card qa-head">
+        <div><h3 id="qHeading">Question 1</h3><p id="qSubheading">Select a question to inspect.</p></div>
+        <div style="display:flex;gap:7px;align-items:center"><span id="partBadge" class="badge part">Part A</span><span id="qaBadge" class="badge review">NEEDS REVIEW</span></div>
+      </div>
+
+      <div class="qa-grid">
+        <section class="card panel">
+          <div class="subhead"><h4>Audio + Subtitle Timeline</h4><span id="audioState" class="muted">Not loaded</span></div>
+          <div class="audio-wrap">
+            <div id="audioTitle" class="audio-title">Audio segment</div>
+            <audio id="audioPlayer" controls preload="metadata"></audio>
+            <div class="audio-buttons">
+              <button id="playQuestionBtn" class="btn small primary">▶ Play Question Range</button>
+              <button id="minusBtn" class="btn small">−0.25s selected cue</button>
+              <button id="plusBtn" class="btn small">+0.25s selected cue</button>
+            </div>
+            <div id="audioPath" class="audio-path"></div>
+          </div>
+
+          <div id="liveCueState" class="muted" style="margin:0 0 8px">Part transition and question number are separated from the conversation. Clean transcript mode. Q39 now includes the full Part C Directions from the actual audio, followed by phrase-spotlight talks.</div><div id="leadInWrap"></div><div class="conversation-label">Conversation / narrator question</div><div id="cueList" class="cues"></div>
+          <div class="save-row">
+            <button id="saveCuesBtn" class="btn primary">Save Subtitle Timing</button>
+            <span id="cueSaveState" class="save-state"></span>
+          </div>
+        </section>
+
+        <section class="card panel">
+          <div class="subhead"><h4>Question + Answer Key</h4><span class="muted">Admin only</span></div>
+          <div id="questionBox" class="question-card"></div>
+
+          <div class="qa-checks">
+            <label class="check"><input id="audioOk" type="checkbox"> Audio correct</label>
+            <label class="check"><input id="transcriptOk" type="checkbox"> Transcript correct</label>
+            <label class="check"><input id="syncOk" type="checkbox"> Sync correct</label>
+            <label class="check"><input id="questionOk" type="checkbox"> Question correct</label>
+            <label class="check"><input id="answerKeyOk" type="checkbox"> Answer key correct</label>
+          </div>
+
+          <div class="note field"><label>QA Note</label><textarea id="qaNote" class="textarea" placeholder="Contoh: cue narrator terlambat 0.25s…"></textarea></div>
+          <div class="save-row">
+            <button id="saveQaBtn" class="btn green">Save QA Status</button>
+            <span id="qaSaveState" class="save-state"></span>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+
+<script>
+(function(){
+"use strict";
+const ADMIN_EMAIL="szultami@gmail.com";
+const TEST_SLUG="complete-test-5";
+const BUCKET="listening-audio";
+const cfg=window.KIP_CONFIG||window.KIP_SUPABASE||{};
+const SUPABASE_URL=cfg.SUPABASE_URL||cfg.url||"";
+const SUPABASE_ANON_KEY=cfg.SUPABASE_ANON_KEY||cfg.anonKey||"";
+let sb=null,user=null,test=null,segments=[],questions=[],keys=[],admins=[],verifications=[],cues=[];
+let selectedNo=1,playingNo=null,selectedCueId=null,activeCueId=null,activePhraseKey=null,activeDirectionCueId=null,partCAutoFollow=true,stopAt=null,audioObjectKey=null,rafId=null;
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function showMsg(type,text){const e=$("loginMessage");e.className="message show "+type;e.textContent=text}
+function fmtMs(ms){ms=Math.max(0,Number(ms)||0);return (ms/1000).toFixed(3)+"s"}
+function qByNo(n){return questions.find(x=>Number(x.question_no)===Number(n))}
+function keyFor(qid){return keys.find(x=>x.question_id===qid)}
+function adminFor(qid){return admins.find(x=>x.question_id===qid)}
+function verificationFor(qid){return verifications.find(x=>x.question_id===qid)}
+function cueForQuestion(qid){return cues.filter(x=>x.question_id===qid).sort((a,b)=>a.cue_order-b.cue_order)}
+function sharedCuesForQuestion(q){
+  if(!q)return [];
+  return cues.filter(x=>x.audio_segment_id===q.audio_segment_id&&!x.question_id).sort((a,b)=>a.cue_order-b.cue_order);
+}
+function visibleCuesForQuestion(q){
+  const shared=sharedCuesForQuestion(q);
+  const specific=cueForQuestion(q.id);
+  return [...shared,...specific].sort((a,b)=>a.start_ms-b.start_ms||a.cue_order-b.cue_order);
+}
+function segmentFor(id){return segments.find(x=>x.id===id)}
+function isVerified(v){return !!(v&&v.audio_ok&&v.transcript_ok&&v.sync_ok&&v.question_ok&&v.answer_key_ok)}
+function isPartial(v){return !!(v&&(v.audio_ok||v.transcript_ok||v.sync_ok||v.question_ok||v.answer_key_ok))}
+function qHasTranscript(qid){
+  const q=questions.find(x=>x.id===qid);
+  return cues.some(x=>x.question_id===qid)||!!(q&&sharedCuesForQuestion(q).length);
+}
+function renderStats(){
+  $("statAudio").textContent=`${segments.length}/10`;
+  $("statQuestions").textContent=`${questions.length}/50`;
+  $("statKeys").textContent=`${keys.length}/50`;
+  $("statTranscript").textContent=`${questions.filter(q=>qHasTranscript(q.id)).length}/50`;
+  $("statVerified").textContent=`${verifications.filter(isVerified).length}/50`;
+}
+function renderGrid(){
+  $("qgrid").innerHTML=questions.slice().sort((a,b)=>a.question_no-b.question_no).map(q=>{
+    const v=verificationFor(q.id),classes=["qbtn"];
+    if(q.question_no===selectedNo)classes.push("active");
+    if(q.question_no===playingNo)classes.push("playing");
+    if(isVerified(v))classes.push("verified");
+    else if(isPartial(v))classes.push("partial");
+    if(!qHasTranscript(q.id))classes.push("noTranscript");
+    return `<button class="${classes.join(" ")}" data-q="${q.question_no}">${q.question_no}</button>`;
+  }).join("");
+}
+async function signedUrlFor(path){
+  const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(path,3600);
+  if(error)throw error;
+  return data.signedUrl;
+}
+async function loadAudioForSegment(seg){
+  if(!seg){$("audioState").textContent="No audio segment";$("audioPlayer").removeAttribute("src");return}
+  if(audioObjectKey===seg.storage_path && $("audioPlayer").src)return;
+  $("audioState").textContent="Creating private signed URL…";
+  try{
+    const url=await signedUrlFor(seg.storage_path);
+    $("audioPlayer").src=url;
+    $("audioPlayer").load();
+    $("audioState").textContent="Private audio ready";
+    audioObjectKey=seg.storage_path;
+  }catch(err){
+    $("audioState").textContent="Audio failed";
+    $("audioPlayer").removeAttribute("src");
+    console.error(err);
+  }
+}
+
+
+function partCDirectionsSegment(){
+  return segments.find(s=>Number(s.segment_order)===7)||null;
+}
+function partCDirectionsCues(){
+  const seg=partCDirectionsSegment();
+  if(!seg)return [];
+  return cues.filter(c=>c.audio_segment_id===seg.id&&!c.question_id).sort((a,b)=>a.cue_order-b.cue_order);
+}
+function partCDirectionsHtml(){
+  const list=partCDirectionsCues();
+  if(!list.length)return "";
+  const lines=list.map(c=>{
+    const cls=[
+      "partc-dir-line",
+      c.cue_type==="choice_reading"?"choice":"",
+      ["speech","narrator_question","explanation"].includes(c.cue_type)?"example":""
+    ].filter(Boolean).join(" ");
+    const prefix=c.speaker&&c.cue_type==="speech"?`${esc(c.speaker)}: `:"";
+    return `<span class="${cls}" data-dir-cue="${esc(c.id)}" data-dir-start="${Number(c.start_ms)}" data-dir-end="${Number(c.end_ms)}">${prefix}${esc(c.transcript_text||"")}</span>`;
+  }).join("");
+  return `<div class="partc-dir-card">
+    <div class="partc-dir-head">
+      <div>
+        <div class="partc-dir-title">Part C Directions · Actual Audio</div>
+        <div class="partc-dir-sub">07-ct5-listening.mp3 · transcript anchored to real acoustic pauses</div>
+      </div>
+      <button class="partc-dir-play" data-play-partc-directions="1">▶ Play Directions</button>
+    </div>
+    <div id="partCDirectionsText" class="partc-dir-text">${lines}</div>
+  </div>`;
+}
+function updatePartCDirectionsSpotlight(ms){
+  const box=document.getElementById("partCDirectionsText");
+  if(!box){activeDirectionCueId=null;return}
+  const nodes=box.querySelectorAll("[data-dir-cue]");
+  let active=null;
+  for(const el of nodes){
+    const s=Number(el.dataset.dirStart),e=Number(el.dataset.dirEnd);
+    if(ms>=s&&ms<e){active=el;break}
+  }
+  const id=active?.dataset.dirCue||null;
+  if(id===activeDirectionCueId)return;
+  activeDirectionCueId=id;
+  nodes.forEach(el=>el.classList.toggle("active",!!id&&el.dataset.dirCue===id));
+  if(active&&partCAutoFollow){
+    const top=active.offsetTop,bottom=top+active.offsetHeight;
+    if(top<box.scrollTop+50||bottom>box.scrollTop+box.clientHeight-50){
+      box.scrollTo({top:Math.max(0,top-box.clientHeight*.42),behavior:"smooth"});
+    }
+  }
+}
+async function playPartCDirections(){
+  const seg=partCDirectionsSegment(),list=partCDirectionsCues();
+  if(!seg||!list.length)return;
+  $("audioTitle").textContent=`${seg.title} · Segment ${seg.segment_order}`;
+  $("audioPath").textContent=`${BUCKET}/${seg.storage_path}`;
+  await loadAudioForSegment(seg);
+  await waitForAudioMetadata();
+  const a=$("audioPlayer");
+  const start=Math.min(...list.map(x=>Number(x.start_ms)))/1000;
+  const end=Math.max(...list.map(x=>Number(x.end_ms)))/1000;
+  a.currentTime=start;
+  stopAt=end;
+  playingNo=null;
+  activeDirectionCueId=null;
+  setPartCAutoFollow(true);
+  renderGrid();
+  a.play().then(startSpotlightLoop).catch(()=>{});
+}
+
+function isPartCQuestion(q){
+  const n=Number(q?.question_no||0);
+  return n>=39&&n<=50;
+}
+function partCContentCues(q){
+  return sharedCuesForQuestion(q)
+    .filter(c=>c.cue_type==="directions"||c.cue_type==="speech")
+    .sort((a,b)=>Number(a.start_ms)-Number(b.start_ms));
+}
+function spokenSharedCues(q){
+  return sharedCuesForQuestion(q).filter(c=>c.cue_type==="speech");
+}
+function phraseTimelineForCue(c){
+  const raw=String(c.transcript_text||"").trim();
+  if(!raw)return [];
+
+  // Split the calibrated speech cue into short natural phrases.
+  // Priority:
+  // 1) punctuation boundaries
+  // 2) keep chunks roughly 3–7 words
+  const tokens=raw.split(/\s+/);
+  const phrases=[];
+  let buf=[];
+
+  const flush=()=>{
+    if(buf.length){
+      phrases.push(buf.join(" "));
+      buf=[];
+    }
+  };
+
+  for(let i=0;i<tokens.length;i++){
+    const w=tokens[i];
+    buf.push(w);
+
+    const hard=/[.!?]$/.test(w);
+    const soft=/[,;:]$/.test(w);
+
+    // Natural punctuation break.
+    if(hard || (soft && buf.length>=3)){
+      flush();
+      continue;
+    }
+
+    // Keep phrase chunks readable even when punctuation is sparse.
+    if(buf.length>=6){
+      flush();
+    }
+  }
+  flush();
+
+  // Merge accidental 1-word leftovers into the previous phrase.
+  for(let i=phrases.length-1;i>0;i--){
+    if(phrases[i].trim().split(/\s+/).length===1){
+      phrases[i-1]+=" "+phrases[i];
+      phrases.splice(i,1);
+    }
+  }
+
+  const start=Number(c.start_ms)||0,end=Number(c.end_ms)||start;
+  const dur=Math.max(1,end-start);
+
+  // Approximate time distribution by spoken-text weight.
+  // Longer phrases receive proportionally more of the already-calibrated cue.
+  const weights=phrases.map(p=>{
+    const letters=(p.match(/[A-Za-z0-9]/g)||[]).length;
+    const words=p.trim().split(/\s+/).length;
+    const punct=/[.!?]$/.test(p)?1.18:/[,;:]$/.test(p)?1.08:1;
+    return Math.max(1,letters*.55+words*1.6)*punct;
+  });
+  const total=weights.reduce((a,b)=>a+b,0)||1;
+
+  let cursor=start;
+  return phrases.map((phrase,i)=>{
+    const slice=dur*(weights[i]/total);
+    const ps=cursor;
+    const pe=i===phrases.length-1?end:cursor+slice;
+    cursor=pe;
+    return {phrase,startMs:ps,endMs:pe,key:`${c.id}:p${i}`};
+  });
+}
+function partCKaraokeHtml(q){
+  const content=partCContentCues(q);
+  if(!content.length)return "";
+  const phrases=[];
+  content.forEach((c,ci)=>{
+    phraseTimelineForCue(c).forEach(p=>phrases.push(
+      `<span class="kp ${c.cue_type==="directions"?"direction":""}" data-phrase-key="${esc(p.key)}" data-phrase-start="${Math.round(p.startMs)}" data-phrase-end="${Math.round(p.endMs)}">${esc(p.phrase)}</span> `
+    ));
+    if(ci<content.length-1)phrases.push('<span class="cue-break"></span>');
+  });
+  return `<div class="partc-karaoke">
+    <div class="partc-karaoke-head">
+      <div>
+        <div class="partc-karaoke-title">Full Talk + Direction · Phrase Spotlight</div>
+        <div class="partc-karaoke-sub">${esc(q.group_code||"Part C")} · one clean transcript box</div>
+      </div>
+      <div class="partc-head-actions">
+        <button class="partc-follow ${partCAutoFollow?'on':'off'}" data-follow-toggle="1">${partCAutoFollow?'✓ Follow Audio':'↕ Manual Scroll'}</button>
+        <button class="partc-talk-play" data-play-talk="1">▶ Play Full Talk</button>
+      </div>
+    </div>
+    <div id="partCKaraokeText" class="partc-karaoke-text" tabindex="0">${phrases.join("")}</div>
+    <div class="partc-note">${partCAutoFollow?'Follow Audio is ON. Scroll manually at any time to pause auto-follow.':'Manual Scroll is active. Phrase highlighting continues; press Follow Audio to resume automatic scrolling.'}</div>
+  </div>`;
+}
+function refreshPartCFollowUi(){
+  const btn=document.querySelector("[data-follow-toggle]");
+  if(btn){
+    btn.classList.toggle("on",partCAutoFollow);
+    btn.classList.toggle("off",!partCAutoFollow);
+    btn.textContent=partCAutoFollow?"✓ Follow Audio":"↕ Manual Scroll";
+  }
+  const note=document.querySelector(".partc-note");
+  if(note){
+    note.textContent=partCAutoFollow
+      ?"Follow Audio is ON. Scroll manually at any time to pause auto-follow."
+      :"Manual Scroll is active. Phrase highlighting continues; press Follow Audio to resume automatic scrolling.";
+  }
+}
+function setPartCAutoFollow(on){
+  partCAutoFollow=!!on;
+  refreshPartCFollowUi();
+  if(partCAutoFollow){
+    activePhraseKey=null; // force one clean reposition on next animation frame
+    updatePartCPhraseSpotlight($("audioPlayer").currentTime*1000);
+  }
+}
+function installPartCManualScrollControl(){
+  const box=document.getElementById("partCKaraokeText");
+  if(!box||box.dataset.scrollControl==="1")return;
+  box.dataset.scrollControl="1";
+
+  // Any genuine user navigation immediately releases the transcript from auto-follow.
+  const manual=()=>{if(partCAutoFollow)setPartCAutoFollow(false)};
+  box.addEventListener("wheel",manual,{passive:true});
+  box.addEventListener("touchstart",manual,{passive:true});
+  box.addEventListener("pointerdown",manual,{passive:true});
+  box.addEventListener("keydown",e=>{
+    if(["ArrowUp","ArrowDown","PageUp","PageDown","Home","End"," "].includes(e.key))manual();
+  });
+}
+function updatePartCPhraseSpotlight(ms){
+  const box=document.getElementById("partCKaraokeText");
+  if(!box){activePhraseKey=null;return}
+  installPartCManualScrollControl();
+
+  let active=null;
+  const nodes=box.querySelectorAll(".kp");
+  for(const el of nodes){
+    const s=Number(el.dataset.phraseStart),e=Number(el.dataset.phraseEnd);
+    if(ms>=s&&ms<e){active=el;break}
+  }
+
+  const key=active?.dataset.phraseKey||null;
+  const changed=key!==activePhraseKey;
+  activePhraseKey=key;
+
+  // Highlight always follows audio, even while the user is manually scrolling.
+  nodes.forEach(el=>el.classList.toggle("active",!!key&&el.dataset.phraseKey===key));
+
+  // Automatic scrolling only happens when Follow Audio is ON.
+  if(active && changed && partCAutoFollow){
+    const top=active.offsetTop;
+    const bottom=top+active.offsetHeight;
+    const safeTop=box.scrollTop+70;
+    const safeBottom=box.scrollTop+box.clientHeight-70;
+    if(top<safeTop || bottom>safeBottom){
+      box.scrollTo({
+        top:Math.max(0,top-box.clientHeight*.45),
+        behavior:"smooth"
+      });
+    }
+  }
+}
+async function playPartCTalk(){
+  const q=qByNo(selectedNo),content=partCContentCues(q);if(!content.length)return;
+  const seg=segmentFor(q.audio_segment_id);if(!seg)return;
+  setPartCAutoFollow(true);
+  $("audioTitle").textContent=`${seg.title} · Segment ${seg.segment_order}`;
+  $("audioPath").textContent=`${BUCKET}/${seg.storage_path}`;
+  await loadAudioForSegment(seg);
+  await waitForAudioMetadata();
+  const start=Math.min(...content.map(x=>Number(x.start_ms)))/1000;
+  const end=Math.max(...content.map(x=>Number(x.end_ms)))/1000;
+  const a=$("audioPlayer");
+  a.currentTime=start;stopAt=end;playingNo=null;activePhraseKey=null;activeDirectionCueId=null;renderGrid();
+  a.play().then(startSpotlightLoop).catch(()=>{});
+}
+
+function renderCues(q){
+  const textFocus=true;
+  $("cueList").classList.toggle("text-focus",textFocus);
+  $("leadInWrap").classList.toggle("text-focus",textFocus);
+  const specific=cueForQuestion(q.id);
+  const shared=sharedCuesForQuestion(q);
+  const lead=specific.filter(x=>x.cue_type==="heading"||x.cue_type==="directions");
+  const specificList=specific.filter(x=>x.cue_type!=="heading"&&x.cue_type!=="directions");
+
+  // Part C Q39-Q50: one large shared-talk box with word-follow spotlight.
+  // Keep only the selected question's narrator prompt below it.
+  if(isPartCQuestion(q)&&spokenSharedCues(q).length){
+    $("leadInWrap").innerHTML=lead.length?lead.map(c=>`<div class="leadbox ${c.id===activeCueId?'active':''}" data-lead="${esc(c.id)}">
+      <div class="lead-top">
+        <div><div class="lead-label">Question number · ${esc(c.speaker||"NARRATOR")}</div><div class="lead-text">${esc(c.transcript_text||"")}</div></div>
+        <button class="cue-play" data-play="${esc(c.id)}">▶</button>
+      </div>
+    </div>`).join(""):"";
+
+    const questionRows=specificList.map(c=>`<div class="cue partc-question-block ${c.id===activeCueId?'active':''} ${c.id===selectedCueId?'selected':''}" data-cue="${esc(c.id)}">
+      <div class="cue-top">
+        <span class="speaker">${esc(c.speaker||c.cue_type)}</span>
+        <textarea class="cue-text" data-field="text">${esc(c.transcript_text||"")}</textarea>
+        <input class="time" data-field="start" type="number" min="0" step="1" value="${Number(c.start_ms)}">
+        <input class="time" data-field="end" type="number" min="1" step="1" value="${Number(c.end_ms)}">
+        <button class="cue-play" data-play="${esc(c.id)}">▶</button>
+      </div>
+    </div>`).join("");
+
+    $("cueList").innerHTML=(Number(q.question_no)===39?partCDirectionsHtml():"")+partCKaraokeHtml(q)+`<div class="group-head">Narrator question · Q${q.question_no}</div>`+questionRows;
+    installPartCManualScrollControl();
+    refreshPartCFollowUi();
+    $("saveCuesBtn").disabled=false;
+    $("minusBtn").disabled=false;
+    $("plusBtn").disabled=false;
+    $("playQuestionBtn").disabled=!specific.length;
+    if(!selectedCueId||!specificList.some(x=>x.id===selectedCueId))selectedCueId=specificList[0]?.id||null;
+    return;
+  }
+
+  $("leadInWrap").innerHTML=lead.length?lead.map(c=>`<div class="leadbox ${c.id===activeCueId?'active':''}" data-lead="${esc(c.id)}">
+    <div class="lead-top">
+      <div><div class="lead-label">${c.cue_type==="directions"?"Part transition":"Question number"} · ${esc(c.speaker||"NARRATOR")}</div><div class="lead-text">${esc(c.transcript_text||"")}</div><div class="lead-time">${fmtMs(c.start_ms)} → ${fmtMs(c.end_ms)}</div></div>
+      <button class="cue-play" data-play="${esc(c.id)}">▶</button>
+    </div>
+  </div>`).join(""):"";
+
+  const sharedHtml=shared.length?`
+    <div class="group-head">Shared conversation · ${esc(q.group_code||"Part B group")}</div>
+    <div class="group-actions"><button class="group-play" data-play-group="${esc(q.audio_segment_id)}">▶ Play Group Conversation</button><span style="font-size:9.5px;color:#64748b">Shown once for all questions in this group</span></div>
+    ${shared.map(c=>`<div class="cue ${c.id===activeCueId?'active':''} ${c.id===selectedCueId?'selected':''}" data-cue="${esc(c.id)}">
+      <div class="cue-top">
+        <span class="speaker">${esc(c.speaker||c.cue_type)}</span>
+        ${textFocus?`<textarea class="cue-text" data-field="text">${esc(c.transcript_text||"")}</textarea>`:`<input class="cue-text" data-field="text" value="${esc(c.transcript_text||"")}">`}
+        <input class="time" data-field="start" type="number" min="0" step="1" value="${Number(c.start_ms)}" title="start ms">
+        <input class="time" data-field="end" type="number" min="1" step="1" value="${Number(c.end_ms)}" title="end ms">
+        <button class="cue-play" data-play="${esc(c.id)}">▶</button>
+      </div>
+      <div class="cue-meta" style="margin-top:5px;font-size:9.5px;color:#94a3b8">${fmtMs(c.start_ms)} → ${fmtMs(c.end_ms)} · ${esc(c.cue_type)}</div>
+    </div>`).join("")}
+    <div class="group-head">Narrator question · Q${q.question_no}</div>`:"";
+
+  if(!specificList.length&&!shared.length){
+    selectedCueId=null;
+    $("cueList").innerHTML='<div class="empty">Conversation subtitle belum dimasukkan untuk question ini.</div>';
+    $("saveCuesBtn").disabled=true;$("minusBtn").disabled=true;$("plusBtn").disabled=true;$("playQuestionBtn").disabled=!specific.length;
+    return;
+  }
+
+  $("saveCuesBtn").disabled=false;$("minusBtn").disabled=false;$("plusBtn").disabled=false;$("playQuestionBtn").disabled=!specific.length;
+  const editable=[...shared,...specificList];
+  if(!selectedCueId||!editable.some(x=>x.id===selectedCueId))selectedCueId=editable[0]?.id||null;
+
+  $("cueList").innerHTML=sharedHtml+specificList.map(c=>`<div class="cue ${c.id===activeCueId?'active':''} ${c.id===selectedCueId?'selected':''}" data-cue="${esc(c.id)}">
+    <div class="cue-top">
+      <span class="speaker">${esc(c.speaker||c.cue_type)}</span>
+      ${textFocus?`<textarea class="cue-text" data-field="text">${esc(c.transcript_text||"")}</textarea>`:`<input class="cue-text" data-field="text" value="${esc(c.transcript_text||"")}">`}
+      <input class="time" data-field="start" type="number" min="0" step="1" value="${Number(c.start_ms)}" title="start ms">
+      <input class="time" data-field="end" type="number" min="1" step="1" value="${Number(c.end_ms)}" title="end ms">
+      <button class="cue-play" data-play="${esc(c.id)}">▶</button>
+    </div>
+    <div class="cue-meta" style="margin-top:5px;font-size:9.5px;color:#94a3b8">${fmtMs(c.start_ms)} → ${fmtMs(c.end_ms)} · ${esc(c.cue_type)}</div>
+  </div>`).join("");
+}
+function renderQuestion(q){
+  const k=keyFor(q.id),a=adminFor(q.id),v=verificationFor(q.id)||{};
+  $("qHeading").textContent=`Question ${q.question_no}`;
+  $("qSubheading").textContent=`${test?.title||"Complete Test Five"} · ${q.group_code||""}`;
+  $("partBadge").textContent=`Part ${q.part}`;
+  $("qaBadge").textContent=isVerified(v)?"VERIFIED":"NEEDS REVIEW";
+  $("qaBadge").className="badge "+(isVerified(v)?"verified":"review");
+  const choices=[["A",q.choice_a],["B",q.choice_b],["C",q.choice_c],["D",q.choice_d]];
+  $("questionBox").innerHTML=`<div class="question-title"><h4>Q${q.question_no}</h4><span class="badge part">Correct: ${esc(k?.correct_option||"—")}</span></div>
+    <div class="narrator"><strong>Narrator:</strong> ${esc(a?.narrator_question||"Narrator question belum dimasukkan.")}</div>
+    <div class="options">${choices.map(([L,t])=>`<div class="option ${k?.correct_option===L?'correct':''}"><span class="letter">${L}.</span><span>${esc(t)}</span></div>`).join("")}</div>`;
+  $("audioOk").checked=!!v.audio_ok;$("transcriptOk").checked=!!v.transcript_ok;$("syncOk").checked=!!v.sync_ok;$("questionOk").checked=!!v.question_ok;$("answerKeyOk").checked=!!v.answer_key_ok;$("qaNote").value=v.note||"";
+}
+
+function questionRange(q){
+  const list=cueForQuestion(q.id);
+  if(!list.length)return null;
+  return {
+    startMs:Math.min(...list.map(x=>Number(x.start_ms))),
+    endMs:Math.max(...list.map(x=>Number(x.end_ms)))
+  };
+}
+function currentAudioSegment(){
+  return segments.find(x=>x.storage_path===audioObjectKey)||null;
+}
+function questionAtAudioTime(ms){
+  const seg=currentAudioSegment();if(!seg)return null;
+  const rows=questions
+    .filter(q=>q.audio_segment_id===seg.id&&qHasTranscript(q.id))
+    .map(q=>({q,range:questionRange(q)}))
+    .filter(x=>x.range)
+    .sort((a,b)=>a.range.startMs-b.range.startMs);
+  if(!rows.length)return null;
+  let current=null;
+  for(let i=0;i<rows.length;i++){
+    const here=rows[i],next=rows[i+1];
+    if(ms>=here.range.startMs && (!next || ms<next.range.startMs)){
+      current=here.q;break;
+    }
+  }
+  return current;
+}
+function syncUiToQuestion(q){
+  if(!q)return;
+  selectedNo=Number(q.question_no);
+  selectedCueId=null;
+  renderGrid();renderQuestion(q);renderCues(q);
+  const seg=segmentFor(q.audio_segment_id);
+  $("audioTitle").textContent=seg?`${seg.title} · Segment ${seg.segment_order}`:"Audio segment not linked";
+  $("audioPath").textContent=seg?`${BUCKET}/${seg.storage_path}`:"";
+  const btn=document.querySelector(`.qbtn[data-q="${CSS.escape(String(q.question_no))}"]`);
+  if(btn)btn.scrollIntoView({block:"nearest",inline:"nearest"});
+}
+function waitForAudioMetadata(){
+  const a=$("audioPlayer");
+  if(a.readyState>=1)return Promise.resolve();
+  return new Promise((resolve,reject)=>{
+    const ok=()=>{cleanup();resolve()};
+    const bad=()=>{cleanup();reject(new Error("Audio metadata gagal dimuat."))};
+    const cleanup=()=>{a.removeEventListener("loadedmetadata",ok);a.removeEventListener("error",bad)};
+    a.addEventListener("loadedmetadata",ok,{once:true});
+    a.addEventListener("error",bad,{once:true});
+  });
+}
+
+async function selectQuestion(n,opts={}){
+  const autoplay=!!opts.autoplay;
+  const a=$("audioPlayer");
+  if(autoplay && !a.paused)a.pause();
+  selectedNo=Number(n);
+  playingNo=null;
+  selectedCueId=null;activeCueId=null;stopAt=null;
+  const q=qByNo(selectedNo);if(!q)return;
+  renderGrid();renderQuestion(q);renderCues(q);
+  const seg=segmentFor(q.audio_segment_id);
+  $("audioTitle").textContent=seg?`${seg.title} · Segment ${seg.segment_order}`:"Audio segment not linked";
+  $("audioPath").textContent=seg?`${BUCKET}/${seg.storage_path}`:"";
+  await loadAudioForSegment(seg);
+  if(autoplay && qHasTranscript(q.id)){
+    try{
+      await waitForAudioMetadata();
+      playQuestionRange();
+    }catch(err){console.error(err)}
+  }
+}
+async function loadAll(){
+  const {data:t,error:te}=await sb.from("listening_tests").select("*").eq("slug",TEST_SLUG).single();if(te)throw te;test=t;
+  const testId=test.id;
+  const results=await Promise.all([
+    sb.from("listening_audio_segments").select("*").eq("test_id",testId).order("segment_order"),
+    sb.from("listening_questions").select("*").eq("test_id",testId).order("question_no"),
+    sb.from("listening_answer_keys").select("*"),
+    sb.from("listening_question_admin").select("*"),
+    sb.from("listening_verifications").select("*"),
+    sb.from("listening_transcript_cues").select("*").eq("test_id",testId).order("cue_order")
+  ]);
+  for(const r of results)if(r.error)throw r.error;
+  [segments,questions,keys,admins,verifications,cues]=results.map(r=>r.data||[]);
+  const qids=new Set(questions.map(q=>q.id));
+  keys=keys.filter(x=>qids.has(x.question_id));
+  admins=admins.filter(x=>qids.has(x.question_id));
+  verifications=verifications.filter(x=>qids.has(x.question_id));
+  $("testTitle").textContent=test.title;
+  $("testMeta").textContent=`${test.source_label||""} · ${test.total_questions} questions · ${test.version_label||""} · status: ${test.status}`;
+  renderStats();renderGrid();await selectQuestion(selectedNo);
+}
+async function saveCues(){
+  const q=qByNo(selectedNo),list=[...sharedCuesForQuestion(q),...cueForQuestion(q.id).filter(x=>x.cue_type!=="heading"&&x.cue_type!=="directions")];if(!list.length)return;
+  $("cueSaveState").textContent="Saving…";
+  try{
+    for(const c of list){
+      const row=document.querySelector(`.cue[data-cue="${CSS.escape(c.id)}"]`);
+      const text=row.querySelector('[data-field="text"]').value;
+      const start=Number(row.querySelector('[data-field="start"]').value);
+      const end=Number(row.querySelector('[data-field="end"]').value);
+      if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start)throw new Error("Start/end time tidak valid.");
+      const {error}=await sb.from("listening_transcript_cues").update({transcript_text:text,start_ms:Math.round(start),end_ms:Math.round(end)}).eq("id",c.id);
+      if(error)throw error;
+      c.transcript_text=text;c.start_ms=Math.round(start);c.end_ms=Math.round(end);
+    }
+    $("cueSaveState").textContent="Saved ✓";
+    renderCues(q);
+  }catch(err){$("cueSaveState").textContent="Failed: "+(err.message||err)}
+}
+async function saveQa(){
+  const q=qByNo(selectedNo);if(!q)return;
+  $("qaSaveState").textContent="Saving…";
+  const payload={
+    audio_ok:$("audioOk").checked,
+    transcript_ok:$("transcriptOk").checked,
+    sync_ok:$("syncOk").checked,
+    question_ok:$("questionOk").checked,
+    answer_key_ok:$("answerKeyOk").checked,
+    note:$("qaNote").value.trim()||null,
+    verified_by:user?.id||null,
+    verified_at:new Date().toISOString()
+  };
+  try{
+    const {data,error}=await sb.from("listening_verifications").update(payload).eq("question_id",q.id).select("*").single();
+    if(error)throw error;
+    const i=verifications.findIndex(x=>x.question_id===q.id);if(i>=0)verifications[i]=data;else verifications.push(data);
+    $("qaSaveState").textContent="Saved ✓";
+    renderStats();renderGrid();renderQuestion(q);
+  }catch(err){$("qaSaveState").textContent="Failed: "+(err.message||err)}
+}
+function playCue(id){
+  const c=cues.find(x=>x.id===id);if(!c)return;
+  selectedCueId=id;renderCues(qByNo(selectedNo));
+  const a=$("audioPlayer");a.currentTime=c.start_ms/1000;stopAt=c.end_ms/1000;a.play().then(startSpotlightLoop).catch(()=>{});
+}
+function nudgeSelected(deltaMs){
+  const q=qByNo(selectedNo),c=cues.find(x=>x.id===selectedCueId);if(!c)return;
+  const row=document.querySelector(`.cue[data-cue="${CSS.escape(c.id)}"]`);if(!row)return;
+  const s=row.querySelector('[data-field="start"]'),e=row.querySelector('[data-field="end"]');
+  s.value=Math.max(0,Number(s.value)+deltaMs);e.value=Math.max(Number(s.value)+1,Number(e.value)+deltaMs);
+}
+function highlightByAudio(){
+  const a=$("audioPlayer"),t=a.currentTime*1000;
+  const currentSeg=currentAudioSegment();
+
+  // Part C Directions is its own audio file (segment 7).
+  if(currentSeg&&Number(currentSeg.segment_order)===7){
+    activePhraseKey=null;
+    updatePartCDirectionsSpotlight(t);
+    if(playingNo!==null){playingNo=null;renderGrid()}
+    if(stopAt!=null&&a.currentTime>=stopAt){
+      a.pause();stopAt=null;activeDirectionCueId=null;
+      document.querySelectorAll("[data-dir-cue]").forEach(el=>el.classList.remove("active"));
+    }
+    return;
+  }else{
+    activeDirectionCueId=null;
+  }
+
+  if(isPartCQuestion(qByNo(selectedNo)))updatePartCPhraseSpotlight(t);else activePhraseKey=null;
+  const audioQ=questionAtAudioTime(t);
+
+  // Two-way sync: while the audio moves into another question,
+  // the question panel and the left navigator follow automatically.
+  if(audioQ && Number(audioQ.question_no)!==Number(selectedNo)){
+    syncUiToQuestion(audioQ);
+    if(isPartCQuestion(audioQ))updatePartCPhraseSpotlight(t);
+  }
+
+  const q=audioQ||qByNo(selectedNo);if(!q)return;
+  const list=visibleCuesForQuestion(q);
+  const c=list.find(x=>t>=Number(x.start_ms)&&t<Number(x.end_ms))||null;
+  const next=c?c.id:null;
+  const nextPlaying=(!a.paused&&!a.ended&&audioQ)?Number(audioQ.question_no):null;
+
+  if(nextPlaying!==playingNo){
+    playingNo=nextPlaying;
+    renderGrid();
+  }
+
+  // Playback spotlight is independent from the cue selected for editing.
+  // During a real audio gap/silence, NO subtitle remains highlighted.
+  if(next!==activeCueId){
+    activeCueId=next;
+    document.querySelectorAll(".cue").forEach(el=>{
+      el.classList.toggle("active",!!activeCueId && el.dataset.cue===activeCueId);
+      el.classList.toggle("selected",!!selectedCueId && el.dataset.cue===selectedCueId);
+    });
+    document.querySelectorAll(".leadbox").forEach(el=>{
+      el.classList.toggle("active",!!activeCueId && el.dataset.lead===activeCueId);
+    });
+  }
+
+  if(stopAt!=null&&a.currentTime>=stopAt){
+    a.pause();stopAt=null;activeCueId=null;activePhraseKey=null;playingNo=null;
+    renderGrid();
+    document.querySelectorAll(".cue").forEach(el=>el.classList.remove("active"));
+    document.querySelectorAll(".leadbox").forEach(el=>el.classList.remove("active"));
+  }
+}
+function spotlightLoop(){
+  highlightByAudio();
+  if(!$("audioPlayer").paused&&!$("audioPlayer").ended)rafId=requestAnimationFrame(spotlightLoop);
+  else rafId=null;
+}
+function startSpotlightLoop(){
+  if(rafId==null)rafId=requestAnimationFrame(spotlightLoop);
+}
+function playGroupConversation(){
+  const q=qByNo(selectedNo),list=sharedCuesForQuestion(q);if(!list.length)return;
+  const start=Math.min(...list.map(x=>Number(x.start_ms)))/1000;
+  const end=Math.max(...list.map(x=>Number(x.end_ms)))/1000;
+  const a=$("audioPlayer");
+  a.currentTime=start;stopAt=end;playingNo=null;renderGrid();
+  a.play().then(startSpotlightLoop).catch(()=>{});
+}
+function playQuestionRange(){
+  const q=qByNo(selectedNo),list=cueForQuestion(q.id);if(!list.length)return;
+  const start=Math.min(...list.map(x=>x.start_ms))/1000,end=Math.max(...list.map(x=>x.end_ms))/1000;
+  const a=$("audioPlayer");
+  a.currentTime=start;stopAt=end;playingNo=Number(q.question_no);renderGrid();
+  a.play().then(startSpotlightLoop).catch(()=>{playingNo=null;renderGrid()});
+}
+async function signIn(){
+  const email=$("email").value.trim(),password=$("password").value;
+  if(!email||!password){showMsg("error","Isi email dan password.");return}
+  $("loginBtn").disabled=true;$("loginBtn").textContent="Signing in…";
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;
+    if(!data?.session)throw new Error("Session tidak terbentuk.");
+    user=data.user;
+    if((user?.email||"").toLowerCase()!==ADMIN_EMAIL){await sb.auth.signOut();throw new Error("Akun ini bukan akun admin KIP yang diizinkan.");}
+    await showDashboard();
+  }catch(err){showMsg("error",err.message||"Login gagal.");}
+  finally{$("loginBtn").disabled=false;$("loginBtn").textContent="Sign In"}
+}
+function showLogin(){$("loginSection").classList.remove("hidden");$("dashboardSection").classList.add("hidden");$("signOutBtn").classList.add("hidden");$("userPill").classList.add("hidden")}
+async function showDashboard(){
+  $("loginSection").classList.add("hidden");$("dashboardSection").classList.remove("hidden");$("signOutBtn").classList.remove("hidden");$("userPill").classList.remove("hidden");$("userPill").textContent=user?.email||"Admin";
+  try{await loadAll()}catch(err){console.error(err);alert("Gagal memuat QA data: "+(err.message||err))}
+}
+async function init(){
+  if(!SUPABASE_URL||!SUPABASE_ANON_KEY){showLogin();showMsg("error","config.js belum terbaca. Upload file ini ke folder yang sama dengan config.js di repo KIP-TOEFL.");return}
+  if(!window.supabase||typeof window.supabase.createClient!=="function"){showLogin();showMsg("error","Supabase SDK gagal dimuat.");return}
+  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  const {data}=await sb.auth.getSession();user=data?.session?.user||null;
+  if(user&&(user.email||"").toLowerCase()===ADMIN_EMAIL)await showDashboard();else showLogin();
+}
+$("loginBtn").addEventListener("click",signIn);
+$("password").addEventListener("keydown",e=>{if(e.key==="Enter")signIn()});
+$("signOutBtn").addEventListener("click",async()=>{await sb.auth.signOut();user=null;showLogin()});
+$("refreshBtn").addEventListener("click",loadAll);
+$("qgrid").addEventListener("click",e=>{const b=e.target.closest("[data-q]");if(b)selectQuestion(b.dataset.q,{autoplay:true})});
+$("cueList").addEventListener("click",e=>{const dir=e.target.closest("[data-play-partc-directions]");if(dir){playPartCDirections();return}const follow=e.target.closest("[data-follow-toggle]");if(follow){setPartCAutoFollow(!partCAutoFollow);return}const talk=e.target.closest("[data-play-talk]");if(talk){playPartCTalk();return}const group=e.target.closest("[data-play-group]");if(group){playGroupConversation();return}const play=e.target.closest("[data-play]");if(play){playCue(play.dataset.play);return}const row=e.target.closest("[data-cue]");if(row){selectedCueId=row.dataset.cue;renderCues(qByNo(selectedNo))}});$("leadInWrap").addEventListener("click",e=>{const play=e.target.closest("[data-play]");if(play)playCue(play.dataset.play)});
+$("saveCuesBtn").addEventListener("click",saveCues);
+$("saveQaBtn").addEventListener("click",saveQa);
+$("minusBtn").addEventListener("click",()=>nudgeSelected(-250));
+$("plusBtn").addEventListener("click",()=>nudgeSelected(250));
+$("playQuestionBtn").addEventListener("click",playQuestionRange);
+$("audioPlayer").addEventListener("play",()=>{startSpotlightLoop();highlightByAudio()});$("audioPlayer").addEventListener("seeking",highlightByAudio);$("audioPlayer").addEventListener("seeked",highlightByAudio);$("audioPlayer").addEventListener("pause",()=>{playingNo=null;renderGrid();highlightByAudio()});$("audioPlayer").addEventListener("ended",()=>{playingNo=null;activeCueId=null;renderGrid();highlightByAudio()});
+init();
+})();
+</script>
+</body>
+</html>
