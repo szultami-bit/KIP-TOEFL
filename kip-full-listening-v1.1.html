@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KIP Listening — Complete Test Five</title>
+<style>
+:root{--navy:#071633;--blue:#2454e6;--red:#d11639;--green:#16a34a;--line:#d8e0ec;--muted:#64748b;--text:#17213a;--soft:#f7f9fc;--spot:#fff3b8}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:#fff}button,input{font:inherit}.hidden{display:none!important}
+.top{height:70px;background:var(--navy);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:0 22px;position:relative;z-index:50}.brand{display:flex;align-items:center;gap:11px}.brand img{width:46px;height:46px;object-fit:contain;background:#fff;border-radius:9px}.brand strong{font-size:18px}.brand small{display:block;opacity:.72}.pill{border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 11px;font-size:10.5px;font-weight:900}.pill.preview{border-color:#fdba74;background:#7c2d12;color:#ffedd5}
+.landing{max-width:1080px;margin:28px auto;padding:20px}.card{border:1px solid var(--line);border-radius:19px;background:#fff;box-shadow:0 12px 28px rgba(8,22,51,.08);padding:25px}.landingGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.hero h1{font-size:42px;margin:7px 0 12px}.hero p{color:var(--muted);line-height:1.6}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}.fact{border:1px solid var(--line);border-radius:13px;padding:13px}.fact strong{display:block;font-size:19px}.fact span{font-size:10.5px;color:var(--muted)}.input{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:11px;margin:6px 0 10px}.btn{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;font-weight:900;cursor:pointer;touch-action:manipulation}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.green{background:var(--green);border-color:var(--green);color:#fff}.btn:disabled{opacity:.5;cursor:not-allowed}.resume{margin-top:13px;padding:12px;border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:11px;font-size:12px}.status{font-size:11px;color:var(--muted);margin-top:8px}.status.bad{color:#b91c1c}.status.good{color:#166534}
+.exam{height:calc(100vh - 70px);display:flex;flex-direction:column}.examHead{height:68px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;padding:0 18px;flex:0 0 auto;background:#fff;z-index:25}.examTitle{font-size:17px;font-weight:950}.audioState{font-size:11px;color:var(--muted);font-weight:800}.headActions{display:flex;align-items:center;gap:7px}.headBtn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;font-size:11px;font-weight:900;cursor:pointer}.headBtn.active{background:#eef4ff;border-color:#9dbaf8;color:#1d4ed8}.timer{font-size:20px;font-weight:950;min-width:78px;text-align:right}.body{flex:1;min-height:0;overflow:auto;background:var(--soft);padding:16px 18px 104px;scroll-behavior:smooth}
+.focusMode .top{display:none}.focusMode .exam{height:100vh}.focusMode .body{padding-top:10px}.focusMode .examHead{height:58px}
+.directionLayout{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr .36fr;gap:13px;align-items:start}.directionPanel,.directionSide{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px}.directionPanel h2,.directionSide h3{margin:0 0 9px}.transcript{display:flex;flex-direction:column;gap:4px}.tline{padding:7px 10px;border-radius:9px;color:#64748b;line-height:1.45;font-size:13px;border-left:4px solid transparent;transition:.08s}.tline.heading{font-weight:950;color:#17213a;background:#f8fafc}.tline.active{background:var(--spot);color:#111827;border-left-color:#f59e0b;font-weight:850}.directionSide{position:sticky;top:6px}.directionSide p{font-size:12px;line-height:1.55;color:#64748b}.speakerIcon{font-size:38px}
+.partIntro{max-width:1220px;margin:0 auto 9px;display:flex;justify-content:space-between;gap:12px;align-items:center}.partIntro strong{font-size:18px}.partIntro span{font-size:11px;color:var(--muted)}.qwrap{max-width:1220px;margin:0 auto}.q{border:1px solid var(--line);border-radius:13px;background:#fff;padding:12px;margin-bottom:9px;transition:.08s}.q.current{border-left:5px solid var(--red);box-shadow:0 0 0 2px rgba(209,22,57,.045);background:#fffdfd}.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}.qnum{font-weight:950}.badge{font-size:9px;font-weight:950;padding:5px 7px;border-radius:999px;background:#fff1f2;color:#be123c}.optgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 8px}.opt{appearance:none;width:100%;text-align:left;display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:8px 9px;cursor:pointer;min-height:41px;background:#fff;color:var(--text);touch-action:manipulation;transition:.07s}.opt:hover{background:#f8fbff}.opt.sel{background:#e9f2ff;border-color:#6f9df5;box-shadow:0 0 0 1px rgba(37,84,230,.08)}.letter{width:25px;height:25px;flex:0 0 25px;border-radius:50%;border:1px solid #cbd5e1;display:grid;place-items:center;font-size:11px;font-weight:950}
+.bottom{position:fixed;left:0;right:0;bottom:0;min-height:88px;background:#fff;border-top:1px solid #ef9cab;display:grid;grid-template-columns:56% 17% 27%;z-index:40}.part{border-right:1px solid var(--line);padding:6px 8px;display:flex;align-items:center;justify-content:center;gap:7px;min-width:0}.part.active{background:#fff9fa;border-top:3px solid var(--red)}.part.done{background:#eef4ff;border-top-color:#2563eb}.pname{font-size:12px;font-weight:950;white-space:nowrap}.nums{display:grid;gap:3px;justify-content:center;align-items:center}.part[data-part="A"] .nums{grid-template-columns:repeat(15,25px)}.part[data-part="B"] .nums{grid-template-columns:repeat(4,25px)}.part[data-part="C"] .nums{grid-template-columns:repeat(6,25px)}.num{width:25px;height:25px;border:1px solid #334155;border-radius:4px;background:#fff;font-size:9.5px;font-weight:950;cursor:pointer}.num.current{background:var(--red);color:#fff;border-color:var(--red)}.num.answered{background:#2563eb;color:#fff;border-color:#2563eb}.num.futurePart{background:#e5e7eb;color:#94a3b8;border-color:#cbd5e1;cursor:not-allowed}
+.result{max-width:1000px;margin:26px auto;padding:20px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:18px 0}.stat{border:1px solid var(--line);border-radius:13px;padding:13px}.stat span{display:block;font-size:10px;color:var(--muted);font-weight:850}.stat strong{font-size:24px}.partsScore{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.savePanel{margin-top:14px;border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:11px;padding:11px;font-size:12px}
+@media(max-width:1050px){.optgrid{grid-template-columns:1fr}.directionLayout{grid-template-columns:1fr}.directionSide{position:static}.bottom{grid-template-columns:1fr}.part:not(.active){display:none}.part[data-part="A"] .nums{grid-template-columns:repeat(15,23px)}.body{padding-bottom:96px}}
+@media(max-width:760px){.landingGrid{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}.examHead{grid-template-columns:1fr auto}.headActions{grid-column:1/-1;position:absolute;right:92px}.stats{grid-template-columns:1fr 1fr}.partsScore{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><img src="kip-logo.jpg" alt="KIP"><div><strong>KIP Listening Test</strong><small>Complete Test Five</small></div></div>
+  <span id="modePill" class="pill">Loading…</span>
+</header>
+
+<main id="landing" class="landing">
+  <div class="landingGrid">
+    <section class="card hero">
+      <div class="pill" style="display:inline-block;background:#071633;color:#fff">TOEFL ITP-style diagnostic</div>
+      <h1>Listening Comprehension</h1>
+      <p>50 questions across Parts A, B and C. The recording controls the pace of the test. Audio cannot be paused, replayed or manually seeked during the attempt.</p>
+      <div class="facts">
+        <div class="fact"><strong>50</strong><span>Questions</span></div>
+        <div class="fact"><strong>≈ 32 min</strong><span>Actual recording</span></div>
+        <div class="fact"><strong>3 Parts</strong><span>A · B · C</span></div>
+      </div>
+      <div class="status" id="loadState">Connecting to KIP database…</div>
+    </section>
+    <section class="card">
+      <h2 style="margin-top:0">Participant</h2>
+      <label>Name</label><input id="name" class="input" autocomplete="name">
+      <label>WhatsApp</label><input id="whatsapp" class="input" inputmode="tel">
+      <label>School / Institution</label><input id="institution" class="input">
+      <button id="start" class="btn primary" style="width:100%" disabled>Start Listening Test</button>
+      <div id="resumeBox" class="resume hidden">
+        <strong>Unfinished attempt found.</strong>
+        <div id="resumeText" style="margin:6px 0 9px"></div>
+        <button id="resume" class="btn green">Resume</button>
+        <button id="discard" class="btn">Discard local session</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<section id="exam" class="exam hidden">
+  <div class="examHead">
+    <div><div id="examTitle" class="examTitle">Listening</div><div id="audioState" class="audioState">Audio controlled by test</div></div>
+    <div class="headActions"><button id="focusBtn" class="headBtn">◎ Focus</button><button id="fullBtn" class="headBtn">⛶ Fullscreen</button><button id="currentBtn" class="headBtn hidden">Go to current</button></div>
+    <div id="timer" class="timer">--:--</div>
+  </div>
+  <div id="body" class="body"></div>
+  <div id="bottom" class="bottom"></div>
+</section>
+
+<main id="result" class="result hidden">
+  <section class="card">
+    <h1 style="margin-top:0">Listening Complete</h1>
+    <p id="who" style="color:#64748b"></p>
+    <div class="stats">
+      <div class="stat"><span>RAW SCORE</span><strong id="raw">—</strong></div>
+      <div class="stat"><span>ACCURACY</span><strong id="acc">—</strong></div>
+      <div class="stat"><span>ANSWERED</span><strong id="answered">—</strong></div>
+      <div class="stat"><span>UNANSWERED</span><strong id="unanswered">—</strong></div>
+      <div class="stat"><span>TIME</span><strong id="elapsed">—</strong></div>
+    </div>
+    <div id="partScores" class="partsScore"></div>
+    <div class="savePanel">Result is scored on the KIP server. Correct answer keys are not sent to the browser.</div>
+    <button id="reset" class="btn" style="margin-top:14px">Return to Start</button>
+  </section>
+</main>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const __fullParams=new URLSearchParams(location.search),__fullSessionId=__fullParams.get('full_session')||'';
+const TEST_SLUG='complete-test-5',BUCKET='listening-audio',LOCAL_KEY=(__fullParams.get('full')==='1'&&__fullSessionId)?`kip_full_${__fullSessionId}_listening`:'kip_listening_ct5_student_v1';
+const $=id=>document.getElementById(id);
+const cfg=window.KIP_CONFIG||window.KIP_SUPABASE||{};
+const SUPABASE_URL=cfg.SUPABASE_URL||cfg.url||'';
+const SUPABASE_ANON_KEY=cfg.SUPABASE_ANON_KEY||cfg.anonKey||'';
+let sb=null,manifest=null,segments=[],questions=[],directions=[],signedUrls=new Map(),offsets=new Map(),totalMs=0;
+let attempt=null,answers=Array(50).fill(null),audio=null,audioSegment=null,tickId=null,saveId=null,rafId=null,lastCurrent=null,currentQ=null,currentPart='A',userScrolledAt=0,submitting=false,focusMode=false;
+
+function fmt(sec){sec=Math.max(0,Math.floor(Number(sec)||0));return `${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function localSave(){if(!attempt)return;localStorage.setItem(LOCAL_KEY,JSON.stringify({attempt_id:attempt.attempt_id,session_token:attempt.session_token,name:attempt.participant_name||$('name').value,answers}))}
+function localRead(){try{return JSON.parse(localStorage.getItem(LOCAL_KEY)||'null')}catch{return null}}
+function localClear(){localStorage.removeItem(LOCAL_KEY)}
+function segById(id){return segments.find(s=>s.id===id)}
+function segByOrder(n){return segments.find(s=>Number(s.segment_order)===Number(n))}
+function partRange(p){return p==='A'?[1,30]:p==='B'?[31,38]:[39,50]}
+function partStarted(p,globalMs){const order=p==='A'?2:p==='B'?5:8;return globalMs>=offsets.get(order)}
+function partDone(p){const [a,b]=partRange(p);return answers.slice(a-1,b).every(x=>x!==null)}
+function answerLabels(){return answers.map(x=>Number.isInteger(x)?'ABCD'[x]:null)}
+
+async function init(){
+  try{
+    if(!SUPABASE_URL||!SUPABASE_ANON_KEY||!window.supabase)throw new Error('config.js / Supabase is not ready.');
+    sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+    const {data,error}=await sb.rpc('get_listening_student_manifest',{p_slug:TEST_SLUG});
+    if(error)throw error;
+    manifest=data;segments=manifest.audio_segments||[];questions=manifest.questions||[];directions=manifest.directions||[];
+    let off=0;segments.sort((a,b)=>a.segment_order-b.segment_order).forEach(s=>{offsets.set(Number(s.segment_order),off);off+=Number(s.duration_ms||0)});totalMs=off;
+    await signAudio();
+    $('modePill').textContent=manifest.test.preview?'ADMIN PREVIEW':'LIVE TEST';
+    $('modePill').classList.toggle('preview',!!manifest.test.preview);
+    $('loadState').textContent=`Ready · ${questions.length}/50 questions · ${segments.length}/10 audio files`;
+    $('loadState').className='status good';$('start').disabled=false;
+    const old=localRead();if(old?.attempt_id&&old?.session_token){$('resumeBox').classList.remove('hidden');$('resumeText').textContent=`Attempt ${String(old.attempt_id).slice(0,8)}… · ${old.answers?.filter(x=>x!==null).length||0}/50 answered`}
+  }catch(err){console.error(err);$('modePill').textContent='NOT READY';$('loadState').textContent=err.message||String(err);$('loadState').className='status bad'}
+}
+async function signAudio(){
+  for(const s of segments){
+    const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(s.storage_path,7200);
+    if(error)throw error;
+    signedUrls.set(s.id,data.signedUrl);
+  }
+}
+
+async function startAttempt(){
+  const name=$('name').value.trim();if(!name){alert('Enter participant name first.');return}
+  $('start').disabled=true;
+  try{
+    const clientId=crypto.randomUUID();
+    const {data,error}=await sb.rpc('start_listening_attempt',{
+      p_slug:TEST_SLUG,p_participant_name:name,p_whatsapp:$('whatsapp').value.trim()||null,
+      p_institution:$('institution').value.trim()||null,p_client_attempt_id:clientId,p_user_agent:navigator.userAgent
+    });
+    if(error)throw error;
+    attempt={...data,participant_name:name};answers=Array(50).fill(null);localSave();beginExam(0);
+  }catch(err){alert(err.message||err);$('start').disabled=false}
+}
+async function resumeAttempt(){
+  const old=localRead();if(!old)return;
+  try{
+    const {data,error}=await sb.rpc('resume_listening_attempt',{p_attempt_id:old.attempt_id,p_session_token:old.session_token});
+    if(error)throw error;
+    attempt={attempt_id:old.attempt_id,session_token:old.session_token,...data};
+    answers=Array.isArray(data.answers)?data.answers.map(x=>x==null?null:'ABCD'.indexOf(x)):Array(50).fill(null);
+    if(data.status==='submitted'){showResult(data);return}
+    beginExam(Number(data.server_elapsed_seconds||0)*1000);
+  }catch(err){alert('Could not resume: '+(err.message||err))}
+}
+function beginExam(globalMs){
+  $('landing').classList.add('hidden');$('result').classList.add('hidden');$('exam').classList.remove('hidden');
+  seekGlobal(globalMs,true);startLoops();renderMode();updateNav();localSave();
+}
+function locate(globalMs){
+  let found=segments[0];
+  for(const s of segments){if(globalMs>=offsets.get(Number(s.segment_order)))found=s;else break}
+  const local=Math.max(0,Math.min(Number(found.duration_ms)-50,globalMs-offsets.get(Number(found.segment_order))));
+  return {segment:found,localMs:local}
+}
+function globalNowMs(){return audio&&audioSegment?offsets.get(Number(audioSegment.segment_order))+(audio.currentTime*1000):0}
+async function seekGlobal(globalMs,play){
+  const loc=locate(Math.min(globalMs,totalMs-50));await loadSegment(loc.segment,loc.localMs,play);
+}
+async function loadSegment(seg,localMs=0,play=true){
+  if(audio){try{audio.pause()}catch{}}
+  if(rafId)cancelAnimationFrame(rafId);
+  audioSegment=seg;audio=new Audio(signedUrls.get(seg.id));audio.preload='auto';
+  audio.addEventListener('loadedmetadata',()=>{try{audio.currentTime=Math.max(0,Math.min(localMs/1000,audio.duration-.05))}catch{}});
+  audio.addEventListener('ended',async()=>{const next=segByOrder(Number(seg.segment_order)+1);if(next)await loadSegment(next,0,true);else await submitAttempt(true)});
+  audio.addEventListener('play',animationLoop);
+  if(play)await audio.play().catch(()=>{});
+  renderMode();
+}
+function animationLoop(){
+  if(!audio||audio.paused)return;
+  updateFromAudio();rafId=requestAnimationFrame(animationLoop);
+}
+function updateFromAudio(){
+  const globalMs=globalNowMs(),seg=audioSegment,localMs=audio.currentTime*1000;
+  currentPart=seg.part;
+  currentQ=null;
+  if(seg.segment_type!=='directions'){
+    const candidates=questions.filter(q=>q.audio_segment_id===seg.id);
+    currentQ=candidates.find(q=>localMs>=Number(q.focus_start_ms)&&localMs<=Number(q.focus_end_ms))||null;
+  }
+  renderDynamic(localMs);updateNav();
+}
+function directionFor(seg){return directions.find(d=>d.audio_segment_id===seg.id)}
+function renderDirections(){
+  const d=directionFor(audioSegment),localMs=(audio?.currentTime||0)*1000;
+  $('examTitle').textContent=`Part ${audioSegment.part} · Directions`;
+  $('body').innerHTML=`<div class="directionLayout">
+    <section class="directionPanel"><h2>${esc(d?.title||audioSegment.title||'Directions')}</h2><div class="transcript">${(d?.cues||[]).map((c,i)=>`<div class="tline ${c.cue_type==='heading'?'heading':''}" data-start="${c.start_ms}" data-end="${c.end_ms}">${esc(c.speaker&&c.speaker!=='NARRATOR'?c.speaker+': ':'')}${esc(c.text||'')}</div>`).join('')}</div></section>
+    <aside class="directionSide"><div class="speakerIcon">🔊</div><h3>Listen carefully</h3><p>The recording controls the pace. You cannot pause, replay or seek backward.</p><p>Questions become available when their Part begins.</p></aside>
+  </div>`;
+  updateDirectionSpotlight(localMs);
+}
+function updateDirectionSpotlight(localMs){
+  document.querySelectorAll('.tline').forEach(el=>el.classList.toggle('active',localMs>=Number(el.dataset.start)&&localMs<Number(el.dataset.end)));
+  const active=document.querySelector('.tline.active');if(active&&Date.now()-userScrolledAt>4000)active.scrollIntoView({block:'center',behavior:'smooth'});
+}
+function renderQuestions(){
+  const [from,to]=partRange(currentPart),qs=questions.filter(q=>q.question_no>=from&&q.question_no<=to);
+  $('examTitle').textContent=currentQ?`Part ${currentPart} · Question ${currentQ.question_no} of 50`:`Part ${currentPart}`;
+  $('body').innerHTML=`<div class="partIntro"><div><strong>Part ${currentPart} · Questions ${from}–${to}</strong><br><span>All answer choices are visible. Red follows the audio only.</span></div><span id="currentText">${currentQ?'Current audio: Q'+currentQ.question_no:'Listen carefully…'}</span></div><div id="qwrap" class="qwrap"></div>`;
+  const wrap=$('qwrap');
+  qs.forEach(q=>{
+    const card=document.createElement('section');card.className='q'+(currentQ?.question_no===q.question_no?' current':'');card.id='q'+q.question_no;
+    card.innerHTML=`<div class="qhead"><div class="qnum">Question ${q.question_no}</div><span class="badge ${currentQ?.question_no===q.question_no?'':'hidden'}">CURRENT AUDIO</span></div><div class="optgrid"></div>`;
+    const og=card.querySelector('.optgrid');
+    (q.choices||[]).forEach((o,i)=>{const b=document.createElement('button');b.type='button';b.className='opt'+(answers[q.question_no-1]===i?' sel':'');b.innerHTML=`<span class="letter">${'ABCD'[i]}</span><span>${esc(o)}</span>`;b.onclick=()=>{answers[q.question_no-1]=i;card.querySelectorAll('.opt').forEach(x=>x.classList.toggle('sel',x===b));localSave();updateNav()};og.appendChild(b)});
+    wrap.appendChild(card)
+  });
+  lastCurrent=currentQ?.question_no||null;
+}
+function renderDynamic(localMs){
+  if(audioSegment.segment_type==='directions'){if(!$('body').querySelector('.directionLayout'))renderDirections();else updateDirectionSpotlight(localMs);return}
+  if(!$('qwrap')||$('body').dataset.part!==currentPart){$('body').dataset.part=currentPart;renderQuestions();return}
+  const n=currentQ?.question_no||null;
+  if(n!==lastCurrent){
+    if(lastCurrent){const old=$('q'+lastCurrent);old?.classList.remove('current');old?.querySelector('.badge')?.classList.add('hidden')}
+    if(n){const now=$('q'+n);now?.classList.add('current');now?.querySelector('.badge')?.classList.remove('hidden');if(Date.now()-userScrolledAt>4500)now?.scrollIntoView({block:'center',behavior:'smooth'})}
+    $('currentText').textContent=n?'Current audio: Q'+n:'Listen carefully…';$('examTitle').textContent=n?`Part ${currentPart} · Question ${n} of 50`:`Part ${currentPart}`;lastCurrent=n
+  }
+}
+function renderMode(){
+  if(!audioSegment)return;
+  $('body').dataset.part='';
+  if(audioSegment.segment_type==='directions')renderDirections();else renderQuestions();
+}
+function updateNav(){
+  const globalMs=globalNowMs(),b=$('bottom');
+  if(!b.dataset.built){
+    b.innerHTML='';
+    for(const p of ['A','B','C']){
+      const [from,to]=partRange(p),d=document.createElement('div');d.className='part';d.dataset.part=p;d.innerHTML=`<div class="pname">Part ${p}</div><div class="nums"></div>`;
+      const ns=d.querySelector('.nums');for(let n=from;n<=to;n++){const bt=document.createElement('button');bt.type='button';bt.className='num';bt.textContent=n;bt.dataset.n=n;bt.onclick=()=>{if(bt.disabled)return;userScrolledAt=Date.now();$('q'+n)?.scrollIntoView({block:'center',behavior:'smooth'})};ns.appendChild(bt)}b.appendChild(d)
+    }b.dataset.built='1'
+  }
+  for(const p of ['A','B','C']){
+    const el=b.querySelector(`.part[data-part="${p}"]`),started=partStarted(p,globalMs);el.classList.toggle('active',currentPart===p);el.classList.toggle('done',partDone(p));
+    el.querySelectorAll('.num').forEach(bt=>{const n=Number(bt.dataset.n);bt.disabled=!started;bt.classList.toggle('futurePart',!started);bt.classList.toggle('current',currentQ?.question_no===n);bt.classList.toggle('answered',answers[n-1]!==null&&currentQ?.question_no!==n)})
+  }
+  $('currentBtn').classList.toggle('hidden',!currentQ);if(currentQ)$('currentBtn').textContent='Go to Q'+currentQ.question_no;
+}
+function startLoops(){
+  clearInterval(tickId);clearInterval(saveId);
+  tickId=setInterval(tick,500);saveId=setInterval(remoteSave,8000)
+}
+function tick(){
+  if(!attempt)return;
+  const elapsed=Math.min(totalMs/1000,(Date.now()-new Date(attempt.started_at).getTime())/1000),left=(totalMs/1000)-elapsed;
+  $('timer').textContent=fmt(left);
+  if(left<=0&&!submitting)submitAttempt(true)
+}
+async function remoteSave(){
+  if(!attempt||submitting)return;
+  localSave();
+  try{
+    const {data,error}=await sb.rpc('save_listening_progress',{p_attempt_id:attempt.attempt_id,p_session_token:attempt.session_token,p_answers:answerLabels(),p_position_seconds:globalNowMs()/1000});
+    if(error)throw error;
+    const serverMs=Number(data.server_elapsed_seconds||0)*1000,actual=globalNowMs();
+    if(serverMs-actual>1800)await seekGlobal(serverMs,true);
+  }catch(err){console.warn('Progress save failed',err)}
+}
+async function submitAttempt(auto=false){
+  if(submitting||!attempt)return;submitting=true;clearInterval(tickId);clearInterval(saveId);if(audio)audio.pause();
+  try{
+    const {data,error}=await sb.rpc('submit_listening_attempt',{p_attempt_id:attempt.attempt_id,p_session_token:attempt.session_token,p_answers:answerLabels(),p_auto_submitted:!!auto});
+    if(error)throw error;localClear();showResult(data,auto)
+  }catch(err){submitting=false;alert('Could not submit result: '+(err.message||err))}
+}
+function showResult(data,auto=false){
+  $('exam').classList.add('hidden');$('landing').classList.add('hidden');$('result').classList.remove('hidden');
+  $('who').textContent=`Participant: ${attempt?.participant_name||$('name').value}${auto||data.auto_submitted?' · Auto-submitted':''}`;
+  $('raw').textContent=`${data.raw_score}/50`;$('acc').textContent=`${data.accuracy}%`;
+  $('answered').textContent=`${50-Number(data.unanswered||0)}/50`;$('unanswered').textContent=data.unanswered;$('elapsed').textContent=fmt(data.elapsed_seconds);
+  $('partScores').innerHTML=`<div class="stat"><span>PART A</span><strong>${data.part_a_score}/30</strong></div><div class="stat"><span>PART B</span><strong>${data.part_b_score}/8</strong></div><div class="stat"><span>PART C</span><strong>${data.part_c_score}/12</strong></div>`;
+}
+async function syncAfterVisibility(){
+  if(document.hidden||!attempt||submitting)return;try{const {data,error}=await sb.rpc('resume_listening_attempt',{p_attempt_id:attempt.attempt_id,p_session_token:attempt.session_token});if(error)throw error;if(data.status==='submitted'){showResult(data);return}const serverMs=Number(data.server_elapsed_seconds||0)*1000;if(serverMs-globalNowMs()>1200)await seekGlobal(serverMs,true)}catch(err){console.warn(err)}
+}
+
+$('start').onclick=startAttempt;$('resume').onclick=resumeAttempt;$('discard').onclick=()=>{localClear();$('resumeBox').classList.add('hidden')};$('reset').onclick=()=>{localClear();location.reload()};
+$('body').addEventListener('scroll',()=>{userScrolledAt=Date.now()},{passive:true});
+$('focusBtn').onclick=()=>{focusMode=!focusMode;document.body.classList.toggle('focusMode',focusMode);$('focusBtn').classList.toggle('active',focusMode);$('focusBtn').textContent=focusMode?'✕ Exit Focus':'◎ Focus'};
+$('fullBtn').onclick=async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen()}catch{}};
+document.addEventListener('fullscreenchange',()=>{$('fullBtn').classList.toggle('active',!!document.fullscreenElement);$('fullBtn').textContent=document.fullscreenElement?'✕ Exit Fullscreen':'⛶ Fullscreen'});
+$('currentBtn').onclick=()=>{if(currentQ){userScrolledAt=0;$('q'+currentQ.question_no)?.scrollIntoView({block:'center',behavior:'smooth'})}};
+document.addEventListener('visibilitychange',syncAfterVisibility);
+window.addEventListener('pagehide',()=>{localSave();remoteSave()});
+init();
+</script>
+
+<style>
+body.full-child .top{display:none!important}
+body.full-child .exam{height:100vh!important}
+body.full-child .landing{padding-top:12px}
+body.full-child #reset{display:none!important}
+/* Full Test master owns browser fullscreen. Prevent nested child fullscreen/focus. */
+body.full-child #focusBtn,
+body.full-child #fullBtn{display:none!important}
+</style>
+<script>
+(function(){
+  const fp=new URLSearchParams(location.search);
+  if(fp.get('full')!=='1')return;
+  document.body.classList.add('full-child');
+  const fullSession=fp.get('full_session')||'';
+
+  async function releaseChildFullscreen(){
+    try{
+      if(document.fullscreenElement && document.exitFullscreen) await document.exitFullscreen();
+    }catch(_e){}
+  }
+  let identity={};
+  try{identity=JSON.parse(localStorage.getItem('kip_full_test_identity')||'{}')}catch(_e){}
+
+  const originalShowResult=showResult;
+  showResult=function(data,auto=false){
+    originalShowResult(data,auto);
+    releaseChildFullscreen().finally(()=>{ try{
+      parent.postMessage({
+        type:'KIP_FULL_SECTION_COMPLETE',
+        full_session:fullSession,
+        section:'listening',
+        result:{
+          attempt_id:attempt?.attempt_id||null,
+          raw_score:Number(data.raw_score||0),
+          accuracy:Number(data.accuracy||0),
+          unanswered:Number(data.unanswered||0),
+          part_a_score:Number(data.part_a_score||0),
+          part_b_score:Number(data.part_b_score||0),
+          part_c_score:Number(data.part_c_score||0),
+          elapsed_seconds:Number(data.elapsed_seconds||0)
+        }
+      },location.origin);
+    }catch(err){console.warn(err)} });
+  };
+
+  function autoEnter(){
+    if(!$('landing')||$('landing').classList.contains('hidden'))return true;
+    if(!identity.name)return false;
+    $('name').value=identity.name||'';
+    $('whatsapp').value=identity.whatsapp||'';
+    $('institution').value=identity.institution||'';
+
+    if(!$('resumeBox').classList.contains('hidden')){
+      $('resume').click(); return true;
+    }
+    if(!$('start').disabled){
+      $('start').click(); return true;
+    }
+    return false;
+  }
+  const iv=setInterval(()=>{if(autoEnter())clearInterval(iv)},250);
+  setTimeout(()=>clearInterval(iv),20000);
+})();
+</script>
+
+</body>
+</html>
