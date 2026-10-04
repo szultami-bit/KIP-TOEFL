@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KIP Certificate System Test</title>
+<style>
+:root{--navy:#071633;--blue:#2454e6;--green:#15803d;--red:#b91c1c;--line:#d8e0ec;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:#f5f7fb;color:#17213a}
+.top{height:70px;background:var(--navy);color:#fff;display:flex;align-items:center;padding:0 22px;gap:12px}.top img{width:46px;height:46px;background:#fff;border-radius:9px;object-fit:contain}.top strong{font-size:18px}.top small{display:block;opacity:.7}
+.wrap{max-width:760px;margin:32px auto;padding:18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 28px rgba(7,22,51,.07)}
+h1{margin:0 0 10px}.muted{color:var(--muted);line-height:1.55}.input{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:11px;margin:6px 0 12px;font:inherit}.btn{border:0;border-radius:11px;padding:12px 14px;background:var(--blue);color:#fff;font-weight:900;cursor:pointer;width:100%}.btn:disabled{opacity:.55}.status{margin-top:16px;padding:13px;border-radius:12px;background:#f8fafc;border:1px solid var(--line);font-size:12px;line-height:1.55}.status.good{background:#f0fdf4;border-color:#86efac;color:#166534}.status.bad{background:#fff1f2;border-color:#fecaca;color:#991b1b}.download{display:inline-block;margin-top:10px;text-decoration:none;font-weight:900;color:#1d4ed8}.hidden{display:none}
+</style>
+</head>
+<body>
+<header class="top"><img src="kip-logo.jpg" alt="KIP"><div><strong>KIP Certificate System Test</strong><small>Admin-only test · no need to repeat 140 questions</small></div></header>
+<main class="wrap">
+<section class="card">
+  <h1>Test PDF + Email Certificate</h1>
+  <p class="muted">Use the same email address as your Resend account for this first sandbox test. This creates a demo completed session with sample scores, then calls <code>issue-certificate</code>.</p>
+  <label>Name</label><input id="name" class="input" value="Certificate Test">
+  <label>Email</label><input id="email" class="input" type="email" placeholder="your Resend account email">
+  <button id="go" class="btn">Generate & Send Test Certificate</button>
+  <div id="status" class="status">Checking admin session…</div>
+  <a id="download" class="download hidden" target="_blank" rel="noopener">Download generated PDF</a>
+</section>
+</main>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const $=id=>document.getElementById(id);
+const cfg=window.KIP_CONFIG||window.KIP_SUPABASE||{};
+const url=cfg.SUPABASE_URL||cfg.url||'',key=cfg.SUPABASE_ANON_KEY||cfg.anonKey||'';
+let sb=null;
+
+function msg(text,kind=''){
+  $('status').textContent=text;
+  $('status').className='status'+(kind?' '+kind:'');
+}
+async function init(){
+  if(!url||!key||!window.supabase){msg('config.js / Supabase not ready.','bad');$('go').disabled=true;return}
+  sb=window.supabase.createClient(url,key);
+  const {data}=await sb.auth.getSession();
+  if(!data?.session){
+    msg('Admin session not found. Open/sign in to the KIP Listening QA Admin first, then return to this page.','bad');
+    $('go').disabled=true;
+    return;
+  }
+  msg('Admin session ready. Enter the email used for your Resend account.','good');
+}
+$('go').onclick=async()=>{
+  const name=$('name').value.trim(),email=$('email').value.trim().toLowerCase();
+  if(!name||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg('Enter a valid name and email.','bad');return}
+  $('go').disabled=true;$('download').classList.add('hidden');msg('Creating a completed certificate-test session…');
+  try{
+    const {data:demo,error:demoErr}=await sb.rpc('create_certificate_test_session',{p_name:name,p_email:email});
+    if(demoErr)throw demoErr;
+
+    msg('Demo session created. Generating PDF and sending email…');
+    const {data,error}=await sb.functions.invoke('issue-certificate',{
+      body:{session_id:demo.session_id,session_token:demo.session_token}
+    });
+    if(error)throw error;
+    if(!data?.ok)throw new Error(data?.error||'Certificate function returned an error.');
+
+    msg(`SUCCESS — ${data.certificate_id} sent to ${data.email}. Check your inbox/spam folder.`, 'good');
+    if(data.download_url){
+      $('download').href=data.download_url;
+      $('download').classList.remove('hidden');
+    }
+  }catch(err){
+    console.error(err);
+    msg('FAILED — '+(err.message||err),'bad');
+  }finally{
+    $('go').disabled=false;
+  }
+};
+init();
+</script>
+</body>
+</html>
