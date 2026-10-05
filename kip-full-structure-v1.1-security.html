@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KIP ITP-Style Grammar Diagnostic — V1.6</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#667085;--primary:#1d4ed8;--primary2:#163ea7;--line:#dde3ec;--good:#15803d;--bad:#b91c1c;--warn:#b45309;--soft:#eef4ff;--navy:#0f172a;--shadow:0 18px 48px rgba(15,23,42,.10);--radius:20px}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#edf4ff 0,#f8fafc 28%,#f4f7fb 100%);color:var(--ink)}button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.app{min-height:100vh}.topbar{height:72px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20;box-shadow:0 2px 14px rgba(0,0,0,.12)}.brand{display:flex;align-items:center;gap:12px;font-weight:800}.brand-badge{width:42px;height:42px;border-radius:12px;background:#fff;color:var(--navy);display:grid;place-items:center;font-weight:900}.brand small{display:block;font-size:12px;font-weight:500;opacity:.72;margin-top:2px}.version{font-size:12px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18)}.container{max-width:1180px;margin:0 auto;padding:32px 20px 60px}.card{background:var(--card);border:1px solid rgba(148,163,184,.25);box-shadow:var(--shadow);border-radius:var(--radius)}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:26px}.intro{padding:40px}.eyebrow{display:inline-flex;font-size:12px;font-weight:850;letter-spacing:.10em;text-transform:uppercase;color:var(--primary);background:var(--soft);padding:8px 12px;border-radius:999px}h1{font-size:44px;line-height:1.08;letter-spacing:-1.3px;margin:18px 0 12px}.lead{font-size:18px;line-height:1.7;color:#475569;max-width:760px}.feature-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}.feature{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fafafa}.feature strong{display:block;font-size:17px}.feature span{display:block;color:var(--muted);font-size:13px;margin-top:4px}.parts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.part-card{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff}.part-card b{display:block;margin-bottom:5px}.part-card span{font-size:13px;line-height:1.55;color:var(--muted)}.disclaimer{font-size:12.5px;color:#64748b;background:#f8fafc;border-left:3px solid #94a3b8;padding:12px 14px;border-radius:10px;line-height:1.55}.start-panel{padding:30px;display:flex;flex-direction:column;justify-content:center}.start-panel h2{margin:0 0 7px;font-size:24px}.start-panel p{margin:0 0 22px;color:var(--muted);line-height:1.55}label{font-size:13px;font-weight:750;margin-bottom:7px;display:block}.input{width:100%;padding:14px 15px;border:1px solid #cbd5e1;border-radius:12px;outline:none;background:#fff}.input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(29,78,216,.1)}.btn{border:0;border-radius:12px;padding:13px 18px;font-weight:800;transition:.18s;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary2);transform:translateY(-1px)}.btn-ghost{background:#fff;color:#1f2937;border:1px solid #d7dce3}.btn-ghost:hover{background:#f8fafc}.btn-danger{background:#fff1f2;color:#be123c;border:1px solid #fecdd3}.test-shell{display:grid;grid-template-columns:1fr 300px;gap:22px;align-items:start}.test-main{padding:28px}.test-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--line)}.progress-wrap{flex:1}.progress-label{font-size:13px;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;gap:12px}.progress{height:9px;border-radius:999px;background:#e5e7eb;overflow:hidden}.progress>div{height:100%;background:var(--primary);width:2.5%;transition:.25s}.timer{font-variant-numeric:tabular-nums;font-weight:900;font-size:22px;background:var(--navy);color:#fff;padding:10px 14px;border-radius:12px;min-width:102px;text-align:center}.timer.warn{background:#9a3412}.timer.danger{background:#991b1b;animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.72}}.part-banner{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin:22px 0 8px;padding:13px 15px;border-radius:13px;background:#f8fafc;border:1px solid var(--line)}.part-banner b{display:block;font-size:13px}.part-banner span{font-size:12px;color:var(--muted);line-height:1.45}.qmeta{display:flex;justify-content:space-between;align-items:center;margin:24px 0 8px}.qtype{font-size:12px;font-weight:850;color:var(--primary);letter-spacing:.08em;text-transform:uppercase}.qnum{font-size:13px;color:var(--muted)}.stem{font-size:23px;line-height:1.58;font-weight:650;margin:18px 0 22px}.options{display:grid;gap:11px}.option{width:100%;text-align:left;padding:15px 17px;border-radius:14px;border:1.5px solid #d9dee8;background:#fff;display:flex;gap:14px;align-items:flex-start;transition:.16s;color:#1f2937}.option:hover{border-color:#93c5fd;background:#f8fbff}.option.selected{border-color:var(--primary);background:#eef4ff;box-shadow:0 0 0 3px rgba(29,78,216,.08)}.letter{width:30px;height:30px;border-radius:9px;border:1px solid #cbd5e1;display:grid;place-items:center;font-weight:850;flex:0 0 auto;background:#fff}.option.selected .letter{background:var(--primary);color:#fff;border-color:var(--primary)}.error-sentence{font-size:22px;line-height:2.15;font-weight:560;margin:20px 0 8px}.seg{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px;padding:1px 4px 0;border:0;background:transparent;color:inherit;border-radius:7px;transition:.16s}.seg .segtext{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}.seg .seglabel{font-size:11px;font-weight:850;color:#64748b;line-height:1;margin-top:5px}.seg:hover{background:#eff6ff}.seg.selected{background:#dbeafe;box-shadow:0 0 0 2px #93c5fd}.seg.selected .seglabel{color:var(--primary)}.error-help{font-size:13px;color:var(--muted);margin-top:12px}.nav-actions{display:flex;justify-content:space-between;gap:12px;margin-top:30px;padding-top:20px;border-top:1px solid var(--line)}.side{padding:20px;position:sticky;top:94px}.side h3{margin:0 0 4px}.side p{margin:0 0 15px;color:var(--muted);font-size:13px;line-height:1.5}.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.pbtn{aspect-ratio:1;border:1px solid #d7dce3;background:#fff;border-radius:9px;font-weight:800;color:#475569;font-size:12px}.pbtn.partb{border-style:dashed}.pbtn.current{border-color:var(--primary);box-shadow:0 0 0 3px rgba(29,78,216,.1)}.pbtn.answered{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe}.divider-label{grid-column:1/-1;font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-top:5px}.legend{display:grid;gap:7px;margin-top:16px;font-size:12px;color:#64748b}.legend span{display:flex;align-items:center;gap:8px}.dot{width:10px;height:10px;border-radius:3px;background:#fff;border:1px solid #cbd5e1}.dot.answered{background:#dbeafe;border-color:#bfdbfe}.dot.current{box-shadow:0 0 0 2px rgba(29,78,216,.25);border-color:var(--primary)}.submit-side{margin-top:18px;width:100%}.result{padding:32px}.score-grid{display:grid;grid-template-columns:190px 1fr;gap:26px;align-items:center}.score-ring{width:180px;height:180px;border-radius:50%;background:conic-gradient(var(--primary) 0deg,#e5e7eb 0deg);display:grid;place-items:center;position:relative;margin:auto}.score-ring::after{content:"";position:absolute;width:138px;height:138px;background:#fff;border-radius:50%}.score-inner{position:relative;z-index:1;text-align:center}.score-big{font-size:44px;font-weight:900;letter-spacing:-1px}.score-sub{font-size:12px;color:var(--muted)}.result h2{font-size:30px;margin:0 0 7px}.result-copy{color:#64748b;line-height:1.65;margin:0 0 16px}.score-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{padding:13px;border:1px solid var(--line);border-radius:14px;background:#fafafa}.stat strong{display:block;font-size:20px}.stat span{font-size:11px;color:var(--muted);line-height:1.3}.itp-box{margin-top:20px;padding:18px;border:1px solid #bfdbfe;border-radius:15px;background:#eff6ff}.itp-box h3{margin:0 0 8px;font-size:17px}.itp-score{font-size:32px;font-weight:900;color:#1d4ed8}.itp-note{font-size:12px;line-height:1.55;color:#475569;margin-top:7px}.part-results{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.part-stat{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}.part-stat b{font-size:16px}.part-stat span{display:block;font-size:11px;color:var(--muted);margin-top:3px}.review{margin-top:26px}.review h3{margin-bottom:12px}.review-item{border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:10px;background:#fff}.review-item.correct{border-left:5px solid var(--good)}.review-item.wrong{border-left:5px solid var(--bad)}.review-item.unanswered{border-left:5px solid var(--warn)}.review-top{display:flex;justify-content:space-between;gap:14px}.review-stem{font-weight:700;line-height:1.55}.review-meta{font-size:13px;color:#64748b;margin-top:8px}.explain{font-size:13px;line-height:1.55;color:#475569;margin-top:8px;background:#f8fafc;padding:10px;border-radius:10px}.footer-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}.toast{position:fixed;right:18px;bottom:18px;background:var(--navy);color:#fff;padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);font-size:13px;z-index:99}
+@media(max-width:900px){.hero,.test-shell,.score-grid{grid-template-columns:1fr}.side{position:static}.intro{padding:30px}h1{font-size:38px}.test-main{padding:22px}.topbar{padding:0 16px}.version{display:none}.score-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.container{padding:18px 11px 36px}.intro,.start-panel,.result{padding:21px}.feature-row,.parts,.part-results{grid-template-columns:1fr}.stem,.error-sentence{font-size:20px}.nav-actions{flex-wrap:wrap}.nav-actions .btn{flex:1}.timer{font-size:18px;min-width:88px}.brand small{display:none}.score-stats{grid-template-columns:1fr 1fr}}
+
+.calibration-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:800;border:1px solid #dbe3ee;background:#fff;color:#475569}.pill.provisional{background:#fff7ed;border-color:#fed7aa;color:#9a3412}.scale-wrap{margin-top:16px}.scale-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;font-size:12px;color:#64748b}.score-scale{height:18px;border-radius:999px;overflow:visible;position:relative;background:linear-gradient(90deg,#e2e8f0 0 2.7%,#dbeafe 2.7% 32.4%,#dcfce7 32.4% 59.5%,#fef3c7 59.5% 89.2%,#ede9fe 89.2% 100%);border:1px solid #cbd5e1}.score-pointer{position:absolute;top:-7px;width:3px;height:32px;background:#0f172a;border-radius:2px;transform:translateX(-50%);transition:.3s}.score-pointer:after{content:"";position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:9px;height:9px;border-radius:50%;background:#0f172a}.scale-labels{display:grid;grid-template-columns:repeat(5,1fr);font-size:10px;color:#64748b;margin-top:6px}.scale-labels span:nth-child(2),.scale-labels span:nth-child(3),.scale-labels span:nth-child(4){text-align:center}.scale-labels span:last-child{text-align:right}.method-box{margin-top:14px;padding:13px 14px;border:1px solid #e2e8f0;background:#f8fafc;border-radius:12px;font-size:12px;line-height:1.55;color:#475569}.method-box b{color:#1e293b}.transition-overlay{position:fixed;inset:0;background:rgba(15,23,42,.62);display:grid;place-items:center;z-index:100;padding:18px}.transition-card{max-width:520px;width:100%;background:#fff;border-radius:20px;padding:28px;box-shadow:0 24px 70px rgba(15,23,42,.28)}.transition-card h2{margin:0 0 8px;font-size:27px}.transition-card p{color:#64748b;line-height:1.65;margin:0 0 16px}.transition-card .callout{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.55;color:#334155;margin-bottom:17px}.transition-actions{display:flex;justify-content:flex-end;gap:10px}.score-explain{font-size:13px;color:#475569;line-height:1.6;margin-top:10px}.print-only{display:none}@media print{.topbar,.footer-actions,.review{display:none!important}.container{max-width:none;padding:0}.card{box-shadow:none;border:0}.print-only{display:block}.itp-box{break-inside:avoid}}
+
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-top:13px}.field.full{grid-column:1/-1}.privacy-note{font-size:11.5px;color:#64748b;line-height:1.5;margin-top:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px}.check-row{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:12px;color:#475569;line-height:1.45}.check-row input{margin-top:3px}.db-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);margin-left:8px}.db-dot{width:8px;height:8px;border-radius:50%;background:#f59e0b}.db-badge.ready .db-dot{background:#22c55e}.save-panel{margin-top:16px;border:1px solid #dbe3ee;border-radius:13px;padding:12px 14px;background:#f8fafc;font-size:12.5px;line-height:1.5;color:#475569}.save-panel strong{color:#1e293b}.save-panel.ok{background:#f0fdf4;border-color:#bbf7d0;color:#166534}.save-panel.err{background:#fff7ed;border-color:#fed7aa;color:#9a3412}.save-panel.pending{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}.attempt-id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;word-break:break-all}.mini-btn{border:1px solid currentColor;background:transparent;border-radius:8px;padding:6px 9px;font-weight:800;margin-left:8px;cursor:pointer;color:inherit}.sync-hidden{display:none}.start-panel .btn{width:100%}@media(max-width:560px){.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.db-badge{display:none}}
+
+
+.pbtn.flagged{outline:2px solid #f59e0b;outline-offset:1px}.upgrade-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.upgrade-tools .btn{padding:9px 12px;font-size:13px}.resume-box{padding:14px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;margin-bottom:16px;font-size:13px;line-height:1.6}button:focus-visible{outline:3px solid #60a5fa;outline-offset:3px}
+</style>
+<script src="config.js"></script>
+</head>
+<body>
+<div class="app">
+<header class="topbar"><div class="brand"><div class="brand-badge">KIP</div><div>Kampung Inggris Pontianak<small>Structure & Written Expression Diagnostic</small></div></div><div style="display:flex;align-items:center"><div class="version">V1.6 · Resume & Review</div><div id="dbBadge" class="db-badge"><span class="db-dot"></span><span id="dbBadgeText">Database setup needed</span></div></div></header>
+<main class="container">
+<section id="startScreen" class="hero">
+  <div class="card intro">
+    <span class="eyebrow">TOEFL ITP Level 1–Style Practice</span>
+    <h1>Structure & Written Expression</h1>
+    <p class="lead">Full-format grammar diagnostic: 40 questions in 25 minutes, with a research-aligned provisional Section 2 score estimate.</p>
+    <div class="feature-row">
+      <div class="feature"><strong>40 Questions</strong><span>15 Structure + 25 Error Identification</span></div>
+      <div class="feature"><strong>25:00</strong><span>One continuous section timer</span></div>
+      <div class="feature"><strong>31–68</strong><span>Research-aligned provisional Section 2 estimate</span></div>
+    </div>
+    <div class="parts">
+      <div class="part-card"><b>Part A · Questions 1–15</b><span>Incomplete sentences. Choose the word or phrase that best completes each sentence.</span></div>
+      <div class="part-card"><b>Part B · Questions 16–40</b><span>Four underlined parts. Select the one part that must be changed for the sentence to be correct.</span></div>
+    </div>
+    <div class="disclaimer"><b>Independent diagnostic.</b> All questions are original KIP items. The format follows the 40-question / 25-minute Structure & Written Expression pattern, but this is not an official ETS TOEFL ITP test. V1.6 estimates a 31–68 Section 2 score using published TOEFL ITP research anchors and interpolation. Official TOEFL ITP scores are statistically equated across forms, so KIP results remain provisional until pilot calibration is completed.</div>
+  </div>
+  <div class="card start-panel">
+    <div id="resumeBox" class="resume-box hidden"></div><h2>Begin Section 2</h2>
+    <p>Enter participant details. The 25-minute timer begins immediately after pressing Start.</p>
+    <div class="form-grid">
+      <div class="field full"><label for="nameInput">Participant name *</label><input id="nameInput" class="input" type="text" placeholder="e.g. Ahmad Fauzan" autocomplete="name" /></div>
+      <div class="field"><label for="whatsappInput">WhatsApp number *</label><input id="whatsappInput" class="input" type="tel" placeholder="e.g. 081234567890" autocomplete="tel" /></div>
+      <div class="field"><label for="institutionInput">School / institution</label><input id="institutionInput" class="input" type="text" placeholder="Optional" autocomplete="organization" /></div>
+    </div>
+    <label class="check-row"><input id="consentInput" type="checkbox" /> <span>I understand this is an independent KIP diagnostic, not an official ETS TOEFL ITP score. My responses and score may be stored by KIP for diagnostic and item-quality analysis.</span></label>
+    <div class="privacy-note">V1.6 can save participant identity, answer choices, timing, and results to your own Supabase database. The test still works if Supabase has not been configured, but results will not reach the KIP dashboard.</div>
+    <button id="startBtn" class="btn btn-primary" style="margin-top:16px">Start Test →</button>
+  </div>
+</section>
+
+<section id="testScreen" class="hidden test-shell">
+  <div class="card test-main">
+    <div class="test-head">
+      <div class="progress-wrap"><div class="progress-label"><span id="participantLabel">Participant</span><span id="progressText">1 of 40</span></div><div class="progress"><div id="progressBar"></div></div></div>
+      <div id="timer" class="timer">25:00</div>
+    </div>
+    <div id="partBanner" class="part-banner"></div>
+    <div class="qmeta"><div id="qType" class="qtype">Part A · Structure</div><div id="qNumber" class="qnum">Question 1</div></div>
+    <div id="questionArea"></div><div class="upgrade-tools"><button id="flagBtn" class="btn btn-ghost">☆ Mark for review</button><span id="answeredCount" style="padding:10px;font-size:13px;color:#64748b"></span></div>
+    <div class="nav-actions"><button id="prevBtn" class="btn btn-ghost">← Previous</button><button id="nextBtn" class="btn btn-primary">Next →</button></div>
+  </div>
+  <aside class="card side">
+    <h3>Question Navigator</h3><p>Solid numbers: Part A. Dashed numbers: Part B. Blue means answered.</p>
+    <div id="palette" class="palette"></div>
+    <div class="legend"><span><i class="dot answered"></i>Answered</span><span><i class="dot current"></i>Current</span></div>
+    <button id="submitBtn" class="btn btn-danger submit-side">Submit Section</button>
+  </aside>
+</section>
+
+<section id="resultScreen" class="hidden card result">
+  <div class="score-grid">
+    <div id="scoreRing" class="score-ring"><div class="score-inner"><div id="scoreBig" class="score-big">0/40</div><div class="score-sub">Raw score</div></div></div>
+    <div>
+      <h2 id="resultTitle">Section Completed</h2><p id="resultCopy" class="result-copy"></p>
+      <div class="score-stats">
+        <div class="stat"><strong id="scaledStat">31</strong><span>Estimated Section 2 score / 68</span></div>
+        <div class="stat"><strong id="cefrStat">—</strong><span>ETS CEFR reference band</span></div>
+        <div class="stat"><strong id="accuracyStat">0%</strong><span>Raw accuracy</span></div>
+        <div class="stat"><strong id="timeStat">00:00</strong><span>Time used</span></div>
+      </div>
+      <div class="itp-box">
+        <h3>KIP Estimated ITP Section 2 Score</h3>
+        <div id="itpScore" class="itp-score">31 / 68</div>
+        <div class="calibration-row"><span id="cefrPill" class="pill">CEFR: —</span><span class="pill provisional">Calibration: PROVISIONAL</span></div>
+        <div id="itpDescriptor" class="score-explain"></div>
+        <div class="scale-wrap">
+          <div class="scale-head"><span>Section 2 reference scale</span><span>31–68</span></div>
+          <div class="score-scale"><div id="scorePointer" class="score-pointer" style="left:0%"></div></div>
+          <div class="scale-labels"><span>31<br>&lt;A2</span><span>32<br>A2</span><span>43<br>B1</span><span>53<br>B2</span><span>64–68<br>C1</span></div>
+        </div>
+        <div class="method-box"><b>V1.6 scoring method.</b> The estimate is anchored to published TOEFL ITP Structure & Written Expression research points (raw 8 → scaled 32, raw 20 → 43, raw 30 → 53) and interpolates between anchors, with the section range capped at 31–68. Because these KIP items have not yet been statistically equated to an official form, the result must be treated as an estimated diagnostic score, not an official TOEFL ITP score.</div>
+        <div class="itp-note"><b>Important:</b> a grammar-only test cannot produce the TOEFL ITP Level 1 total score. A total requires Listening, Structure & Written Expression, and Reading.</div>
+      </div>
+      <div class="part-results"><div class="part-stat"><b id="partAStat">0/15</b><span>Part A · Structure</span></div><div class="part-stat"><b id="partBStat">0/25</b><span>Part B · Written Expression</span></div></div>
+      <div id="savePanel" class="save-panel pending"><strong>Database:</strong> <span id="saveStatus">Waiting for result submission.</span><div id="attemptIdLine" class="attempt-id" style="margin-top:5px"></div><button id="retrySaveBtn" class="mini-btn sync-hidden" type="button">Retry save</button></div>
+    </div>
+  </div>
+  <div class="review"><h3>Answer Review</h3><div class="upgrade-tools" id="reviewFilters"><button class="btn btn-ghost" data-filter="all">All</button><button class="btn btn-ghost" data-filter="wrong">Incorrect</button><button class="btn btn-ghost" data-filter="unanswered">Unanswered</button><button class="btn btn-ghost" data-filter="flagged">Marked</button></div><div id="reviewList"></div></div>
+  <div class="footer-actions"><button id="restartBtn" class="btn btn-primary">Try Again</button><button id="downloadBtn" class="btn btn-ghost">Download Result JSON</button><button id="printBtn" class="btn btn-ghost">Print Result</button></div>
+</section>
+
+<div id="partTransition" class="hidden transition-overlay" role="dialog" aria-modal="true" aria-labelledby="partTransitionTitle">
+  <div class="transition-card">
+    <span class="eyebrow">Part A Complete</span>
+    <h2 id="partTransitionTitle">Continue to Part B</h2>
+    <p>Questions 16–40 use a different task. Each sentence contains four underlined words or phrases. Select the one part that must be changed for the sentence to be correct.</p>
+    <div class="callout"><b>The 25-minute section timer does not stop.</b> You may still return to Questions 1–15 using the navigator.</div>
+    <div class="transition-actions"><button id="continuePartBBtn" class="btn btn-primary">Go to Question 16 →</button></div>
+  </div>
+</div>
+</main>
+</div>
+<script src="config.js"></script>
+<script>
+const questions = [
+
+/* =========================
+   PART A — STRUCTURE
+   Questions 1–15
+   ========================= */
+
+{part:'A',
+topic:'Subject–Verb Agreement',
+difficulty:'B1/B2',
+stem:'The collection of historical documents stored in the university archives _____ available to researchers by appointment.',
+options:['are','is','have been','being'],
+answer:1,
+explanation:'The head subject is “collection,” which is singular. The phrase “of historical documents” does not change the number of the subject, so “is” is required.'
+},
+
+{part:'A',
+topic:'Reduced Clause / Modifier',
+difficulty:'B2',
+stem:'Located several kilometers from the mainland, _____.',
+options:[
+  'tourists can reach the island only by boat',
+  'the only way to reach the island is by boat',
+  'the island can be reached only by boat',
+  'a boat is necessary for tourists reaching the island'
+],
+answer:2,
+explanation:'The introductory participial phrase must logically modify “the island,” so the following subject must be “the island.”'
+},
+
+{part:'A',
+topic:'Inversion after Limiting Expression',
+difficulty:'B2/C1',
+stem:'Only after the final laboratory results were examined _____ the cause of the contamination.',
+options:[
+  'did the researchers identify',
+  'the researchers identified',
+  'had the researchers identified',
+  'the researchers had identifying'
+],
+answer:0,
+explanation:'When “Only after ...” begins the sentence, the main clause requires subject–auxiliary inversion: “did the researchers identify.”'
+},
+
+{part:'A',
+topic:'Subjunctive',
+difficulty:'B2/C1',
+stem:'The committee recommended that the revised safety procedures _____ immediately.',
+options:[
+  'are implemented',
+  'were implemented',
+  'implemented',
+  'be implemented'
+],
+answer:3,
+explanation:'After a formal recommendation followed by a that-clause, the base-form subjunctive is used: “be implemented.”'
+},
+
+{part:'A',
+topic:'Correlative Comparative',
+difficulty:'B2',
+stem:'The more accurately the measurements are taken, _____.',
+options:[
+  'the results become reliable more',
+  'the more likely the results are to be reliable',
+  'more reliable are likely the results',
+  'the results are more likely reliably'
+],
+answer:1,
+explanation:'The correlative comparative pattern is “the more ..., the more ...”.'
+},
+
+{part:'A',
+topic:'Embedded Question Word Order',
+difficulty:'B1/B2',
+stem:'The investigators have not yet determined why _____ during the final stage of the experiment.',
+options:[
+  'did the equipment fail',
+  'the equipment did fail',
+  'the equipment failed',
+  'failed the equipment'
+],
+answer:2,
+explanation:'An embedded question uses statement word order: “why the equipment failed,” not direct-question inversion.'
+},
+
+{part:'A',
+topic:'Past Unreal Conditional',
+difficulty:'B2',
+stem:'If the warning had been issued earlier, many residents _____ the area before the storm arrived.',
+options:[
+  'would have left',
+  'would leave',
+  'had left',
+  'left'
+],
+answer:0,
+explanation:'A past unreal condition uses “if + past perfect” and “would have + past participle.”'
+},
+
+{part:'A',
+topic:'Appositive',
+difficulty:'B1/B2',
+stem:'Dr. Elena Vargas, _____ in tropical disease prevention, will lead the international research team.',
+options:[
+  'she is a specialist',
+  'who specializing',
+  'specializes',
+  'a specialist'
+],
+answer:3,
+explanation:'The noun phrase “a specialist in tropical disease prevention” functions as an appositive renaming Dr. Elena Vargas.'
+},
+
+{part:'A',
+topic:'Inversion with So',
+difficulty:'B2/C1',
+stem:'So rapidly _____ that the research team had to revise its original estimates.',
+options:[
+  'the glacier was melting',
+  'did the glacier melting',
+  'was the glacier melting',
+  'the glacier melting was'
+],
+answer:2,
+explanation:'When “so + adverb” is fronted for emphasis, subject–auxiliary inversion is required: “So rapidly was the glacier melting that ...”.'
+},
+
+{part:'A',
+topic:'Negative Inversion',
+difficulty:'B2/C1',
+stem:'Not until the nineteenth century _____ widely accepted by the scientific community.',
+options:[
+  'the theory became',
+  'did the theory become',
+  'the theory had becoming',
+  'became the theory'
+],
+answer:1,
+explanation:'A sentence beginning with “Not until ...” requires inversion in the main clause: “did the theory become.”'
+},
+
+{part:'A',
+topic:'Gerund after Preposition',
+difficulty:'B1/B2',
+stem:'The success of the conservation program depends largely on _____ local communities in the planning process.',
+options:[
+  'involving',
+  'involve',
+  'to involve',
+  'involved'
+],
+answer:0,
+explanation:'The preposition “on” is followed by a gerund: “on involving.”'
+},
+
+{part:'A',
+topic:'Relative Determiner',
+difficulty:'B1/B2',
+stem:'The researcher, _____ findings were published in several international journals, received a national science award.',
+options:[
+  'who',
+  'whom',
+  'which',
+  'whose'
+],
+answer:3,
+explanation:'“Whose” expresses possession: the researcher’s findings.'
+},
+
+{part:'A',
+topic:'Passive Modal',
+difficulty:'B1/B2',
+stem:'Before the medication can be distributed, its safety _____ through additional clinical testing.',
+options:[
+  'must establish',
+  'has to establishing',
+  'must be established',
+  'must have establish'
+],
+answer:2,
+explanation:'“Safety” receives the action, so a passive modal form is required: “must be established.”'
+},
+
+{part:'A',
+topic:'Comparative Structure',
+difficulty:'B2',
+stem:'The latest telescope can detect objects _____ than those observable with the previous instrument.',
+options:[
+  'more distantly',
+  'far more distant',
+  'much distance',
+  'far distant'
+],
+answer:1,
+explanation:'“Distant” is an adjective describing “objects,” and “far” can intensify the comparative form “more distant.”'
+},
+
+{part:'A',
+topic:'Participial / Adverbial Clause',
+difficulty:'B2',
+stem:'_____ data from several independent surveys, the researchers identified a consistent pattern across all regions.',
+options:[
+  'After analyzing',
+  'Analyzed',
+  'Having been analyzed',
+  'To be analyzed by'
+],
+answer:0,
+explanation:'The researchers perform the action, so the active introductory phrase “After analyzing ...” is appropriate.'
+},
+
+
+/* =========================
+   PART B — WRITTEN EXPRESSION
+   Questions 16–40
+   ========================= */
+
+{part:'B',
+topic:'Subject–Verb Agreement',
+difficulty:'B1/B2',
+parts:[
+  ['seg','The number of','A'],
+  ['text',' students enrolling in online courses '],
+  ['seg','at several universities','B'],
+  ['text',' '],
+  ['seg','have increased','C'],
+  ['text',' steadily '],
+  ['seg','during the past decade','D'],
+  ['text','.']
+],
+answer:2,
+correction:'has increased',
+explanation:'The grammatical head of the subject is the singular noun “number,” so the verb must be “has increased.”'
+},
+
+{part:'B',
+topic:'Present Perfect with Since',
+difficulty:'B1/B2',
+parts:[
+  ['seg','Since the research center opened in 2022','A'],
+  ['text',', its scientists '],
+  ['seg','discovered','B'],
+  ['text',' more than thirty new compounds and '],
+  ['seg','have published their findings','C'],
+  ['text',' in '],
+  ['seg','international journals','D'],
+  ['text','.']
+],
+answer:1,
+correction:'have discovered',
+explanation:'“Since ... opened in 2022” establishes a period continuing to the present, so the present perfect “have discovered” is required.'
+},
+
+{part:'B',
+topic:'Parallel Structure',
+difficulty:'B1/B2',
+parts:[
+  ['seg','The training program','A'],
+  ['text',' teaches participants to '],
+  ['seg','analyze evidence','B'],
+  ['text',', '],
+  ['seg','evaluate alternative explanations','C'],
+  ['text',', and '],
+  ['seg','presenting their conclusions clearly','D'],
+  ['text','.']
+],
+answer:3,
+correction:'present their conclusions clearly',
+explanation:'The coordinated verb phrases must be parallel: analyze, evaluate, and present.'
+},
+
+{part:'B',
+topic:'Agreement with Neither...Nor',
+difficulty:'B2',
+parts:[
+  ['seg','Neither the laboratory assistants','A'],
+  ['text',' nor '],
+  ['seg','the senior researcher','B'],
+  ['text',' '],
+  ['seg','were informed','C'],
+  ['text',' about '],
+  ['seg','the change in procedure','D'],
+  ['text','.']
+],
+answer:2,
+correction:'was informed',
+explanation:'With “neither ... nor,” the verb normally agrees with the nearer subject. The nearer subject “researcher” is singular.'
+},
+
+{part:'B',
+topic:'Adjective / Adverb Form',
+difficulty:'B1/B2',
+parts:[
+  ['seg','Remarkable efficient','A'],
+  ['text',', the new filtration system '],
+  ['seg','removes contaminants','B'],
+  ['text',' from water '],
+  ['seg','without requiring','C'],
+  ['text',' large amounts of '],
+  ['seg','electrical energy','D'],
+  ['text','.']
+],
+answer:0,
+correction:'Remarkably efficient',
+explanation:'An adverb is required to modify the adjective “efficient,” so “remarkably efficient” is correct.'
+},
+
+{part:'B',
+topic:'Count / Noncount Nouns',
+difficulty:'B1/B2',
+parts:[
+  ['seg','During the investigation','A'],
+  ['text',', the committee collected '],
+  ['seg','extensive evidence','B'],
+  ['text',' from '],
+  ['seg','several independent sources','C'],
+  ['text',' and recorded many useful '],
+  ['seg','informations','D'],
+  ['text','.']
+],
+answer:3,
+correction:'pieces of information',
+explanation:'“Information” is a noncount noun and normally does not take the plural form “informations.”'
+},
+
+{part:'B',
+topic:'Gerund after Preposition',
+difficulty:'B1/B2',
+parts:[
+  ['seg','The researchers','A'],
+  ['text',' were particularly interested '],
+  ['seg','in determine','B'],
+  ['text',' whether the treatment '],
+  ['seg','affected long-term memory','C'],
+  ['text',' among '],
+  ['seg','older adults','D'],
+  ['text','.']
+],
+answer:1,
+correction:'in determining',
+explanation:'A verb following the preposition “in” takes the -ing form: “in determining.”'
+},
+
+{part:'B',
+topic:'Preposition / Idiomatic Usage',
+difficulty:'B1/B2',
+parts:[
+  ['text','The report '],
+  ['seg','was divided in','A'],
+  ['text',' four major sections, '],
+  ['seg','each focusing on','B'],
+  ['text',' a different aspect of '],
+  ['seg','regional development','C'],
+  ['text',' during '],
+  ['seg','the last twenty years','D'],
+  ['text','.']
+],
+answer:0,
+correction:'was divided into',
+explanation:'The standard expression is “divide something into parts.”'
+},
+
+{part:'B',
+topic:'Each + Singular Agreement',
+difficulty:'B1/B2',
+parts:[
+  ['seg','Each of the proposals','A'],
+  ['text',' submitted by the research teams '],
+  ['seg','during the first round','B'],
+  ['text',' '],
+  ['seg','have been evaluated','C'],
+  ['text',' by '],
+  ['seg','two independent reviewers','D'],
+  ['text','.']
+],
+answer:2,
+correction:'has been evaluated',
+explanation:'The grammatical subject is “Each,” which is singular, so “has been evaluated” is required.'
+},
+
+{part:'B',
+topic:'Past Unreal Conditional',
+difficulty:'B2',
+parts:[
+  ['seg','If the samples had been stored','A'],
+  ['text',' at a lower temperature, '],
+  ['seg','the chemical reaction','B'],
+  ['text',' '],
+  ['seg','probably occurred more slowly','C'],
+  ['text',' and the samples '],
+  ['seg','would have remained stable longer','D'],
+  ['text','.']
+],
+answer:2,
+correction:'would probably have occurred more slowly',
+explanation:'The condition refers to an unreal past situation, so the result clause requires “would have + past participle.”'
+},
+
+{part:'B',
+topic:'Logical Comparison',
+difficulty:'B2',
+parts:[
+  ['seg','The salary','A'],
+  ['text',' of a senior engineer is usually higher than '],
+  ['seg','a junior engineer','B'],
+  ['text',' with '],
+  ['seg','the same academic background','C'],
+  ['text',' and '],
+  ['seg','similar technical qualifications','D'],
+  ['text','.']
+],
+answer:1,
+correction:'that of a junior engineer',
+explanation:'A salary must be compared with another salary, not with a person. “That of a junior engineer” creates a logically parallel comparison.'
+},
+
+{part:'B',
+topic:'Relative Pronoun for People',
+difficulty:'B1/B2',
+parts:[
+  ['seg','The scientist which developed','A'],
+  ['text',' the new diagnostic procedure '],
+  ['seg','received an international award','B'],
+  ['text',' for '],
+  ['seg','her contribution','C'],
+  ['text',' to '],
+  ['seg','public health research','D'],
+  ['text','.']
+],
+answer:0,
+correction:'The scientist who developed',
+explanation:'A person functioning as the subject of a relative clause takes “who,” not “which.”'
+},
+
+{part:'B',
+topic:'Superlative Construction',
+difficulty:'B1/B2',
+parts:[
+  ['seg','The Amazon Basin','A'],
+  ['text',' contains '],
+  ['seg','an enormous variety','B'],
+  ['text',' of plant species and is '],
+  ['seg','considered one','C'],
+  ['text',' of '],
+  ['seg','most biologically diverse regions in the world','D'],
+  ['text','.']
+],
+answer:3,
+correction:'the most biologically diverse regions in the world',
+explanation:'A superlative in the structure “one of ...” normally requires the definite article: “one of the most ...”.'
+},
+
+{part:'B',
+topic:'Verb Complement',
+difficulty:'B2',
+parts:[
+  ['seg','The department chair','A'],
+  ['text',' recommended that the committee '],
+  ['seg','review the proposal again','B'],
+  ['text',' and '],
+  ['seg','suggested to postpone','C'],
+  ['text',' the final decision '],
+  ['seg','until the following week','D'],
+  ['text','.']
+],
+answer:2,
+correction:'suggested postponing',
+explanation:'“Suggest” is followed by a gerund or a that-clause, not an infinitive.'
+},
+
+{part:'B',
+topic:'Every + Singular Agreement',
+difficulty:'B1/B2',
+parts:[
+  ['seg','Every applicant','A'],
+  ['text',' to the graduate program '],
+  ['seg','are required','B'],
+  ['text',' to submit '],
+  ['seg','two academic references','C'],
+  ['text',' before '],
+  ['seg','the application deadline','D'],
+  ['text','.']
+],
+answer:1,
+correction:'is required',
+explanation:'“Every applicant” is grammatically singular and therefore requires “is.”'
+},
+
+{part:'B',
+topic:'Verb + Indirect Object',
+difficulty:'B2',
+parts:[
+  ['seg','The instructor explained us','A'],
+  ['text',' how '],
+  ['seg','the measurement device worked','B'],
+  ['text',' before '],
+  ['seg','allowing the students','C'],
+  ['text',' to operate it '],
+  ['seg','independently','D'],
+  ['text','.']
+],
+answer:0,
+correction:'The instructor explained to us',
+explanation:'“Explain” requires the preposition “to” before the person receiving the explanation.'
+},
+
+{part:'B',
+topic:'Quantifier with Noncount Noun',
+difficulty:'B1/B2',
+parts:[
+  ['seg','Researchers now have','A'],
+  ['text',' considerably more data about '],
+  ['seg','the later stages of the disease','B'],
+  ['text',' but still '],
+  ['seg','lack reliable evidence about its origin','C'],
+  ['text',' because there is '],
+  ['seg','fewer information from the early period','D'],
+  ['text','.']
+],
+answer:3,
+correction:'less information from the early period',
+explanation:'“Information” is a noncount noun, so “less” is used rather than “fewer.”'
+},
+
+{part:'B',
+topic:'Passive Infinitive',
+difficulty:'B2',
+parts:[
+  ['seg','The new railway line','A'],
+  ['text',' is '],
+  ['seg','widely expected','B'],
+  ['text',' '],
+  ['seg','completing by the end of next year','C'],
+  ['text',' if construction continues '],
+  ['seg','according to schedule','D'],
+  ['text','.']
+],
+answer:2,
+correction:'to be completed by the end of next year',
+explanation:'After “is expected,” the sentence requires the passive infinitive “to be completed.”'
+},
+
+{part:'B',
+topic:'Gerund after To as Preposition',
+difficulty:'B2',
+parts:[
+  ['seg','The graduate students','A'],
+  ['text',' are '],
+  ['seg','looking forward to attend','B'],
+  ['text',' the international conference '],
+  ['seg','scheduled for June','C'],
+  ['text',' at '],
+  ['seg','the new convention center','D'],
+  ['text','.']
+],
+answer:1,
+correction:'looking forward to attending',
+explanation:'In the expression “look forward to,” “to” is a preposition and therefore takes a gerund.'
+},
+
+{part:'B',
+topic:'Despite / In Spite Of',
+difficulty:'B1/B2',
+parts:[
+  ['seg','Despite of the heavy rainfall','A'],
+  ['text',', the research team '],
+  ['seg','continued collecting samples','B'],
+  ['text',' throughout '],
+  ['seg','the entire afternoon','C'],
+  ['text',' without '],
+  ['seg','interrupting the experiment','D'],
+  ['text','.']
+],
+answer:0,
+correction:'Despite the heavy rainfall',
+explanation:'“Despite” is not followed by “of.” The alternatives are “despite the rainfall” or “in spite of the rainfall.”'
+},
+
+{part:'B',
+topic:'Agreement in Relative Clause',
+difficulty:'B2',
+parts:[
+  ['seg','The research institute employs','A'],
+  ['text',' several engineers '],
+  ['seg','with extensive experience','B'],
+  ['text',' in satellite systems, '],
+  ['seg','many of whom','C'],
+  ['text',' '],
+  ['seg','specializes in navigation technology','D'],
+  ['text','.']
+],
+answer:3,
+correction:'specialize in navigation technology',
+explanation:'“Many of whom” refers to the plural noun “engineers,” so the verb must be plural: “specialize.”'
+},
+
+{part:'B',
+topic:'Past Participle',
+difficulty:'B1/B2',
+parts:[
+  ['seg','By the time the rescue team arrived','A'],
+  ['text',', the hikers '],
+  ['seg','had went','B'],
+  ['text',' nearly '],
+  ['seg','ten kilometers beyond','C'],
+  ['text',' the '],
+  ['seg','marked trail','D'],
+  ['text','.']
+],
+answer:1,
+correction:'had gone',
+explanation:'The past participle of “go” is “gone,” so the past perfect form is “had gone.”'
+},
+
+{part:'B',
+topic:'Inversion after No Sooner',
+difficulty:'B2/C1',
+parts:[
+  ['seg','No sooner','A'],
+  ['text',' '],
+  ['seg','the committee members had arrived','B'],
+  ['text',' than '],
+  ['seg','the chair called the meeting to order','C'],
+  ['text',' and the first issue '],
+  ['seg','was introduced','D'],
+  ['text','.']
+],
+answer:1,
+correction:'had the committee members arrived',
+explanation:'When “No sooner” begins the sentence, subject–auxiliary inversion is required: “No sooner had the committee members arrived than ...”.'
+},
+
+{part:'B',
+topic:'Noncount Noun Agreement',
+difficulty:'B1/B2',
+parts:[
+  ['seg','The information collected from the interviews were carefully checked','A'],
+  ['text',' before '],
+  ['seg','being entered','B'],
+  ['text',' into '],
+  ['seg','the central database','C'],
+  ['text',' for '],
+  ['seg','further statistical analysis','D'],
+  ['text','.']
+],
+answer:0,
+correction:'The information collected from the interviews was carefully checked',
+explanation:'“Information” is a singular noncount noun and therefore takes “was,” not “were.”'
+},
+
+{part:'B',
+topic:'Double Connector',
+difficulty:'B2',
+parts:[
+  ['seg','Because the roads were covered with ice','A'],
+  ['text',', '],
+  ['seg','therefore several buses','B'],
+  ['text',' '],
+  ['seg','were delayed for more than an hour','C'],
+  ['text',', causing some passengers '],
+  ['seg','to miss their connections','D'],
+  ['text','.']
+],
+answer:1,
+correction:'several buses',
+explanation:'“Because” already introduces the reason. The main clause should begin directly with “several buses,” without the additional connector “therefore.”'
+}
+
+];
+
+const TOTAL_SECONDS = 25*60;
+let flags=Array(40).fill(false), finished=false;
+const __fullParams=new URLSearchParams(location.search),__fullSessionId=__fullParams.get('full_session')||'';
+const SESSION_KEY=(__fullParams.get('full')==='1'&&__fullSessionId)?`kip_full_${__fullSessionId}_structure`:'kip_grammar_v16_active';
+let current=0, answers=Array(questions.length).fill(null), remaining=TOTAL_SECONDS, timerId=null, startedAt=null, participant='', whatsapp='', institution='', attemptId='', lastAttemptRecord=null;
+const $=id=>document.getElementById(id);
+
+function startTest(){
+  participant=$('nameInput').value.trim(); whatsapp=$('whatsappInput').value.trim(); institution=$('institutionInput').value.trim();
+  if(!participant){showToast('Please enter the participant name.');$('nameInput').focus();return}
+  if(!/^\+?[0-9\s()-]{8,20}$/.test(whatsapp)){showToast('Please enter a valid WhatsApp number (8–15 digits).');$('whatsappInput').focus();return}
+  if(!$('consentInput').checked){showToast('Please confirm the diagnostic and data-use notice.');$('consentInput').focus();return}
+  attemptId=(globalThis.crypto&&globalThis.crypto.randomUUID)?globalThis.crypto.randomUUID():('kip-'+Date.now()+'-'+Math.random().toString(16).slice(2));
+  current=0; flags=Array(40).fill(false); finished=false; lastAttemptRecord=null; answers=Array(questions.length).fill(null); remaining=TOTAL_SECONDS; startedAt=Date.now();
+  $('participantLabel').textContent=participant; $('startScreen').classList.add('hidden'); $('resultScreen').classList.add('hidden'); $('testScreen').classList.remove('hidden');
+  renderPalette(); renderQuestion(); updateTimer(); clearInterval(timerId);
+  persistSession(); runClock();
+}
+function updateTimer(){const m=String(Math.floor(Math.max(remaining,0)/60)).padStart(2,'0'),s=String(Math.max(remaining,0)%60).padStart(2,'0');$('timer').textContent=`${m}:${s}`;$('timer').classList.toggle('warn',remaining<=300&&remaining>60);$('timer').classList.toggle('danger',remaining<=60)}
+function renderQuestion(){
+  if(!finished && startedAt && Date.now()>=startedAt+TOTAL_SECONDS*1000){finishTest(true);return}
+  persistSession(); $('flagBtn').textContent=flags[current]?'★ Marked for review':'☆ Mark for review'; $('answeredCount').textContent=answers.filter(a=>a!==null).length+'/40 answered';
+  const q=questions[current], partA=q.part==='A';
+  $('qType').textContent=partA?'Part A · Structure':'Part B · Written Expression'; $('qNumber').textContent=`Question ${current+1}`; $('progressText').textContent=`${current+1} of ${questions.length}`; $('progressBar').style.width=`${((current+1)/questions.length)*100}%`;
+  $('partBanner').innerHTML=partA?'<div><b>Part A · Questions 1–15</b><span>Choose the word or phrase that best completes the sentence.</span></div><span>One answer only</span>':'<div><b>Part B · Questions 16–40</b><span>Select the one underlined word or phrase that must be changed.</span></div><span>One error only</span>';
+  const area=$('questionArea'); area.innerHTML='';
+  if(partA){
+    const stem=document.createElement('div');stem.className='stem';stem.textContent=q.stem;area.appendChild(stem);
+    const opts=document.createElement('div');opts.className='options';q.options.forEach((opt,i)=>{const b=document.createElement('button');b.className='option'+(answers[current]===i?' selected':'');b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span>${opt}</span>`;b.onclick=()=>{answers[current]=i;renderQuestion();renderPalette()};opts.appendChild(b)});area.appendChild(opts);
+  } else {
+    const sentence=document.createElement('div');sentence.className='error-sentence';
+    q.parts.forEach(p=>{if(p[0]==='text'){sentence.appendChild(document.createTextNode(p[1]))}else{const idx=p[2].charCodeAt(0)-65;const b=document.createElement('button');b.className='seg'+(answers[current]===idx?' selected':'');b.innerHTML=`<span class="segtext">${p[1]}</span><span class="seglabel">${p[2]}</span>`;b.onclick=()=>{answers[current]=idx;renderQuestion();renderPalette()};sentence.appendChild(b)}});
+    area.appendChild(sentence);const help=document.createElement('div');help.className='error-help';help.textContent='Click the underlined part (A, B, C, or D) that contains the error.';area.appendChild(help);
+  }
+  $('prevBtn').disabled=current===0;$('prevBtn').style.opacity=current===0?.45:1;$('nextBtn').textContent=current===questions.length-1?'Review →':'Next →';renderPalette();
+}
+function renderPalette(){
+  const pal=$('palette');pal.innerHTML='';
+  questions.forEach((q,i)=>{if(i===15){const d=document.createElement('div');d.className='divider-label';d.textContent='Part B';pal.appendChild(d)}const b=document.createElement('button');b.className='pbtn'+(q.part==='B'?' partb':'');if(answers[i]!==null)b.classList.add('answered');if(i===current)b.classList.add('current');if(flags[i])b.classList.add('flagged');b.setAttribute('aria-label',`Question ${i+1}${flags[i]?', marked for review':''}`);b.textContent=i+1;b.onclick=()=>{current=i;renderQuestion()};pal.appendChild(b)});
+}
+function next(){
+  if(current===14){$('partTransition').classList.remove('hidden');return}
+  if(current<questions.length-1){current++;renderQuestion()}else showToast('Review your answers, then press Submit Section.')
+}
+function continueToPartB(){$('partTransition').classList.add('hidden');current=15;renderQuestion()}
+function prev(){if(current>0){current--;renderQuestion()}}
+const SCORE_ANCHORS=[{raw:0,scaled:31},{raw:8,scaled:32},{raw:20,scaled:43},{raw:30,scaled:53},{raw:40,scaled:68}];
+function estimateScaled(raw){
+  raw=Math.max(0,Math.min(40,raw));
+  if(raw<8)return 31;
+  for(let i=1;i<SCORE_ANCHORS.length;i++){
+    const lo=SCORE_ANCHORS[i-1],hi=SCORE_ANCHORS[i];
+    if(raw<=hi.raw){
+      const ratio=(raw-lo.raw)/(hi.raw-lo.raw);
+      return Math.max(31,Math.min(68,Math.round(lo.scaled+ratio*(hi.scaled-lo.scaled))));
+    }
+  }
+  return 68;
+}
+function cefrBand(s){if(s>=64)return 'C1';if(s>=53)return 'B2';if(s>=43)return 'B1';if(s>=32)return 'A2';return '< A2'}
+function descriptor(s){if(s>=64)return 'C1 reference range: performance is consistent with strong control of complex sentence structure, less familiar verb patterns, reduced clauses, inversion, and interactions among several grammatical elements.';if(s>=53)return 'B2 reference range: performance shows generally strong control of word forms, noun modification, common complex structures, and grammar patterns that depend on specific vocabulary or usage.';if(s>=43)return 'B1 reference range: performance shows useful control of common verb tenses, passive forms, verb complements, clauses, and basic sentence structure, with more difficulty as structures become complex.';if(s>=32)return 'A2 reference range: performance shows developing control of common verb forms, simple agreement, linking verbs, basic comparison, conjunctions, and prepositions.';return 'Below the A2 reference cut on the Section 2 scale. Priority should be core sentence structure, subject–verb agreement, verb forms, comparatives, conjunctions, and basic clauses.'}
+async function finishTest(auto=false){
+  if(finished)return;
+  const unanswered=answers.filter(a=>a===null).length;if(!auto){const msg=unanswered?`You still have ${unanswered} unanswered question${unanswered>1?'s':''}. Submit anyway?`:'Submit this section now?';if(!confirm(msg))return}finished=true; clearInterval(timerId); try{localStorage.removeItem(SESSION_KEY)}catch(e){}
+  const raw=answers.reduce((sum,a,i)=>sum+(a===questions[i].answer?1:0),0),pct=Math.round(raw/40*100),scaled=estimateScaled(raw),cefr=cefrBand(scaled),used=Math.min(TOTAL_SECONDS,Math.round((Date.now()-startedAt)/1000));
+  const partA=answers.slice(0,15).reduce((sum,a,i)=>sum+(a===questions[i].answer?1:0),0),partB=answers.slice(15).reduce((sum,a,j)=>sum+(a===questions[j+15].answer?1:0),0);
+  $('testScreen').classList.add('hidden');$('partTransition').classList.add('hidden');$('resultScreen').classList.remove('hidden');$('scoreBig').textContent=`${raw}/40`;$('scoreRing').style.background=`conic-gradient(var(--primary) ${pct*3.6}deg,#e5e7eb 0deg)`;$('scaledStat').textContent=scaled;$('cefrStat').textContent=cefr;$('accuracyStat').textContent=`${pct}%`;$('timeStat').textContent=formatTime(used);$('itpScore').textContent=`${scaled} / 68`;$('cefrPill').textContent=`CEFR: ${cefr}`;$('itpDescriptor').textContent=descriptor(scaled);$('scorePointer').style.left=`${((scaled-31)/(68-31))*100}%`;$('partAStat').textContent=`${partA}/15`;$('partBStat').textContent=`${partB}/25`;$('resultTitle').textContent=auto?'Time is up!':'Section Completed';$('resultCopy').textContent=`${participant}, you answered ${raw} of 40 questions correctly. V1.6 estimates your Structure & Written Expression score at ${scaled}/68 (${cefr} reference band).`;renderReview();window.scrollTo({top:0,behavior:'smooth'});
+  const itemResults=questions.map((q,i)=>({item_no:i+1,part:q.part,topic:q.topic,difficulty:q.difficulty,selected:answers[i]===null?null:String.fromCharCode(65+answers[i]),correct:String.fromCharCode(65+q.answer),is_correct:answers[i]===q.answer}));
+  lastAttemptRecord={id:attemptId,version:'1.6',participant_name:participant,whatsapp,institution:institution||null,started_at:new Date(startedAt).toISOString(),submitted_at:new Date().toISOString(),elapsed_seconds:used,auto_submitted:!!auto,raw_score:raw,part_a_score:partA,part_b_score:partB,accuracy:pct,estimated_section2:scaled,cefr_band:cefr,unanswered,answers,item_results:itemResults,user_agent:navigator.userAgent};
+  $('attemptIdLine').textContent=`Attempt ID: ${attemptId}`;
+  await saveAttempt(lastAttemptRecord);
+}
+function supabaseConfig(){const c=window.KIP_CONFIG||{};return {url:(c.SUPABASE_URL||'').replace(/\/$/,''),key:c.SUPABASE_ANON_KEY||''}}
+function isSupabaseConfigured(){const c=supabaseConfig();return /^https:\/\/.+\.supabase\.co$/.test(c.url)&&c.key.length>30}
+function updateDbBadge(){const ready=isSupabaseConfigured();$('dbBadge').classList.toggle('ready',ready);$('dbBadgeText').textContent=ready?'Database configured':'Database setup needed'}
+function setSaveStatus(type,msg,retry=false){const p=$('savePanel');p.className=`save-panel ${type}`;$('saveStatus').textContent=msg;$('retrySaveBtn').classList.toggle('sync-hidden',!retry)}
+async function saveAttempt(record){
+  try{localStorage.setItem(`kip_unsynced_${record.id}`,JSON.stringify(record))}catch(e){}
+  if(!isSupabaseConfigured()){setSaveStatus('err','Supabase is not configured yet. Result is not saved to the KIP database. Download a copy or retry after setup.',true);return false}
+  setSaveStatus('pending','Saving result to KIP database…',false);
+  const c=supabaseConfig();
+  try{
+    const r=await fetch(`${c.url}/rest/v1/test_attempts`,{method:'POST',headers:{'apikey':c.key,'Authorization':`Bearer ${c.key}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(record),signal:AbortSignal.timeout(15000)});
+    if(r.status===409){setSaveStatus('err','Attempt ID already exists. Ask KIP to verify the stored result before retrying.',true);return false}
+    if(!r.ok)throw new Error((await r.text())||`HTTP ${r.status}`);
+    localStorage.removeItem(`kip_unsynced_${record.id}`);setSaveStatus('ok','Saved successfully to the KIP database.',false);return true;
+  }catch(err){
+    try{localStorage.setItem(`kip_unsynced_${record.id}`,JSON.stringify(record))}catch(e){}
+    setSaveStatus('err','Could not sync to Supabase. A retry copy was kept on this device.',true);console.error(err);return false;
+  }
+}
+async function retrySave(){if(lastAttemptRecord){await saveAttempt(lastAttemptRecord);return}for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('kip_unsynced_')){try{const rec=JSON.parse(localStorage.getItem(k));lastAttemptRecord=rec;await saveAttempt(rec);return}catch(e){}}}showToast('No unsynced result found on this device.')}
+function renderReview(){const list=$('reviewList');list.innerHTML='';questions.forEach((q,i)=>{const a=answers[i],state=a===null?'unanswered':a===q.answer?'correct':'wrong';const div=document.createElement('div');div.className=`review-item ${state}`;div.dataset.state=state;div.dataset.flagged=String(flags[i]);let stem='',your='',correct='';if(q.part==='A'){stem=q.stem;your=a===null?'No answer':`${String.fromCharCode(65+a)}. ${q.options[a]}`;correct=`${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}`}else{stem=q.parts.map(p=>p[1]).join('');your=a===null?'No answer':String.fromCharCode(65+a);correct=`${String.fromCharCode(65+q.answer)} → ${q.correction}`}div.innerHTML=`<div class="review-top"><div class="review-stem">${i+1}. ${stem}</div><strong>${state==='correct'?'✓':state==='wrong'?'✕':'—'}</strong></div><div class="review-meta">Topic: <strong>${q.topic}</strong> · Target: ${q.difficulty}<br>Your answer: <strong>${your}</strong><br>Correct answer: <strong>${correct}</strong></div><div class="explain">${q.explanation}</div>`;list.appendChild(div)})}
+function formatTime(sec){const m=String(Math.floor(sec/60)).padStart(2,'0'),s=String(sec%60).padStart(2,'0');return `${m}:${s}`}
+function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+$('startBtn').onclick=startTest;$('nextBtn').onclick=next;$('prevBtn').onclick=prev;$('submitBtn').onclick=()=>finishTest(false);$('continuePartBBtn').onclick=continueToPartB;$('printBtn').onclick=()=>window.print();$('retrySaveBtn').onclick=retrySave;$('restartBtn').onclick=()=>{$('resultScreen').classList.add('hidden');$('startScreen').classList.remove('hidden');$('nameInput').focus();window.scrollTo({top:0,behavior:'smooth'})};$('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('whatsappInput').focus()});updateDbBadge();
+
+function persistSession(){if(!startedAt||finished)return;try{localStorage.setItem(SESSION_KEY,JSON.stringify({version:1,startedAt,current,answers,flags,participant,whatsapp,institution,attemptId}))}catch(e){}}
+function clockTick(){if(finished)return;remaining=Math.max(0,Math.ceil((startedAt+TOTAL_SECONDS*1000-Date.now())/1000));updateTimer();if(remaining===0)finishTest(true)}
+function runClock(){clearInterval(timerId);clockTick();if(!finished)timerId=setInterval(clockTick,1000)}
+function restoreSession(){try{const rec=JSON.parse(localStorage.getItem(SESSION_KEY));if(!rec||rec.version!==1||!Number.isFinite(rec.startedAt)||rec.startedAt>Date.now()||!Array.isArray(rec.answers)||rec.answers.length!==40||!rec.answers.every(a=>a===null||Number.isInteger(a)&&a>=0&&a<4)||!Number.isInteger(rec.current)||rec.current<0||rec.current>=40||!Array.isArray(rec.flags)||rec.flags.length!==40)return;const box=$('resumeBox');box.classList.remove('hidden');const label=document.createElement('div');label.textContent='Unfinished test: '+rec.participant+'. The original timer continues.';box.appendChild(label);const b=document.createElement('button');b.className='btn btn-primary';b.textContent='Resume Test';b.onclick=()=>{({startedAt,current,answers,flags,participant,whatsapp,institution,attemptId}=rec);finished=false;$('participantLabel').textContent=participant;$('startScreen').classList.add('hidden');$('testScreen').classList.remove('hidden');renderQuestion();runClock()};box.appendChild(b);const discard=document.createElement('button');discard.className='btn btn-ghost';discard.textContent='Discard';discard.onclick=()=>{if(confirm('Discard this unfinished test?')){localStorage.removeItem(SESSION_KEY);box.classList.add('hidden')}};box.appendChild(discard)}catch(e){}}
+$('flagBtn').onclick=()=>{flags[current]=!flags[current];renderQuestion()};
+$('reviewFilters').onclick=e=>{const f=e.target.dataset.filter;if(!f)return;document.querySelectorAll('.review-item').forEach(item=>item.classList.toggle('hidden',!(f==='all'||f==='flagged'&&item.dataset.flagged==='true'||item.dataset.state===f)))};
+$('downloadBtn').onclick=()=>{if(!lastAttemptRecord)return;const url=URL.createObjectURL(new Blob([JSON.stringify(lastAttemptRecord,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='KIP-TOEFL-result-'+attemptId+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+window.addEventListener('pagehide',persistSession);document.addEventListener('visibilitychange',()=>{if(startedAt&&!finished)clockTick()});
+restoreSession();
+</script>
+
+<style>
+body.full-child .topbar{display:none!important}
+body.full-child .container{max-width:none;padding-top:12px}
+body.full-child #restartBtn,body.full-child #downloadBtn,body.full-child #printBtn{display:none!important}
+</style>
+<script>
+(function(){
+  const fp=new URLSearchParams(location.search);
+  if(fp.get('full')!=='1')return;
+  document.body.classList.add('full-child');
+  const fullSession=fp.get('full_session')||'';
+  let identity={};
+  try{identity=JSON.parse(localStorage.getItem('kip_full_test_identity')||'{}')}catch(_e){}
+
+  const originalFinishTest=finishTest;
+  finishTest=async function(auto=false){
+    await originalFinishTest(auto);
+    if(!lastAttemptRecord)return;
+    try{
+      parent.postMessage({
+        type:'KIP_FULL_SECTION_COMPLETE',
+        full_session:fullSession,
+        section:'structure',
+        result:{
+          attempt_id:lastAttemptRecord.id||null,
+          raw_score:Number(lastAttemptRecord.raw_score||0),
+          accuracy:Number(lastAttemptRecord.accuracy||0),
+          estimated_section2:Number(lastAttemptRecord.estimated_section2||0),
+          cefr_band:lastAttemptRecord.cefr_band||'',
+          part_a_score:Number(lastAttemptRecord.part_a_score||0),
+          part_b_score:Number(lastAttemptRecord.part_b_score||0),
+          unanswered:Number(lastAttemptRecord.unanswered||0),
+          elapsed_seconds:Number(lastAttemptRecord.elapsed_seconds||0)
+        }
+      },location.origin);
+    }catch(err){console.warn(err)}
+  };
+
+
+  window.addEventListener('message',e=>{
+    const msg=e.data;
+    if(e.source!==parent||!msg||msg.type!=='KIP_SECURITY_FORCE_SUBMIT'||msg.full_session!==fullSession)return;
+    try{finishTest(true)}catch(err){console.warn('Security force-submit failed',err)}
+  });
+
+  function autoEnter(){
+    if(!$('startScreen')||$('startScreen').classList.contains('hidden'))return true;
+    if(!identity.name)return false;
+    $('nameInput').value=identity.name||'';
+    $('whatsappInput').value=identity.whatsapp||'';
+    $('institutionInput').value=identity.institution||'';
+    $('consentInput').checked=true;
+
+    const resumeBox=$('resumeBox');
+    if(resumeBox&&!resumeBox.classList.contains('hidden')){
+      const buttons=[...resumeBox.querySelectorAll('button')];
+      const resume=buttons.find(b=>/resume/i.test(b.textContent||''));
+      if(resume){resume.click();return true}
+    }
+    $('startBtn').click();return true;
+  }
+  setTimeout(autoEnter,150);
+})();
+</script>
+
+</body>
+</html>
