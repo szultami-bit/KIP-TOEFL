@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KIP Structure Security QA</title>
+<style>
+:root{--navy:#071633;--blue:#2454e6;--green:#15803d;--red:#b91c1c;--line:#d9e1ec;--soft:#f6f8fc;--text:#17213a}
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--soft);color:var(--text)}
+.hidden{display:none!important}
+.top{height:72px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.brand{display:flex;align-items:center;gap:12px}.brand img{width:46px;height:46px;object-fit:contain;background:#fff;border-radius:8px}
+.brand small{display:block;opacity:.72;margin-top:2px}.badge{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900}
+.badge.warn{background:#7c2d12}.badge.bad{background:#991b1b}
+.start{max-width:720px;margin:50px auto;padding:26px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 30px rgba(7,22,51,.08)}
+.start h1{margin-top:0}.start p{line-height:1.6;color:#475569}.btn{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:900;cursor:pointer}.primary{background:var(--blue);color:#fff}
+.runner{height:calc(100vh - 72px);display:grid;grid-template-rows:1fr}.frame{width:100%;height:100%;border:0;background:#fff}
+.notice{margin-top:16px;padding:12px 14px;border-radius:12px;background:#eff6ff;border:1px solid #bfdbfe;font-size:13px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <img src="kip-logo.jpg" alt="KIP">
+    <div><strong>KIP Structure Security QA</strong><small>Temporary QA shortcut · not for participants</small></div>
+  </div>
+  <div id="badge" class="badge">SECURITY QA · 0/2</div>
+</header>
+
+<main id="start" class="start">
+  <h1>Test the Grammar submit warning in fullscreen.</h1>
+  <p>This page opens the current Structure child inside a fullscreen parent, just like the Full Test. Answer only 1–2 questions, press <b>Submit Section</b>, then choose <b>Continue Test</b>. The warning must stay inside fullscreen and the security counter above must remain <b>0/2</b>.</p>
+  <button id="go" class="btn primary">Start Grammar QA in Fullscreen</button>
+  <div class="notice">QA only. This does not bypass the normal participant flow at the main TOEFL URL.</div>
+</main>
+
+<section id="runner" class="runner hidden">
+  <iframe id="frame" class="frame" allow="fullscreen"></iframe>
+</section>
+
+<script>
+const $=id=>document.getElementById(id);
+let violations=0,armed=false,lastAt=0;
+
+function fullscreenElement(){
+  return document.fullscreenElement||document.webkitFullscreenElement||null;
+}
+function update(){
+  const b=$('badge');
+  b.textContent=violations>=3?'SECURITY QA · WOULD DISQUALIFY':`SECURITY QA · ${violations}/2`;
+  b.className='badge'+(violations>=3?' bad':violations>0?' warn':'');
+}
+function record(reason){
+  if(!armed)return;
+  const now=Date.now();
+  if(now-lastAt<1800)return;
+  lastAt=now;
+  violations=Math.min(3,violations+1);
+  update();
+  console.warn('QA security event:',reason);
+}
+function fsChanged(){
+  if(armed&&!fullscreenElement())record('fullscreen_exit');
+}
+document.addEventListener('fullscreenchange',fsChanged);
+document.addEventListener('webkitfullscreenchange',fsChanged);
+document.addEventListener('visibilitychange',()=>{
+  if(armed&&document.visibilityState==='hidden')record('visibility_hidden');
+});
+
+$('go').onclick=async()=>{
+  try{
+    const el=document.documentElement;
+    if(el.requestFullscreen) await el.requestFullscreen();
+    else if(el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
+    else throw new Error('Fullscreen API not supported');
+  }catch(err){
+    alert('Please allow fullscreen, then try again.');
+    return;
+  }
+
+  localStorage.setItem('kip_full_test_identity',JSON.stringify({
+    name:'Security QA',
+    email:'qa@kampunginggrispontianak.com',
+    whatsapp:'',
+    institution:'KIP QA'
+  }));
+
+  $('start').classList.add('hidden');
+  $('runner').classList.remove('hidden');
+  $('frame').src='kip-full-structure-v1.2-security.html?full=1&full_session=qa-structure-security&host_fullscreen=1&qa=1&t='+Date.now();
+
+  setTimeout(()=>{armed=true},1800);
+};
+
+window.addEventListener('message',e=>{
+  if(e.origin!==location.origin)return;
+  if(e.data?.type==='KIP_FULL_SECTION_COMPLETE'){
+    console.log('QA section completed',e.data);
+  }
+});
+</script>
+</body>
+</html>
