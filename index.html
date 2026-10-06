@@ -154,6 +154,53 @@ body.security-locked{overflow:hidden}
 @media(max-width:980px){.salesHeroGrid,.painStoryGrid,.solveGrid,.offerShell{grid-template-columns:1fr}.heroVisual{min-height:560px;max-width:720px}.salesHeroGrid{gap:32px}.examCards,.stepsFlow{grid-template-columns:1fr 1fr}.faqLayout{grid-template-columns:1fr}.heroPhoto{left:70px;right:20px}}
 @media(max-width:640px){.salesWrap{width:min(100% - 28px,1180px)}.salesHeroGrid{padding:42px 0 58px}.salesHero h1{font-size:44px}.salesHeroLead{font-size:16px}.heroActions{display:grid}.heroPrimary,.heroSecondary{width:100%}.heroTrust{gap:18px}.heroVisual{min-height:470px}.heroPhoto{inset:20px 0 90px 28px;border-radius:22px}.resultMock{width:250px;padding:14px}.priceFloat{bottom:46px;right:4px}.certFloat{right:2px}.storySection{padding:62px 0}.painStoryGrid{margin-top:30px}.painPhoto{min-height:330px}.painQuote{font-size:20px}.examCards,.stepsFlow,.valueList{grid-template-columns:1fr}.productStage{min-height:430px}.laptop{left:16px;right:16px}.laptopBase{top:347px}.salesSticky{display:flex}.offerStory,.offerPriceCard{padding:24px}.offerStory h2{font-size:32px}.offerBig{font-size:50px}.purchaseActions{display:grid}}
 
+
+/* ===== Conversion polish V5 ===== */
+.heroPhoto img{object-position:center 42%}
+.priceFloat{right:10px;bottom:50px;padding:15px 18px 14px;min-width:190px}
+.priceFloat .priceSave{position:absolute;right:10px;top:-12px;background:#ef3e2f;color:#fff;border-radius:999px;padding:5px 9px;font-size:9px;font-weight:950;letter-spacing:.04em;box-shadow:0 8px 18px rgba(239,62,47,.22)}
+.priceFloat span{display:block;font-size:9px;font-weight:700;text-transform:none;letter-spacing:0;color:#25410d}
+.priceFloat span s{font-weight:900;margin-left:4px;text-decoration-thickness:2px;text-decoration-color:#d12626}
+.priceFloat b{display:block;font-size:9px;letter-spacing:.08em;text-transform:uppercase;margin-top:5px}
+.priceFloat strong{font-size:29px}
+
+.purchaseModal{position:fixed;inset:0;z-index:200000;display:grid;place-items:center;padding:22px}
+.purchaseBackdrop{position:absolute;inset:0;background:rgba(5,20,38,.62);backdrop-filter:blur(6px)}
+.purchaseModalCard{position:relative;z-index:1;width:min(470px,94vw);max-width:none;margin:0;background:#fff;border-radius:26px;padding:28px;box-shadow:0 34px 90px rgba(0,0,0,.30);max-height:min(92vh,760px);overflow:auto}
+.purchaseClose{position:absolute;right:17px;top:14px;border:0;background:transparent;color:#607287;font-size:30px;line-height:1;cursor:pointer}
+.purchaseMiniTag{display:inline-block;background:#eef7d7;color:#436017;border-radius:999px;padding:7px 10px;font-size:9.5px;font-weight:950;letter-spacing:.06em;margin-bottom:12px}
+.purchaseModalCard h2{font-size:30px;letter-spacing:-.035em;margin:0 0 6px}
+.purchaseModalCard .purchaseHelp{font-size:12px;line-height:1.5;margin-bottom:16px}
+.purchasePricePanel{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#f7f9fc;border:1px solid #e3e9ef;border-radius:17px;padding:13px;margin:4px 0 18px}
+.purchasePricePanel>div{padding:8px 10px}
+.purchasePricePanel span{display:block;font-size:9.5px;color:#6d7f91;margin-bottom:3px}
+.purchasePricePanel s{font-size:17px;color:#7f8fa0;font-weight:850;text-decoration-thickness:2px;text-decoration-color:#d73333}
+.purchaseLaunch{background:#b9f13a;border-radius:12px}
+.purchaseLaunch span{color:#304311;font-weight:800}
+.purchaseLaunch strong{display:block;font-size:25px;color:#14210c;letter-spacing:-.04em}
+.purchasePricePanel em{position:absolute;right:9px;top:-12px;background:#ef3e2f;color:#fff;border-radius:999px;padding:5px 9px;font-size:9px;font-weight:950;font-style:normal}
+.purchaseModalCard label{display:block;font-size:11px;font-weight:900;margin-top:7px}
+.purchaseModalCard .input{background:#fbfcfe}
+.purchaseTrustRow{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:5px 0 15px}
+.purchaseTrustRow span{background:#f6f9fc;border-radius:10px;padding:9px 7px;text-align:center;font-size:8.8px;color:#52677c;font-weight:800}
+.purchaseActions{display:grid;gap:8px}
+.purchasePayBtn{background:#b9f13a!important;border-color:#b9f13a!important;color:#14210c!important;padding:14px 16px!important;font-size:12px!important}
+.purchaseGhost{background:#fff!important;color:#617285!important}
+.purchaseStatus{text-align:center}
+body.purchase-open{overflow:hidden}
+body.purchase-open .salesSticky{opacity:0;pointer-events:none;transform:translateY(14px)}
+.salesSticky{display:flex!important;opacity:1;transition:.2s opacity,.2s transform}
+.salesSticky{left:auto;right:18px;bottom:18px;width:min(390px,calc(100% - 36px))}
+.salesSticky small{font-size:9px}.salesSticky small s{color:#8397a9}
+.salesSticky .heroPrimary{width:auto;white-space:nowrap}
+
+@media(max-width:640px){
+  .purchaseModal{align-items:end;padding:0}
+  .purchaseModalCard{width:100%;max-width:none;border-radius:24px 24px 0 0;padding:24px 18px 20px;max-height:92vh}
+  .purchaseTrustRow{grid-template-columns:1fr 1fr 1fr}
+  .salesSticky{left:12px;right:12px;bottom:12px;width:auto}
+}
+
 </style>
 </head>
 <body>
@@ -197,7 +244,7 @@ body.security-locked{overflow:hidden}
 
         <div class="heroVisual">
           <div class="heroPhoto">
-            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=82" alt="Mahasiswa belajar menggunakan laptop">
+            <img src="https://images.unsplash.com/photo-1759984782199-a4f6d1b6054e?auto=format&fit=crop&w=1400&q=82" alt="Mahasiswa belajar menggunakan laptop">
           </div>
 
           <div class="certFloat"><span class="dot"></span><strong>E-sertifikat siap</strong>Dikirim ke email setelah tes selesai</div>
@@ -212,7 +259,7 @@ body.security-locked{overflow:hidden}
             </div>
           </div>
 
-          <div class="priceFloat"><span>Harga Launching</span><strong>Rp39.000</strong></div>
+          <div class="priceFloat"><div class="priceSave">HEMAT 43%</div><span>Harga normal <s>Rp69.000</s></span><b>Harga launching</b><strong>Rp39.000</strong></div>
         </div>
       </div>
     </div>
@@ -361,22 +408,43 @@ body.security-locked{overflow:hidden}
     </div>
   </section>
 
-  <section id="purchaseCard" class="purchaseCard hidden">
-    <h2>Daftar KIP TOEFL Assessment</h2>
-    <p class="purchaseHelp">Gunakan email aktif. Email ini akan dipakai untuk verifikasi akses dan pengiriman e-sertifikat.</p>
-    <label>Email *</label>
-    <input id="purchaseEmail" class="input" type="email" autocomplete="email" placeholder="nama@email.com">
-    <div class="purchaseActions">
-      <button id="createPaymentBtn" class="btn primary" type="button">Bayar Rp39.000</button>
-      <button id="paymentReturnBtn" class="btn green hidden" type="button">Saya Sudah Bayar — Akses Tes</button>
-      <button id="cancelPurchaseBtn" class="btn" type="button">Batal</button>
-    </div>
-    <div id="purchaseStatus" class="purchaseStatus">Pembayaran diproses melalui Midtrans.</div>
-  </section>
+  <div id="purchaseModal" class="purchaseModal hidden" aria-hidden="true">
+    <div class="purchaseBackdrop" id="purchaseBackdrop"></div>
+    <section id="purchaseCard" class="purchaseCard purchaseModalCard" role="dialog" aria-modal="true" aria-labelledby="purchaseTitle">
+      <button id="closePurchaseBtn" class="purchaseClose" type="button" aria-label="Tutup">×</button>
+      <div class="purchaseMiniTag">HARGA LAUNCHING · 1.000 PESERTA PERTAMA</div>
+      <h2 id="purchaseTitle">Daftar Sekarang</h2>
+      <p class="purchaseHelp">Isi data singkat di bawah. Setelah itu kamu langsung lanjut ke pembayaran aman via Midtrans.</p>
+
+      <div class="purchasePricePanel">
+        <div><span>Harga normal</span><s>Rp69.000</s></div>
+        <div class="purchaseLaunch"><span>Harga launching</span><strong>Rp39.000</strong></div>
+        <em>HEMAT 43%</em>
+      </div>
+
+      <label>Nama lengkap *</label>
+      <input id="purchaseName" class="input" type="text" autocomplete="name" placeholder="Contoh: Ahmad Rizki">
+      <label>Email aktif *</label>
+      <input id="purchaseEmail" class="input" type="email" autocomplete="email" placeholder="nama@email.com">
+
+      <div class="purchaseTrustRow">
+        <span>🔒 Pembayaran aman</span>
+        <span>✉ Akses via email</span>
+        <span>↻ Bisa lanjut tes</span>
+      </div>
+
+      <div class="purchaseActions">
+        <button id="createPaymentBtn" class="btn purchasePayBtn" type="button">LANJUTKAN PEMBAYARAN →</button>
+        <button id="paymentReturnBtn" class="btn green hidden" type="button">Saya Sudah Bayar — Akses Tes</button>
+        <button id="cancelPurchaseBtn" class="btn purchaseGhost" type="button">Nanti saja</button>
+      </div>
+      <div id="purchaseStatus" class="purchaseStatus">Pembayaran diproses melalui Midtrans.</div>
+    </section>
+  </div>
 
   <div class="salesSticky">
-    <div><small>Harga Launching</small><strong>Rp39.000</strong></div>
-    <button class="heroPrimary" type="button" onclick="openPurchaseFlow()">Mulai →</button>
+    <div><small><s>Rp69.000</s> · Harga launching</small><strong>Rp39.000</strong></div>
+    <button class="heroPrimary" type="button" onclick="openPurchaseFlow()">DAFTAR SEKARANG →</button>
   </div>
 </main>
 
@@ -511,7 +579,7 @@ const $=id=>document.getElementById(id);
 const cfg=window.KIP_CONFIG||window.KIP_SUPABASE||{};
 const URL_=cfg.SUPABASE_URL||cfg.url||'',KEY_=cfg.SUPABASE_ANON_KEY||cfg.anonKey||'';
 let sb=null,session=null,identity=null,pendingNext=null,lastResult=null;
-const PRODUCT_CODE='TOEFL_FULL_TEST',PURCHASE_EMAIL_KEY='kip_toefl_purchase_email';
+const PRODUCT_CODE='TOEFL_FULL_TEST',PURCHASE_EMAIL_KEY='kip_toefl_purchase_email',PURCHASE_NAME_KEY='kip_toefl_purchase_name';
 let paidAccess=null;
 let emailVerification={email:'',verificationId:null,verificationToken:null,verified:false};
 let resendTimer=null;
@@ -528,25 +596,40 @@ function showLanding(){
   $('fullscreenBtn').style.display='none';
 }
 function openAccessFlow(prefill=''){
+  closePurchaseFlow();
   $('landing').classList.add('hidden');
   $('homeNav').classList.remove('hidden');
   $('home').classList.remove('hidden');
   if(!getFullscreenElement())$('fullscreenBtn').style.display='inline-flex';
   const saved=prefill||localStorage.getItem(PURCHASE_EMAIL_KEY)||'';
+  const savedName=localStorage.getItem(PURCHASE_NAME_KEY)||'';
   if(saved&&!$('email').value)$('email').value=saved;
+  if(savedName&&!$('name').value)$('name').value=savedName;
   $('accessGate').className='accessGate';
   $('accessGate').textContent='Masukkan email yang digunakan saat pembayaran, lalu verifikasi dengan kode OTP.';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function openPurchaseFlow(){
-  $('purchaseCard').classList.remove('hidden');
-  const saved=localStorage.getItem(PURCHASE_EMAIL_KEY)||'';
-  if(saved&&!$('purchaseEmail').value)$('purchaseEmail').value=saved;
-  $('purchaseCard').scrollIntoView({behavior:'smooth',block:'center'});
+  const savedEmail=localStorage.getItem(PURCHASE_EMAIL_KEY)||'';
+  const savedName=localStorage.getItem(PURCHASE_NAME_KEY)||'';
+  if(savedEmail&&!$('purchaseEmail').value)$('purchaseEmail').value=savedEmail;
+  if(savedName&&!$('purchaseName').value)$('purchaseName').value=savedName;
+  $('purchaseModal').classList.remove('hidden');
+  $('purchaseModal').setAttribute('aria-hidden','false');
+  document.body.classList.add('purchase-open');
+  setTimeout(()=>($('purchaseName').value?$('purchaseEmail'):$('purchaseName')).focus(),80);
+}
+function closePurchaseFlow(){
+  $('purchaseModal').classList.add('hidden');
+  $('purchaseModal').setAttribute('aria-hidden','true');
+  document.body.classList.remove('purchase-open');
 }
 async function createPayment(){
+  const name=$('purchaseName').value.trim();
   const email=$('purchaseEmail').value.trim().toLowerCase();
-  if(!validEmail(email)){alert('Masukkan email yang valid.');return}
+  if(name.length<2){alert('Masukkan nama lengkap terlebih dahulu.');$('purchaseName').focus();return}
+  if(!validEmail(email)){alert('Masukkan email yang valid.');$('purchaseEmail').focus();return}
+  localStorage.setItem(PURCHASE_NAME_KEY,name);
   localStorage.setItem(PURCHASE_EMAIL_KEY,email);
   const payWindow=window.open('about:blank','kipToeflPayment');
   $('createPaymentBtn').disabled=true;
@@ -1047,7 +1130,10 @@ $('startBtn').onclick=startFull;$('resumeBtn').onclick=()=>emailVerification.ver
 $('buyNowBtn').onclick=openPurchaseFlow;
 $('alreadyBoughtBtn').onclick=()=>openAccessFlow();
 $('backToLandingBtn').onclick=showLanding;
-$('cancelPurchaseBtn').onclick=()=>{$('purchaseCard').classList.add('hidden')};
+$('cancelPurchaseBtn').onclick=closePurchaseFlow;
+$('closePurchaseBtn').onclick=closePurchaseFlow;
+$('purchaseBackdrop').onclick=closePurchaseFlow;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('purchaseModal').classList.contains('hidden'))closePurchaseFlow()});
 $('createPaymentBtn').onclick=createPayment;
 $('paymentReturnBtn').onclick=()=>openAccessFlow($('purchaseEmail').value.trim().toLowerCase());
 $('continueBtn').onclick=async()=>{
