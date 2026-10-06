@@ -1,0 +1,1275 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KIP TOEFL Online Assessment — Kampung Inggris Pontianak</title>
+<style>
+:root{--navy:#071633;--blue:#2454e6;--green:#16a34a;--red:#d11639;--line:#d9e1ec;--soft:#f6f8fc;--muted:#64748b;--text:#17213a}
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:var(--soft)}
+.hidden{display:none!important}button,input{font:inherit}
+.top{height:72px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:relative;z-index:50}
+.brand{display:flex;align-items:center;gap:11px}.brand img{width:47px;height:47px;object-fit:contain;border-radius:9px;background:#fff}.brand strong{font-size:18px}.brand small{display:block;opacity:.72;margin-top:2px}.topright{display:flex;gap:8px;align-items:center}.pill{border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 11px;font-size:10.5px;font-weight:900}
+.fullscreenBtn{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;padding:9px 14px;font-size:10.5px;font-weight:900;cursor:pointer;letter-spacing:.02em}
+.fullscreenBtn:hover{background:rgba(255,255,255,.15)}
+.fullscreenExit{display:none;position:fixed;top:14px;right:14px;z-index:100001;border:1px solid #dbe3ef;background:#fff;color:#0b1d3a;border-radius:999px;padding:10px 14px;font-weight:900;font-size:11px;box-shadow:0 8px 24px rgba(15,23,42,.18);cursor:pointer}
+.fullscreenExit:hover{background:#f8fafc}
+body.is-fullscreen .fullscreenExit{display:block}
+body.is-fullscreen #home{
+  max-width:none;
+  min-height:calc(100vh - 78px);
+  margin:0;
+  padding:24px;
+  display:grid;
+  place-items:center;
+}
+body.is-fullscreen #home .hero{
+  display:block;
+  width:min(100%,620px);
+  margin:0 auto;
+}
+body.is-fullscreen #home .introCard{display:none}
+body.is-fullscreen #home .participantCard{
+  width:100%;
+  margin:0 auto;
+  max-height:calc(100vh - 125px);
+  overflow:auto;
+}
+body.is-fullscreen .transition{inset:0}
+body.is-fullscreen .transitionCard{max-height:90vh;overflow:auto}
+
+
+
+.home{max-width:1160px;margin:28px auto;padding:18px}.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:19px;box-shadow:0 12px 30px rgba(7,22,51,.07);padding:24px}.eyebrow{font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}h1{font-size:34px;line-height:1.12;margin:9px 0 13px;max-width:660px}.heroLead{font-size:15px;line-height:1.6;margin:0 0 4px;max-width:690px}p{line-height:1.58}.muted{color:var(--muted)}.sections{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}.sectionCard{border:1px solid var(--line);border-radius:14px;padding:14px}.sectionCard .n{font-size:10px;color:var(--muted);font-weight:950}.sectionCard strong{display:block;margin:5px 0}.sectionCard span{font-size:11px;color:var(--muted)}
+.input{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;margin:6px 0 11px}
+.emailRow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.emailRow .input{margin-bottom:6px}
+.emailVerifyBtn{white-space:nowrap;padding:12px 14px}
+.emailState{font-size:11px;line-height:1.45;margin:2px 0 10px;color:var(--muted)}
+.emailState.good{color:#166534;font-weight:800}.emailState.bad{color:#b91c1c;font-weight:800}
+.otpBox{border:1px solid #bfdbfe;background:#eff6ff;border-radius:12px;padding:11px;margin:4px 0 11px}
+.otpBox label{font-size:11px;font-weight:900;color:#1e3a8a}
+.otpCode{letter-spacing:.22em;font-weight:900;text-align:center;font-size:18px}
+.verifiedBox{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid #86efac;background:#f0fdf4;color:#166534;border-radius:12px;padding:10px 12px;margin:4px 0 11px;font-size:12px;font-weight:900}
+.verifiedBox button{padding:7px 10px;font-size:10px}
+.check{display:flex;gap:9px;font-size:11px;color:#475569;line-height:1.45;margin:5px 0 13px}.btn{border:1px solid var(--line);border-radius:11px;background:#fff;padding:11px 14px;font-weight:900;cursor:pointer}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.green{background:var(--green);border-color:var(--green);color:#fff}.btn:disabled{opacity:.5}.resume{border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;padding:12px;margin-top:12px;font-size:12px}.status{font-size:11px;margin-top:9px;color:var(--muted)}
+.runner{height:calc(100vh - 72px);display:grid;grid-template-rows:66px 1fr;background:#fff}.runnerHead{border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;padding:0 18px;background:#fff}.progressTitle{font-weight:950}.progressSub{font-size:10.5px;color:var(--muted);margin-top:3px}.stepper{display:flex;gap:6px}.step{min-width:92px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-size:10px;font-weight:900;text-align:center;color:#64748b}.step.active{background:#eef4ff;border-color:#9ab5f5;color:#1d4ed8}.step.done{background:#f0fdf4;border-color:#86efac;color:#166534}.frame{width:100%;height:100%;border:0;background:#fff}
+.transition{position:fixed;inset:72px 0 0;background:rgba(7,22,51,.62);z-index:100000;display:grid;place-items:center;padding:20px;pointer-events:auto}.transitionCard{width:min(620px,94vw);background:#fff;border-radius:20px;padding:27px;box-shadow:0 24px 70px rgba(0,0,0,.25)}.transitionCard h2{margin-top:0}.summaryLine{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #edf1f6}.summaryLine strong{font-size:18px}
+.final{max-width:1050px;margin:25px auto;padding:18px}.bigScore{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:center}.scoreBox{height:190px;border-radius:18px;background:var(--navy);color:#fff;display:grid;place-items:center;text-align:center}.scoreBox strong{font-size:48px}.scoreBox span{display:block;font-size:10px;opacity:.7}.breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.stat{border:1px solid var(--line);border-radius:13px;padding:14px}.stat span{display:block;font-size:10px;color:var(--muted);font-weight:900}.stat strong{font-size:24px}.notice{margin-top:15px;padding:12px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11px;line-height:1.5}
+@media(max-width:850px){.hero{grid-template-columns:1fr}.sections{grid-template-columns:1fr}.step{min-width:auto}.bigScore{grid-template-columns:1fr}.breakdown{grid-template-columns:1fr}.runnerHead{grid-template-columns:1fr}.stepper{margin-top:5px}.runner{grid-template-rows:88px 1fr}}
+
+
+.securityPolicy{margin:8px 0 13px;padding:11px 12px;border:1px solid #c7d2fe;background:#eef2ff;border-radius:12px;color:#3730a3;font-size:11px;line-height:1.5}
+.securityPolicy strong{display:block;margin-bottom:3px;color:#312e81}
+.securityBadge{border:1px solid #cbd5e1;background:#f8fafc;color:#475569;border-radius:999px;padding:8px 11px;font-size:10px;font-weight:950;white-space:nowrap}
+.securityBadge.warn{border-color:#f59e0b;background:#fffbeb;color:#92400e}
+.securityBadge.bad{border-color:#ef4444;background:#fff1f2;color:#991b1b}
+.securityOverlay{position:fixed;inset:0;background:rgba(7,22,51,.76);z-index:100004;display:grid;place-items:center;padding:20px}
+.securityCard{width:min(560px,94vw);background:#fff;border-radius:20px;padding:28px;box-shadow:0 28px 80px rgba(0,0,0,.34);text-align:center}
+.securityIcon{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;margin:0 auto 14px;background:#fff7ed;color:#c2410c;font-size:27px;font-weight:950}
+.securityCard.danger .securityIcon{background:#fff1f2;color:#be123c}
+.securityCard h2{margin:0 0 9px}.securityCard p{margin:0 0 17px;color:#475569}.securityMeta{font-size:11px;color:#64748b;margin-top:10px}
+body.security-locked{overflow:hidden}
+
+.certPanel{margin-top:12px;border:1px solid #bfdbfe;background:#eff6ff;border-radius:13px;padding:13px;display:flex;justify-content:space-between;gap:14px;align-items:center;color:#1e3a8a}
+.certPanel #certStatus{font-size:11px;margin-top:4px;line-height:1.45;color:#475569}
+.certPanel.sent{border-color:#86efac;background:#f0fdf4;color:#166534}
+.certPanel.fail{border-color:#fecaca;background:#fff1f2;color:#991b1b}
+.certActions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.certActions a{text-decoration:none}
+
+
+/* ===== Payment Landing V4 — premium editorial story ===== */
+.salesLanding{background:#f7f9fc;padding:0 0 76px;color:#0d1b2e}
+.salesWrap{width:min(1180px,calc(100% - 40px));margin:auto}
+.salesBar{background:#07192b;color:#d9e6ef;text-align:center;padding:10px 14px;font-size:11px;font-weight:800;letter-spacing:.02em}
+.salesBar strong{color:#c9ff45}
+.salesHero{position:relative;overflow:hidden;background:linear-gradient(180deg,#fbfdff 0%,#f3f7fb 100%)}
+.salesHero:before{content:"";position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(63,190,189,.15),rgba(63,190,189,0) 68%);right:-210px;top:-230px;pointer-events:none}
+.salesHeroGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;padding:74px 0 86px}
+.storyEyebrow{display:inline-flex;align-items:center;gap:8px;color:#1763c3;font-size:10.5px;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
+.storyEyebrow:before{content:"";width:26px;height:2px;background:#21b9b5;border-radius:99px}
+.salesHero h1{font-size:clamp(44px,5.7vw,76px);line-height:.99;letter-spacing:-.06em;margin:18px 0 22px;max-width:760px}
+.heroAccent{background:linear-gradient(90deg,#1b73ef,#10a7b6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.salesHeroLead{font-size:18px;line-height:1.62;color:#52677d;max-width:690px;margin:0}
+.heroPainLine{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 30px}
+.heroPain{display:flex;align-items:center;gap:8px;border:1px solid #dce5ee;background:#fff;border-radius:999px;padding:10px 13px;font-size:11.5px;font-weight:850;color:#314860;box-shadow:0 8px 22px rgba(15,35,60,.04)}
+.heroPain i{font-style:normal;width:19px;height:19px;border-radius:50%;background:#fff0f0;color:#c44141;display:grid;place-items:center;font-weight:950}
+.heroActions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.heroPrimary,.heroSecondary{border:0;border-radius:14px;padding:15px 20px;font-size:13px;font-weight:950;cursor:pointer;transition:.2s transform,.2s box-shadow}
+.heroPrimary{background:#b9f13a;color:#13220b;box-shadow:0 12px 30px rgba(124,172,24,.18)}
+.heroPrimary:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(124,172,24,.24)}
+.heroSecondary{background:#fff;color:#0c1c2e;border:1px solid #d9e3ec}
+.heroTrust{display:flex;gap:24px;flex-wrap:wrap;margin-top:32px}
+.heroTrustItem strong{display:block;font-size:21px;letter-spacing:-.035em}.heroTrustItem span{display:block;color:#6a7c8e;font-size:10.5px;margin-top:2px}
+
+.heroVisual{position:relative;min-height:580px}
+.heroPhoto{position:absolute;inset:26px 0 72px 56px;border-radius:30px;overflow:hidden;box-shadow:0 30px 70px rgba(10,28,49,.18);background:#dfe8ef}
+.heroPhoto img{width:100%;height:100%;object-fit:cover;display:block}
+.heroPhoto:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,25,43,0) 48%,rgba(7,25,43,.34))}
+.resultMock{position:absolute;left:0;bottom:0;width:310px;background:#fff;border:1px solid #dfe6ee;border-radius:22px;padding:18px;box-shadow:0 24px 54px rgba(9,31,53,.18)}
+.resultMockTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.resultMockTop strong{font-size:12px}.resultBadge{font-size:9px;font-weight:950;color:#137c55;background:#e8faf1;border-radius:999px;padding:5px 8px}
+.resultScore{display:flex;align-items:end;gap:8px;border-radius:16px;background:#07192b;color:#fff;padding:17px}.resultScore strong{font-size:42px;line-height:1}.resultScore span{font-size:10px;color:#a9bdcc;padding-bottom:4px}
+.resultRows{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}.resultRows div{background:#f4f7fa;border-radius:10px;padding:9px;text-align:center}.resultRows b{display:block;font-size:13px}.resultRows span{font-size:8.5px;color:#6c7d8f}
+.certFloat{position:absolute;right:-8px;top:16px;background:#fff;border:1px solid #dfe6ee;border-radius:16px;padding:12px 14px;box-shadow:0 18px 40px rgba(9,31,53,.12);font-size:10px;color:#41586e}.certFloat strong{display:block;color:#102239;font-size:12px;margin-bottom:3px}.certFloat .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#b9f13a;margin-right:6px}
+.priceFloat{position:absolute;right:12px;bottom:58px;background:#b9f13a;color:#10210a;border-radius:18px;padding:14px 17px;box-shadow:0 18px 36px rgba(100,145,16,.19)}.priceFloat span{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.priceFloat strong{display:block;font-size:26px;margin-top:1px;letter-spacing:-.04em}
+
+.storySection{padding:88px 0}.storySection.white{background:#fff}.storySection.dark{background:#07192b;color:#fff}
+.storyHead{max-width:820px}.storyHead h2{font-size:clamp(34px,4.2vw,52px);line-height:1.05;letter-spacing:-.05em;margin:12px 0 16px}.storyHead p{font-size:16px;line-height:1.65;color:#667a8e;margin:0}.dark .storyHead p{color:#a9bdcc}
+.painStoryGrid{display:grid;grid-template-columns:.88fr 1.12fr;gap:30px;margin-top:46px;align-items:stretch}
+.painPhoto{border-radius:26px;overflow:hidden;min-height:430px;position:relative;background:#dde8ef}.painPhoto img{width:100%;height:100%;object-fit:cover;display:block}.painPhoto:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,26,45,0) 45%,rgba(8,26,45,.65))}
+.painQuote{position:absolute;left:24px;right:24px;bottom:22px;color:#fff;font-size:24px;line-height:1.2;font-weight:900;letter-spacing:-.03em;z-index:1}
+.painCards{display:grid;gap:14px}
+.painCard{background:#fff;border:1px solid #dfe6ee;border-radius:22px;padding:24px;display:grid;grid-template-columns:46px 1fr;gap:14px;align-items:start}
+.painNum{width:42px;height:42px;border-radius:13px;background:#fff1f1;color:#b43c3c;display:grid;place-items:center;font-weight:950}
+.painCard h3{margin:1px 0 7px;font-size:18px}.painCard p{margin:0;color:#66798c;font-size:13px;line-height:1.58}
+
+.solveGrid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;margin-top:42px}
+.productStage{position:relative;border-radius:28px;background:linear-gradient(145deg,#102845,#0b1b2d);min-height:510px;padding:28px;overflow:hidden}.productStage:before{content:"";position:absolute;width:360px;height:360px;border-radius:50%;background:rgba(35,190,186,.13);right:-120px;top:-130px}
+.laptop{position:absolute;left:28px;right:28px;top:64px;background:#091522;border-radius:18px 18px 8px 8px;padding:10px;box-shadow:0 24px 48px rgba(0,0,0,.28)}
+.screen{background:#f8fafc;border-radius:10px;min-height:300px;padding:18px;color:#142337}
+.screenBar{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e2e8f0;padding-bottom:12px;margin-bottom:18px}.screenBar strong{font-size:11px}.screenTimer{font-size:10px;color:#64748b}
+.qLine{height:12px;background:#dde6ef;border-radius:99px;margin:10px 0}.qLine.sm{width:66%}.qOption{border:1px solid #dfe6ee;border-radius:10px;padding:9px 11px;margin-top:8px;font-size:10px;color:#506274;background:#fff}
+.laptopBase{position:absolute;left:14%;right:14%;top:394px;height:14px;background:#aeb9c5;border-radius:0 0 18px 18px}
+.stagePill{position:absolute;background:#fff;border-radius:14px;padding:11px 13px;font-size:10px;box-shadow:0 16px 30px rgba(0,0,0,.14)}.stagePill strong{display:block;font-size:12px;color:#10243a;margin-bottom:2px}.stagePill.one{left:24px;bottom:22px}.stagePill.two{right:24px;bottom:34px}
+.solveList{display:grid;gap:14px}.solveItem{display:grid;grid-template-columns:44px 1fr;gap:13px;padding:18px 0;border-bottom:1px solid #e4eaf0}.solveIcon{width:42px;height:42px;border-radius:13px;background:#eef6ff;color:#1763c3;display:grid;place-items:center;font-weight:950}.solveItem h3{margin:0 0 5px;font-size:17px}.solveItem p{margin:0;color:#65798b;font-size:12.5px;line-height:1.55}
+
+.examCards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
+.examCard{background:#0d243a;border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:24px}.examCard small{color:#35c7c2;font-weight:950;letter-spacing:.08em}.examCard h3{font-size:19px;margin:10px 0 7px}.examCard p{font-size:12px;line-height:1.55;color:#9eb3c5;margin:0}.examMeta{margin-top:20px;color:#dbe6ef;font-size:12px;font-weight:850}
+
+.stepsFlow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}.stepCard{position:relative;border:1px solid #dfe6ee;background:#fff;border-radius:20px;padding:22px}.stepCard b{width:35px;height:35px;border-radius:11px;background:#07192b;color:#fff;display:grid;place-items:center;margin-bottom:18px}.stepCard h3{margin:0 0 7px;font-size:16px}.stepCard p{margin:0;color:#687b8e;font-size:12px;line-height:1.55}
+
+.offerSection{padding:86px 0;background:linear-gradient(180deg,#f2f6fa,#edf3f8)}
+.offerShell{display:grid;grid-template-columns:1fr .86fr;gap:28px;align-items:stretch}
+.offerStory{background:#fff;border:1px solid #dfe6ee;border-radius:28px;padding:34px}.offerStory h2{font-size:40px;letter-spacing:-.045em;line-height:1.07;margin:12px 0}.offerStory p{color:#66798c;font-size:14px;line-height:1.6;margin:0}.valueList{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}.valueItem{border:1px solid #e2e8ef;background:#fafcfe;border-radius:14px;padding:13px;font-size:11px;font-weight:850}.valueItem span{color:#1f9c79;margin-right:7px}
+.offerPriceCard{background:#07192b;color:#fff;border-radius:28px;padding:32px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 24px 60px rgba(6,24,42,.14)}.offerTag{display:inline-flex;align-self:flex-start;background:#b9f13a;color:#13210c;padding:7px 11px;border-radius:999px;font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase}.offerOld{color:#8ea7ba;font-size:13px;margin-top:22px}.offerBig{font-size:58px;letter-spacing:-.06em;line-height:1;margin-top:4px}.offerBig span{font-size:13px;color:#a7bac9;letter-spacing:0}.offerQuota{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);border-radius:13px;padding:11px 12px;margin:16px 0 20px;color:#b4c6d4;font-size:11px;line-height:1.5}.offerPriceCard .heroPrimary{width:100%}.offerPriceCard .heroSecondary{width:100%;margin-top:9px}
+.payChips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:14px}.payChip{border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:5px 8px;color:#b7c8d5;font-size:9px;font-weight:850}.offerMicro{text-align:center;color:#8097a9;font-size:9.5px;margin-top:10px}
+
+.faqLayout{display:grid;grid-template-columns:.75fr 1.25fr;gap:50px;margin-top:42px}.faqList{display:grid;gap:12px}.faqItem{background:#fff;border:1px solid #dfe6ee;border-radius:16px;padding:18px 20px}.faqItem strong{display:block;font-size:13px;margin-bottom:5px}.faqItem span{color:#687b8e;font-size:12px;line-height:1.55}
+.disclaimer{margin-top:30px;border-left:3px solid #21b9b5;padding:14px 18px;background:#f5fbfb;border-radius:0 12px 12px 0;color:#5d7286;font-size:11px;line-height:1.55}
+.purchaseCard{max-width:680px;margin:28px auto 0;background:#fff;border:1px solid #dfe6ee;border-radius:20px;padding:24px;box-shadow:0 16px 38px rgba(7,22,51,.09)}.purchaseCard h2{margin:0 0 6px}.purchaseHelp{font-size:12px;color:#65758a;margin:0 0 14px}.purchaseActions{display:flex;gap:9px;flex-wrap:wrap}.purchaseStatus{font-size:11px;line-height:1.5;margin-top:10px;color:#65758a}
+.salesSticky{display:none;position:fixed;left:14px;right:14px;bottom:14px;z-index:45;background:#07192b;color:#fff;border-radius:16px;padding:10px 11px;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 20px 50px rgba(0,0,0,.28)}.salesSticky small{display:block;color:#9eb3c5}.salesSticky strong{font-size:18px}.salesSticky .heroPrimary{padding:11px 14px}
+.homeNav{max-width:1160px;margin:18px auto -8px;padding:0 18px}.homeNav .btn{font-size:11px}.accessGate{margin:0 0 14px;padding:11px 12px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11px;line-height:1.45}.accessGate.good{background:#f0fdf4;border-color:#86efac;color:#166534}
+
+@media(max-width:980px){.salesHeroGrid,.painStoryGrid,.solveGrid,.offerShell{grid-template-columns:1fr}.heroVisual{min-height:560px;max-width:720px}.salesHeroGrid{gap:32px}.examCards,.stepsFlow{grid-template-columns:1fr 1fr}.faqLayout{grid-template-columns:1fr}.heroPhoto{left:70px;right:20px}}
+@media(max-width:640px){.salesWrap{width:min(100% - 28px,1180px)}.salesHeroGrid{padding:42px 0 58px}.salesHero h1{font-size:44px}.salesHeroLead{font-size:16px}.heroActions{display:grid}.heroPrimary,.heroSecondary{width:100%}.heroTrust{gap:18px}.heroVisual{min-height:470px}.heroPhoto{inset:20px 0 90px 28px;border-radius:22px}.resultMock{width:250px;padding:14px}.priceFloat{bottom:46px;right:4px}.certFloat{right:2px}.storySection{padding:62px 0}.painStoryGrid{margin-top:30px}.painPhoto{min-height:330px}.painQuote{font-size:20px}.examCards,.stepsFlow,.valueList{grid-template-columns:1fr}.productStage{min-height:430px}.laptop{left:16px;right:16px}.laptopBase{top:347px}.salesSticky{display:flex}.offerStory,.offerPriceCard{padding:24px}.offerStory h2{font-size:32px}.offerBig{font-size:50px}.purchaseActions{display:grid}}
+
+
+/* ===== Conversion polish V5 ===== */
+.heroPhoto img{object-position:center 42%}
+.priceFloat{right:10px;bottom:50px;padding:15px 18px 14px;min-width:190px}
+.priceFloat .priceSave{position:absolute;right:10px;top:-12px;background:#ef3e2f;color:#fff;border-radius:999px;padding:5px 9px;font-size:9px;font-weight:950;letter-spacing:.04em;box-shadow:0 8px 18px rgba(239,62,47,.22)}
+.priceFloat span{display:block;font-size:9px;font-weight:700;text-transform:none;letter-spacing:0;color:#25410d}
+.priceFloat span s{font-weight:900;margin-left:4px;text-decoration-thickness:2px;text-decoration-color:#d12626}
+.priceFloat b{display:block;font-size:9px;letter-spacing:.08em;text-transform:uppercase;margin-top:5px}
+.priceFloat strong{font-size:29px}
+
+.purchaseModal{position:fixed;inset:0;z-index:200000;display:grid;place-items:center;padding:22px}
+.purchaseBackdrop{position:absolute;inset:0;background:rgba(5,20,38,.62);backdrop-filter:blur(6px)}
+.purchaseModalCard{position:relative;z-index:1;width:min(470px,94vw);max-width:none;margin:0;background:#fff;border-radius:26px;padding:28px;box-shadow:0 34px 90px rgba(0,0,0,.30);max-height:min(92vh,760px);overflow:auto}
+.purchaseClose{position:absolute;right:17px;top:14px;border:0;background:transparent;color:#607287;font-size:30px;line-height:1;cursor:pointer}
+.purchaseMiniTag{display:inline-block;background:#eef7d7;color:#436017;border-radius:999px;padding:7px 10px;font-size:9.5px;font-weight:950;letter-spacing:.06em;margin-bottom:12px}
+.purchaseModalCard h2{font-size:30px;letter-spacing:-.035em;margin:0 0 6px}
+.purchaseModalCard .purchaseHelp{font-size:12px;line-height:1.5;margin-bottom:16px}
+.purchasePricePanel{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#f7f9fc;border:1px solid #e3e9ef;border-radius:17px;padding:13px;margin:4px 0 18px}
+.purchasePricePanel>div{padding:8px 10px}
+.purchasePricePanel span{display:block;font-size:9.5px;color:#6d7f91;margin-bottom:3px}
+.purchasePricePanel s{font-size:17px;color:#7f8fa0;font-weight:850;text-decoration-thickness:2px;text-decoration-color:#d73333}
+.purchaseLaunch{background:#b9f13a;border-radius:12px}
+.purchaseLaunch span{color:#304311;font-weight:800}
+.purchaseLaunch strong{display:block;font-size:25px;color:#14210c;letter-spacing:-.04em}
+.purchasePricePanel em{position:absolute;right:9px;top:-12px;background:#ef3e2f;color:#fff;border-radius:999px;padding:5px 9px;font-size:9px;font-weight:950;font-style:normal}
+.purchaseModalCard label{display:block;font-size:11px;font-weight:900;margin-top:7px}
+.purchaseModalCard .input{background:#fbfcfe}
+.purchaseTrustRow{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:5px 0 15px}
+.purchaseTrustRow span{background:#f6f9fc;border-radius:10px;padding:9px 7px;text-align:center;font-size:8.8px;color:#52677c;font-weight:800}
+.purchaseActions{display:grid;gap:8px}
+.purchasePayBtn{background:#b9f13a!important;border-color:#b9f13a!important;color:#14210c!important;padding:14px 16px!important;font-size:12px!important}
+.purchaseGhost{background:#fff!important;color:#617285!important}
+.purchaseStatus{text-align:center}
+body.purchase-open{overflow:hidden}
+body.purchase-open .salesSticky{opacity:0;pointer-events:none;transform:translateY(14px)}
+.salesSticky{display:flex!important;opacity:1;transition:.2s opacity,.2s transform}
+.salesSticky{left:auto;right:18px;bottom:18px;width:min(390px,calc(100% - 36px))}
+.salesSticky small{font-size:9px}.salesSticky small s{color:#8397a9}
+.salesSticky .heroPrimary{width:auto;white-space:nowrap}
+
+@media(max-width:640px){
+  .purchaseModal{align-items:end;padding:0}
+  .purchaseModalCard{width:100%;max-width:none;border-radius:24px 24px 0 0;padding:24px 18px 20px;max-height:92vh}
+  .purchaseTrustRow{grid-template-columns:1fr 1fr 1fr}
+  .salesSticky{left:12px;right:12px;bottom:12px;width:auto}
+}
+
+/* ===== Hero V6 — follows approved mockup ===== */
+.heroV6{background:
+  radial-gradient(circle at 62% 22%,rgba(76,165,224,.20),transparent 30%),
+  radial-gradient(circle at 88% 10%,rgba(25,81,126,.25),transparent 26%),
+  linear-gradient(135deg,#f8fbff 0%,#edf5fa 54%,#d8e6ef 100%);
+  padding:0 0 24px;overflow:hidden}
+.heroV6Wrap{width:min(1460px,calc(100% - 38px));margin:auto;padding:20px 0 0}
+.heroV6Top{display:flex;justify-content:space-between;align-items:center;padding:2px 14px 20px;color:#10233e}
+.heroV6Brand{display:flex;align-items:center;gap:6px;font-size:28px;letter-spacing:-.03em}.heroV6Bolt{color:#a6ef21;font-size:24px}.heroV6Meta{font-size:11px;color:#fff;font-weight:700}.heroV6Trust{background:rgba(255,255,255,.86);color:#16304e;border-radius:999px;padding:8px 13px;margin-left:24px}
+.heroV6Grid{display:grid;grid-template-columns:1.02fr .95fr .83fr;gap:18px;align-items:stretch}
+.heroV6Copy{padding:26px 16px 26px 18px;display:flex;flex-direction:column;justify-content:center}
+.heroV6Badge{align-self:flex-start;background:linear-gradient(90deg,#f5ff43,#aef22c);border-radius:999px;padding:12px 18px;font-size:11px;font-weight:950;letter-spacing:.03em;color:#14210c;box-shadow:0 8px 20px rgba(121,170,22,.12)}
+.heroV6Copy h1{font-size:clamp(42px,4.3vw,66px);line-height:.98;letter-spacing:-.055em;margin:26px 0 22px;max-width:650px;color:#0a1f3d}
+.heroV6Copy h1 span{color:#1058ea}.heroV6Copy p{font-size:17px;line-height:1.55;color:#203a59;max-width:600px;margin:0}
+.heroV6Benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:32px}
+.heroV6Benefits>div{text-align:center;color:#10233e}.heroV6Benefits i{width:50px;height:50px;border-radius:50%;margin:0 auto 9px;display:grid;place-items:center;background:#dcecff;color:#0e5ee8;font-size:20px;font-style:normal}.heroV6Benefits strong{font-size:10.5px;line-height:1.3}
+
+.heroV6Student{position:relative;min-height:620px;overflow:visible;display:flex;align-items:flex-end;justify-content:center}
+.heroV6Student>img{position:absolute;inset:76px 0 18px;width:100%;height:calc(100% - 94px);object-fit:cover;object-position:center 40%;border-radius:0 0 24px 24px;filter:saturate(.95);box-shadow:0 26px 50px rgba(32,68,99,.12)}
+.heroV6TestScreen{position:absolute;top:4px;left:0;right:0;height:265px;background:#f7fbff;border:9px solid #174a86;border-bottom:0;border-radius:36px 36px 8px 8px;padding:30px 34px 20px;transform:perspective(900px) rotateY(4deg);box-shadow:0 22px 50px rgba(16,55,93,.13);z-index:0;color:#12375f}
+.miniBrowserDots{font-size:8px;letter-spacing:3px;color:#ffb94e;margin-bottom:15px}.heroV6TestScreen strong{display:block;font-size:19px}.miniAudio{margin:14px 0;background:#e4f0ff;color:#1362d6;border-radius:14px;padding:10px;font-size:13px}.heroV6TestScreen small{color:#6d8398}.miniOpts{display:grid;gap:8px;margin-top:10px}.miniOpts span{width:24px;height:24px;border-radius:50%;border:1px solid #c9d8e8;display:grid;place-items:center;font-size:10px}
+.heroV6Score{position:absolute;right:-4px;bottom:134px;width:235px;background:#fff;border-radius:16px;padding:12px;box-shadow:0 18px 38px rgba(11,41,68,.16);z-index:3}
+.heroV6ScoreHead{display:flex;justify-content:space-between;align-items:center;font-size:9px}.heroV6ScoreHead span{background:#dcfae9;color:#168252;padding:3px 6px;border-radius:999px;font-size:7px;font-weight:900}
+.heroV6ScoreBig{margin-top:8px;background:#07192b;color:#fff;border-radius:9px;padding:10px 12px;font-size:31px;font-weight:950}.heroV6ScoreBig small{font-size:8px;color:#c1d0dc;margin-left:5px;font-weight:600}
+.heroV6ScoreParts{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:5px}.heroV6ScoreParts span{background:#f4f7fa;border-radius:7px;text-align:center;padding:6px 3px;font-size:7px;color:#718399}.heroV6ScoreParts b{display:block;font-size:12px;color:#10233e}
+.heroV6Cert{position:absolute;right:-10px;bottom:24px;background:#fff;border-radius:14px;padding:9px 12px;box-shadow:0 14px 34px rgba(9,38,66,.13);font-size:10px;z-index:3;color:#1453b8}.heroV6Cert strong{color:#15324e;margin-left:5px}.heroV6Cert small{display:block;color:#6b7e90;margin-left:25px;margin-top:2px}
+
+.heroV6Signup{position:relative;background:rgba(255,255,255,.96);border-radius:28px;padding:30px;box-shadow:0 24px 60px rgba(9,37,65,.15);align-self:center;min-height:595px}
+.heroV6Close{position:absolute;right:20px;top:15px;border:0;background:transparent;color:#718397;font-size:31px}.heroV6Signup h2{font-size:32px;margin:0 0 3px;letter-spacing:-.04em}.heroV6Signup>p{color:#587087;font-size:12px;margin:0 0 20px}
+.heroV6Price{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:7px;background:#fff1f1;border-radius:15px;padding:11px;margin-bottom:9px}
+.heroV6Price>div{padding:9px 8px}.heroV6Price small{display:block;font-size:9px;color:#344d65}.heroV6Price s{display:block;font-size:22px;color:#728292;font-weight:850;text-decoration-color:#cb3131;text-decoration-thickness:2px}
+.heroV6Launch{background:#b7f229;border-radius:12px}.heroV6Launch strong{display:block;font-size:30px;letter-spacing:-.05em;color:#111}.heroV6Price em{position:absolute;right:3px;top:-14px;background:#f03420;color:#fff;border-radius:999px;padding:5px 9px;font-size:9px;font-weight:950;font-style:normal}
+.heroV6Quota{font-size:10px;color:#e52d1e;margin:4px 0 20px}.heroV6Signup label{display:block;font-size:11px;font-weight:900;margin:12px 0 5px}.heroV6Signup input{width:100%;border:1px solid #d7e1eb;background:#fbfdff;border-radius:11px;padding:13px;font-size:12px;outline:none}.heroV6Signup input:focus{border-color:#3b79dc;box-shadow:0 0 0 3px rgba(59,121,220,.1)}
+.heroV6Pay{width:100%;margin-top:20px;background:#b7f229;border:0;border-radius:12px;padding:16px 13px;font-size:13px;font-weight:950;color:#14210d;cursor:pointer;box-shadow:0 10px 24px rgba(148,207,28,.18)}
+.heroV6Security{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:24px;border-top:1px solid #e8edf2;padding-top:14px}.heroV6Security span{text-align:center;font-size:7.8px;line-height:1.35;color:#4f657a}
+.heroV6Sections{display:grid;grid-template-columns:repeat(3,1fr);background:rgba(255,255,255,.93);border-radius:30px;padding:22px 30px;box-shadow:0 12px 32px rgba(18,46,72,.05)}
+.heroV6Sections>div{display:grid;grid-template-columns:58px 1fr;gap:13px;align-items:center;padding:0 24px;border-right:1px solid #dce5ed}.heroV6Sections>div:last-child{border-right:0}.heroV6Sections i{width:55px;height:55px;border-radius:50%;background:#e5f1ff;display:grid;place-items:center;font-style:normal;font-size:22px}.heroV6Sections strong{display:block;font-size:15px}.heroV6Sections strong span{background:#eaf2fb;border-radius:999px;padding:4px 8px;font-size:9px;margin-left:5px}.heroV6Sections p{font-size:10.5px;line-height:1.45;color:#50677e;margin:5px 0 0}
+
+@media(max-width:1180px){.heroV6Grid{grid-template-columns:1fr 1fr}.heroV6Signup{grid-column:1/-1;min-height:0}.heroV6Student{min-height:560px}.heroV6Top{padding-top:8px}.heroV6Meta{color:#36516d}}
+@media(max-width:780px){.heroV6Wrap{width:min(100% - 22px,1460px)}.heroV6Top{gap:12px}.heroV6Meta{font-size:8px;text-align:right}.heroV6Trust{display:block;margin:5px 0 0;padding:5px 8px}.heroV6Grid{grid-template-columns:1fr}.heroV6Copy{padding:18px 8px}.heroV6Copy h1{font-size:44px}.heroV6Benefits{grid-template-columns:repeat(2,1fr)}.heroV6Student{min-height:520px}.heroV6Signup{padding:23px}.heroV6Sections{grid-template-columns:1fr;padding:10px 18px}.heroV6Sections>div{border-right:0;border-bottom:1px solid #e1e8ef;padding:14px 4px}.heroV6Sections>div:last-child{border-bottom:0}}
+
+
+/* ===== FINAL HERO POLISH — approved mockup ===== */
+.heroV6{padding-top:12px;background:
+  radial-gradient(circle at 68% 18%,rgba(82,154,213,.20),transparent 26%),
+  linear-gradient(105deg,#fbfdff 0%,#f5f9fd 38%,#deebf4 70%,#cbdbe7 100%)}
+.heroV6Wrap{width:min(1488px,calc(100% - 34px))}
+.heroV6Top{padding:0 18px 14px}
+.heroV6Brand{font-size:30px}.heroV6Meta{color:#f9fbff;text-shadow:0 1px 3px rgba(14,42,70,.22);font-size:12px}
+.heroV6Grid{grid-template-columns:1.02fr .92fr .84fr;gap:16px}
+.heroV6Copy{padding:28px 14px 24px 22px}
+.heroV6Badge{font-size:12px;padding:13px 20px}
+.heroV6Copy h1{font-size:clamp(48px,4.45vw,68px);line-height:.99;margin:28px 0 24px}
+.heroV6Copy p{font-size:18px;line-height:1.55}
+.heroV6Benefits{margin-top:34px;gap:16px}
+.heroV6Benefits i{width:58px;height:58px;font-size:24px}
+.heroV6Benefits strong{font-size:12px}
+.heroV6Student{min-height:635px}
+.heroV6Student>img{inset:84px 0 16px;height:calc(100% - 100px);object-position:center 38%}
+.heroV6TestScreen{height:270px;top:6px}
+.heroV6Score{width:250px;bottom:140px}
+.heroV6Cert{bottom:22px;right:-8px}
+.heroV6Signup{border-radius:30px;padding:32px;min-height:605px}
+.heroV6Signup h2{font-size:34px}
+.heroV6Signup>p{font-size:13px}
+.heroV6Price{margin-top:24px}
+.heroV6Signup label{font-size:13px}
+.heroV6Signup input{padding:15px 16px;font-size:14px}
+.heroV6Pay{padding:18px 15px;font-size:16px;border-radius:14px}
+.heroV6Security span{font-size:8.5px}
+.heroV6Sections{margin-top:22px;border-radius:34px;padding:26px 32px}
+.heroV6Sections>div{grid-template-columns:62px 1fr;gap:16px;padding:0 30px}
+.heroV6Sections i{width:60px;height:60px;font-size:25px}
+.heroV6Sections strong{font-size:17px}
+.heroV6Sections p{font-size:12px}
+@media(max-width:1180px){
+  .heroV6Meta{color:#36516d;text-shadow:none}
+}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><img src="kip-logo.jpg" alt="KIP"><div><strong>KIP TOEFL Online Assessment</strong><small>Listening · Structure · Reading</small></div></div>
+  <div class="topright">
+    <button id="fullscreenBtn" class="fullscreenBtn" type="button">LAYAR PENUH</button>
+  </div>
+</header>
+<button id="fullscreenExit" class="fullscreenExit" type="button">KELUAR LAYAR PENUH</button>
+
+<main id="landing" class="salesLanding">
+  <section class="heroV6">
+    <div class="heroV6Wrap">
+      <div class="heroV6Top">
+        <div class="heroV6Brand"><span class="heroV6Bolt">⚡</span><strong>KIP TOEFL</strong></div>
+        <div class="heroV6Meta">Online Assessment bergaya TOEFL ITP <span class="heroV6Trust">🔒 Aman &amp; Terpercaya</span></div>
+      </div>
+
+      <div class="heroV6Grid">
+        <div class="heroV6Copy">
+          <div class="heroV6Badge">🔥 HARGA LAUNCHING · 1.000 PESERTA PERTAMA</div>
+          <h1>Sudah belajar TOEFL,<br>tapi masih belum tahu<br><span>posisi kemampuanmu<br>sekarang?</span></h1>
+          <p>Ikuti <b>KIP TOEFL Online Assessment</b> dan dapatkan hasil langsung setelah selesai. Tes fleksibel dari mana saja, tanpa harus datang ke lokasi.</p>
+
+          <div class="heroV6Benefits">
+            <div><i>▣</i><strong>Online &amp;<br>fleksibel</strong></div>
+            <div><i>▤</i><strong>3 section<br>lengkap</strong></div>
+            <div><i>⚡</i><strong>Hasil langsung<br>setelah tes</strong></div>
+            <div><i>✪</i><strong>E-sertifikat<br>dikirim ke email</strong></div>
+          </div>
+        </div>
+
+        <div class="heroV6Student">
+          <div class="heroV6TestScreen">
+            <div class="miniBrowserDots">● ● ●</div>
+            <strong>Listening Section</strong>
+            <div class="miniAudio">▶  ▮▮▮▮▮▮▮▮▮</div>
+            <small>Question 12 of 50</small>
+            <div class="miniOpts"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+          </div>
+          <img src="https://images.unsplash.com/photo-1759984782199-a4f6d1b6054e?auto=format&fit=crop&w=1400&q=84" alt="Peserta sedang mengerjakan simulasi TOEFL dengan laptop dan headphone">
+          <div class="heroV6Score">
+            <div class="heroV6ScoreHead"><strong>Hasil Assessment</strong><span>SELESAI</span></div>
+            <div class="heroV6ScoreBig">517 <small>Estimasi Practice Score</small></div>
+            <div class="heroV6ScoreParts"><span><b>52</b>Listening</span><span><b>49</b>Structure</span><span><b>54</b>Reading</span></div>
+          </div>
+          <div class="heroV6Cert">✉ <strong>E-sertifikat dikirim</strong><small>ke email setelah tes selesai</small></div>
+        </div>
+
+        <aside class="heroV6Signup">
+          <button class="heroV6Close" type="button" aria-hidden="true">×</button>
+          <h2>Daftar Sekarang</h2>
+          <p>Dapatkan akses tes dan hasil langsung.</p>
+
+          <div class="heroV6Price">
+            <div><small>Harga normal</small><s>Rp69.000</s></div>
+            <div class="heroV6Launch"><small>Harga launching</small><strong>Rp39.000</strong></div>
+            <em>HEMAT 43%</em>
+          </div>
+          <div class="heroV6Quota">🔥 Hanya untuk 1.000 peserta pertama.</div>
+
+          <label>Nama Lengkap</label>
+          <input id="heroPurchaseName" type="text" placeholder="Contoh: Ahmad Rizki" autocomplete="name">
+          <label>Email Aktif</label>
+          <input id="heroPurchaseEmail" type="email" placeholder="contoh@email.com" autocomplete="email">
+
+          <button id="heroRegisterBtn" class="heroV6Pay" type="button">LANJUTKAN PEMBAYARAN →</button>
+
+          <div class="heroV6Security">
+            <span>🛡 Pembayaran aman<br>dan terenkripsi</span>
+            <span>✉ Akses dikirim<br>ke email</span>
+            <span>∞ Lanjutkan tes<br>jika terputus</span>
+          </div>
+        </aside>
+      </div>
+
+      <div class="heroV6Sections">
+        <div><i>🎧</i><div><strong>Listening <span>50 soal</span></strong><p>Simulasi listening lengkap dengan audio seperti tes asli.</p></div></div>
+        <div><i>▤</i><div><strong>Structure &amp; Written Expression <span>40 soal</span></strong><p>Latihan tata bahasa dan struktur kalimat yang sering muncul.</p></div></div>
+        <div><i>📖</i><div><strong>Reading <span>50 soal</span></strong><p>Reading dengan teks akademik seperti tes sebenarnya.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="storySection white">
+    <div class="salesWrap">
+      <div class="storyHead">
+        <div class="storyEyebrow">MASALAHNYA BUKAN KAMU TIDAK MAU TES</div>
+        <h2>Sering kali yang bikin tertunda justru prosesnya.</h2>
+        <p>Kamu hanya ingin tahu kemampuanmu sekarang. Tapi proses tes konvensional bisa terasa terlalu besar untuk tujuan sesederhana itu.</p>
+      </div>
+
+      <div class="painStoryGrid">
+        <div class="painPhoto">
+          <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=82" alt="Mahasiswa belajar bersama">
+          <div class="painQuote">“Saya cuma ingin tahu level saya sekarang. Kenapa prosesnya harus serumit itu?”</div>
+        </div>
+
+        <div class="painCards">
+          <div class="painCard"><div class="painNum">01</div><div><h3>Biayanya terasa besar untuk sekadar mengukur kemampuan</h3><p>Tes resmi tentu punya fungsi penting, tetapi tidak semua orang sedang membutuhkan sertifikasi resmi. Banyak yang hanya ingin punya baseline sebelum belajar lebih serius.</p></div></div>
+          <div class="painCard"><div class="painNum">02</div><div><h3>Waktunya tidak selalu mengikuti hidup kita</h3><p>Kuliah, kerja, keluarga, dan jarak membuat jadwal offline tidak selalu praktis. Padahal kesiapan setiap orang berbeda.</p></div></div>
+          <div class="painCard"><div class="painNum">03</div><div><h3>Sudah selesai tes, masih harus menunggu hasil</h3><p>Kalau tujuanmu adalah mengambil keputusan belajar berikutnya, hasil yang lebih cepat berarti kamu bisa bertindak lebih cepat.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="storySection">
+    <div class="salesWrap">
+      <div class="storyHead">
+        <div class="storyEyebrow">MAKA KAMI BUAT ALURNYA LEBIH SEDERHANA</div>
+        <h2>Bayar saat siap. Tes saat siap. Hasil langsung setelah selesai.</h2>
+        <p>KIP TOEFL Online Assessment dirancang sebagai assessment diagnostik bergaya TOEFL ITP untuk latihan dan pemetaan kemampuan — bukan tes resmi ETS TOEFL ITP.</p>
+      </div>
+
+      <div class="solveGrid">
+        <div class="productStage">
+          <div class="laptop">
+            <div class="screen">
+              <div class="screenBar"><strong>KIP TOEFL · Listening</strong><span class="screenTimer">28:41 tersisa</span></div>
+              <div class="qLine"></div><div class="qLine sm"></div>
+              <div class="qOption">A. She needs more time to finish the assignment.</div>
+              <div class="qOption">B. She has already submitted the assignment.</div>
+              <div class="qOption">C. She plans to speak with the professor.</div>
+              <div class="qOption">D. She does not understand the question.</div>
+            </div>
+          </div>
+          <div class="laptopBase"></div>
+          <div class="stagePill one"><strong>✓ Auto-save session</strong>Keluar? Bisa lanjut lagi.</div>
+          <div class="stagePill two"><strong>✓ Secure access</strong>Email + OTP + pembayaran.</div>
+        </div>
+
+        <div class="solveList">
+          <div class="solveItem"><div class="solveIcon">1</div><div><h3>Tes dari mana saja</h3><p>Gunakan laptop atau komputer dengan koneksi internet yang stabil. Tidak perlu datang ke lokasi tes.</p></div></div>
+          <div class="solveItem"><div class="solveIcon">2</div><div><h3>Tes saat kamu benar-benar siap</h3><p>Sudah bayar hari ini tapi baru punya waktu akhir pekan? Tidak masalah. Akses tetap tersimpan selama masa aktif.</p></div></div>
+          <div class="solveItem"><div class="solveIcon">3</div><div><h3>Hasil langsung tampil</h3><p>Begitu seluruh section selesai, hasil practice langsung tersedia tanpa menunggu koreksi manual berhari-hari.</p></div></div>
+          <div class="solveItem"><div class="solveIcon">4</div><div><h3>E-sertifikat via email</h3><p>Setelah assessment selesai dan proses penerbitan berhasil, e-sertifikat dikirim ke email peserta.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="storySection dark">
+    <div class="salesWrap">
+      <div class="storyHead">
+        <div class="storyEyebrow" style="color:#4fe0db">FULL ASSESSMENT</div>
+        <h2>Satu tes. Tiga section. 140 soal.</h2>
+        <p>Alur tes dibuat berurutan agar kamu mendapatkan pengalaman full assessment yang lebih utuh.</p>
+      </div>
+
+      <div class="examCards">
+        <div class="examCard"><small>SECTION 01</small><h3>Listening Comprehension</h3><p>Mengukur kemampuan memahami percakapan dan pembicaraan berbahasa Inggris.</p><div class="examMeta">50 soal · ±32 menit</div></div>
+        <div class="examCard"><small>SECTION 02</small><h3>Structure &amp; Written Expression</h3><p>Mengukur pemahaman struktur kalimat, grammar, dan penggunaan bahasa.</p><div class="examMeta">40 soal · 25 menit</div></div>
+        <div class="examCard"><small>SECTION 03</small><h3>Reading Comprehension</h3><p>Mengukur kemampuan memahami informasi dan bacaan akademik berbahasa Inggris.</p><div class="examMeta">50 soal · 55 menit</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="storySection white">
+    <div class="salesWrap">
+      <div class="storyHead">
+        <div class="storyEyebrow">CARA KERJANYA</div>
+        <h2>Dari pembayaran sampai hasil, semuanya jelas.</h2>
+        <p>Tidak perlu menyimpan kode aneh atau mengingat order ID. Sistem mengenali akses melalui email yang digunakan saat pembayaran.</p>
+      </div>
+
+      <div class="stepsFlow">
+        <div class="stepCard"><b>1</b><h3>Daftar &amp; bayar</h3><p>Gunakan email aktif lalu selesaikan pembayaran melalui Midtrans.</p></div>
+        <div class="stepCard"><b>2</b><h3>Verifikasi email</h3><p>Saat ingin tes, masukkan email yang sama lalu verifikasi dengan OTP.</p></div>
+        <div class="stepCard"><b>3</b><h3>Mulai / lanjutkan</h3><p>Belum mulai? Mulai tes. Sudah pernah mulai? Lanjutkan sesi yang sama.</p></div>
+        <div class="stepCard"><b>4</b><h3>Lihat hasil</h3><p>Setelah seluruh section selesai, hasil tampil dan e-sertifikat diproses.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="offerSection">
+    <div class="salesWrap">
+      <div class="offerShell">
+        <div class="offerStory">
+          <div class="storyEyebrow">APA YANG KAMU DAPAT?</div>
+          <h2>Full assessment dengan harga yang tetap terasa ringan untuk dicoba.</h2>
+          <p>Bukan sekadar kumpulan soal. Kamu mendapat satu alur assessment lengkap yang terhubung ke akses email, resume session, hasil, dan e-sertifikat.</p>
+
+          <div class="valueList">
+            <div class="valueItem"><span>✓</span>Listening · 50 soal</div>
+            <div class="valueItem"><span>✓</span>Structure · 40 soal</div>
+            <div class="valueItem"><span>✓</span>Reading · 50 soal</div>
+            <div class="valueItem"><span>✓</span>Hasil langsung</div>
+            <div class="valueItem"><span>✓</span>Resume session</div>
+            <div class="valueItem"><span>✓</span>E-sertifikat via email</div>
+          </div>
+        </div>
+
+        <div class="offerPriceCard">
+          <span class="offerTag">Harga Launching</span>
+          <div class="offerOld">Harga normal <s>Rp69.000</s></div>
+          <div class="offerBig">Rp39.000 <span>/ test</span></div>
+          <div class="offerQuota">Khusus <b>1.000 peserta pertama</b>. Setelah kuota terpenuhi, harga kembali menjadi Rp69.000.</div>
+          <button class="heroPrimary" type="button" onclick="openPurchaseFlow()">MULAI TOEFL — Rp39.000</button>
+          <button class="heroSecondary" type="button" onclick="openAccessFlow()">SUDAH MEMBELI? AKSES TES</button>
+          <div class="payChips"><span class="payChip">QRIS</span><span class="payChip">BCA VA</span><span class="payChip">Mandiri</span><span class="payChip">BNI</span><span class="payChip">GoPay</span></div>
+          <div class="offerMicro">Pembayaran diproses melalui Midtrans.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="storySection white">
+    <div class="salesWrap">
+      <div class="faqLayout">
+        <div>
+          <div class="storyEyebrow">FAQ</div>
+          <div class="storyHead"><h2>Sebelum mulai tes.</h2><p>Empat pertanyaan yang paling penting sebelum membeli akses.</p></div>
+        </div>
+
+        <div class="faqList">
+          <div class="faqItem"><strong>Apakah harus langsung tes setelah bayar?</strong><span>Tidak. Kamu bisa membayar sekarang dan kembali ketika sudah siap selama akses masih aktif.</span></div>
+          <div class="faqItem"><strong>Kalau browser tertutup bagaimana?</strong><span>Jika sesi sudah dimulai, masuk kembali dengan email yang sama dan sistem akan menawarkan untuk melanjutkan sesi tersebut.</span></div>
+          <div class="faqItem"><strong>Apakah ini skor resmi ETS TOEFL ITP?</strong><span>Tidak. KIP TOEFL adalah assessment diagnostik/practice bergaya TOEFL ITP untuk latihan dan pemetaan kemampuan.</span></div>
+          <div class="faqItem"><strong>Kapan e-sertifikat dikirim?</strong><span>Setelah seluruh assessment selesai dan proses penerbitan e-sertifikat berhasil.</span></div>
+        </div>
+      </div>
+
+      <div class="disclaimer"><strong>Catatan penting:</strong> KIP TOEFL Online Assessment bukan tes resmi ETS dan tidak menerbitkan skor resmi ETS TOEFL ITP. Assessment ini digunakan untuk latihan dan pemetaan kemampuan.</div>
+    </div>
+  </section>
+
+  <div id="purchaseModal" class="purchaseModal hidden" aria-hidden="true">
+    <div class="purchaseBackdrop" id="purchaseBackdrop"></div>
+    <section id="purchaseCard" class="purchaseCard purchaseModalCard" role="dialog" aria-modal="true" aria-labelledby="purchaseTitle">
+      <button id="closePurchaseBtn" class="purchaseClose" type="button" aria-label="Tutup">×</button>
+      <div class="purchaseMiniTag">HARGA LAUNCHING · 1.000 PESERTA PERTAMA</div>
+      <h2 id="purchaseTitle">Daftar Sekarang</h2>
+      <p class="purchaseHelp">Isi data singkat di bawah. Setelah itu kamu langsung lanjut ke pembayaran aman via Midtrans.</p>
+
+      <div class="purchasePricePanel">
+        <div><span>Harga normal</span><s>Rp69.000</s></div>
+        <div class="purchaseLaunch"><span>Harga launching</span><strong>Rp39.000</strong></div>
+        <em>HEMAT 43%</em>
+      </div>
+
+      <label>Nama lengkap *</label>
+      <input id="purchaseName" class="input" type="text" autocomplete="name" placeholder="Contoh: Ahmad Rizki">
+      <label>Email aktif *</label>
+      <input id="purchaseEmail" class="input" type="email" autocomplete="email" placeholder="nama@email.com">
+
+      <div class="purchaseTrustRow">
+        <span>🔒 Pembayaran aman</span>
+        <span>✉ Akses via email</span>
+        <span>↻ Bisa lanjut tes</span>
+      </div>
+
+      <div class="purchaseActions">
+        <button id="createPaymentBtn" class="btn purchasePayBtn" type="button">LANJUTKAN PEMBAYARAN →</button>
+        <button id="paymentReturnBtn" class="btn green hidden" type="button">Saya Sudah Bayar — Akses Tes</button>
+        <button id="cancelPurchaseBtn" class="btn purchaseGhost" type="button">Nanti saja</button>
+      </div>
+      <div id="purchaseStatus" class="purchaseStatus">Pembayaran diproses melalui Midtrans.</div>
+    </section>
+  </div>
+
+  <div class="salesSticky">
+    <div><small><s>Rp69.000</s> · Harga launching</small><strong>Rp39.000</strong></div>
+    <button class="heroPrimary" type="button" onclick="openPurchaseFlow()">DAFTAR SEKARANG →</button>
+  </div>
+</main>
+
+<div id="homeNav" class="homeNav hidden"><button id="backToLandingBtn" class="btn" type="button">← Kembali ke halaman utama</button></div>
+
+<main id="home" class="home hidden">
+  <div class="hero">
+    <section class="card introCard">
+      <div class="eyebrow">KIP TOEFL ITP-Style Diagnostic Assessment</div>
+      <h1>Ukur kemampuan TOEFL kamu dalam tiga section utama.</h1>
+      <p class="muted heroLead">Kerjakan Listening, Structure &amp; Written Expression, dan Reading dalam satu rangkaian tes. Setelah selesai, hasil tiap section, estimasi skor TOEFL practice, dan e-sertifikat akan tersedia.</p>
+      <div class="sections">
+        <div class="sectionCard"><div class="n">SECTION 1</div><strong>Listening</strong><span>50 soal · ≈32 menit</span></div>
+        <div class="sectionCard"><div class="n">SECTION 2</div><strong>Structure & Written Expression</strong><span>40 soal · 25 menit</span></div>
+        <div class="sectionCard"><div class="n">SECTION 3</div><strong>Reading</strong><span>50 soal · 55 menit</span></div>
+      </div>
+      <p class="muted" style="font-size:11px;margin-top:15px">Total: 140 soal · sekitar 112 menit waktu pengerjaan aktif, di luar waktu perpindahan antarsection.</p>
+    </section>
+
+    <section class="card participantCard">
+      <h2 style="margin-top:0">Akses TOEFL Assessment</h2>
+      <div id="accessGate" class="accessGate">Masukkan email yang digunakan saat pembayaran, lalu verifikasi dengan kode OTP.</div>
+      <label>Nama lengkap *</label><input id="name" class="input" autocomplete="name">
+      <label>Email *</label>
+      <div class="emailRow">
+        <input id="email" class="input" type="email" autocomplete="email" placeholder="student@example.com">
+        <button id="sendOtpBtn" class="btn emailVerifyBtn" type="button">Kirim Kode</button>
+      </div>
+      <div id="emailState" class="emailState">Verifikasi email sebelum memulai tes.</div>
+      <div id="otpBox" class="otpBox hidden">
+        <label>Kode verifikasi 6 digit</label>
+        <div class="emailRow">
+          <input id="otpCode" class="input otpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000">
+          <button id="verifyOtpBtn" class="btn green emailVerifyBtn" type="button">Verifikasi Email</button>
+        </div>
+      </div>
+      <div id="verifiedBox" class="verifiedBox hidden">
+        <span>✓ Email terverifikasi</span>
+        <button id="changeEmailBtn" class="btn" type="button">Ganti email</button>
+      </div>
+      <label>WhatsApp</label><input id="wa" class="input" inputmode="tel">
+      <label>Sekolah / Institusi</label><input id="inst" class="input" autocomplete="organization">
+      <div class="securityPolicy"><strong>Mode Keamanan Tes</strong>Tetap berada dalam mode layar penuh dan jangan berpindah tab atau aplikasi. Pelanggaran pertama dan kedua akan mendapat peringatan. Pelanggaran ketiga akan mengakhiri tes secara otomatis dan e-sertifikat tidak akan diterbitkan.</div>
+      <label class="check"><input id="consent" type="checkbox"><span>Saya memahami bahwa KIP TOEFL adalah assessment diagnostik dengan format section bergaya TOEFL ITP, bukan tes resmi ETS TOEFL ITP. Saya juga menyetujui Mode Keamanan Tes di atas.</span></label>
+      <button id="startBtn" class="btn primary" style="width:100%" disabled>Mulai TOEFL Test</button>
+      <div id="status" class="status">Siap.</div>
+      <div id="resumeBox" class="resume hidden">
+        <strong>Tes yang belum selesai ditemukan.</strong>
+        <div id="resumeText" style="margin:6px 0 9px"></div>
+        <button id="resumeBtn" class="btn green">Lanjutkan TOEFL Test</button>
+        <button id="discardBtn" class="btn">Hapus sesi lokal</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<section id="runner" class="runner hidden">
+  <div class="runnerHead">
+    <div><div id="progressTitle" class="progressTitle">Section</div><div id="progressSub" class="progressSub"></div></div>
+    <div id="securityBadge" class="securityBadge">SECURITY · 0/2</div>
+    <div class="stepper">
+      <div id="step-listening" class="step">1 · Listening</div>
+      <div id="step-structure" class="step">2 · Structure</div>
+      <div id="step-reading" class="step">3 · Reading</div>
+    </div>
+  </div>
+  <iframe id="frame" class="frame" allow="autoplay; fullscreen"></iframe>
+</section>
+
+<div id="transition" class="transition hidden">
+  <div class="transitionCard">
+    <div class="eyebrow">Section Selesai</div>
+    <h2 id="transitionTitle">Section selesai</h2>
+    <div id="transitionSummary"></div>
+    <p id="transitionCopy" class="muted"></p>
+    <button id="continueBtn" class="btn primary" style="width:100%">Lanjutkan</button>
+  </div>
+</div>
+
+<div id="securityOverlay" class="securityOverlay hidden">
+  <div id="securityCard" class="securityCard">
+    <div class="securityIcon">!</div>
+    <h2 id="securityTitle">Security warning</h2>
+    <p id="securityText"></p>
+    <button id="securityReturnBtn" class="btn primary" type="button" style="width:100%">Return to Fullscreen</button>
+    <div id="securityMeta" class="securityMeta"></div>
+  </div>
+</div>
+
+<main id="final" class="final hidden">
+  <section class="card">
+    <div class="eyebrow">Assessment Selesai</div>
+    <div class="bigScore">
+      <div class="scoreBox"><div><strong id="combinedRaw">—</strong><span>ESTIMASI SKOR TOEFL PRACTICE</span></div></div>
+      <div>
+        <h1 style="font-size:34px;margin-top:0">Assessment selesai.</h1>
+        <p id="finalWho" class="muted"></p>
+        <div class="breakdown">
+          <div class="stat"><span>LISTENING</span><strong id="fListening">—</strong></div>
+          <div class="stat"><span>STRUCTURE</span><strong id="fStructure">—</strong></div>
+          <div class="stat"><span>READING</span><strong id="fReading">—</strong></div>
+        </div>
+        <div class="breakdown">
+          <div class="stat"><span>JAWABAN BENAR</span><strong id="fRawTotal">—</strong></div>
+          <div class="stat"><span>AKURASI GABUNGAN</span><strong id="fAccuracy">—</strong></div>
+          <div class="stat"><span>JUMLAH SOAL</span><strong>140</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="notice"><strong>Catatan skor:</strong> skor yang ditampilkan adalah estimasi practice untuk kebutuhan diagnostik KIP dan bukan skor resmi ETS TOEFL ITP.</div>
+    <div id="certificatePanel" class="certPanel">
+      <div>
+        <strong id="certTitle">E-Sertifikat</strong>
+        <div id="certStatus">E-sertifikat akan dibuat otomatis setelah seluruh tes selesai.</div>
+      </div>
+      <div class="certActions">
+        <a id="certDownload" class="btn hidden" target="_blank" rel="noopener">Unduh PDF</a>
+        <button id="certRetry" class="btn hidden">Coba Lagi</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const MASTER_KEY='kip_full_test_master_v1',IDENTITY_KEY='kip_full_test_identity';
+const FILES={listening:'kip-full-listening-v1.2-security.html',structure:'kip-full-structure-v1.2-security.html',reading:'kip-full-reading-v1.3-security.html'};
+const ORDER=['listening','structure','reading'];
+const LABEL={listening:'Listening Comprehension',structure:'Structure & Written Expression',reading:'Reading Comprehension'};
+const $=id=>document.getElementById(id);
+const cfg=window.KIP_CONFIG||window.KIP_SUPABASE||{};
+const URL_=cfg.SUPABASE_URL||cfg.url||'',KEY_=cfg.SUPABASE_ANON_KEY||cfg.anonKey||'';
+let sb=null,session=null,identity=null,pendingNext=null,lastResult=null;
+const PRODUCT_CODE='TOEFL_FULL_TEST',PURCHASE_EMAIL_KEY='kip_toefl_purchase_email',PURCHASE_NAME_KEY='kip_toefl_purchase_name';
+let paidAccess=null;
+let emailVerification={email:'',verificationId:null,verificationToken:null,verified:false};
+let resendTimer=null;
+let securityArmed=false,securitySection=null,securityViolationCount=0,securityDisqualified=false;
+let securityArmTimer=null,securityFallbackTimer=null,lastSecurityEventAt=0;
+
+
+function showLanding(){
+  $('landing').classList.remove('hidden');
+  $('homeNav').classList.add('hidden');
+  $('home').classList.add('hidden');
+  $('runner').classList.add('hidden');
+  $('final').classList.add('hidden');
+  $('fullscreenBtn').style.display='none';
+}
+function openAccessFlow(prefill=''){
+  closePurchaseFlow();
+  $('landing').classList.add('hidden');
+  $('homeNav').classList.remove('hidden');
+  $('home').classList.remove('hidden');
+  if(!getFullscreenElement())$('fullscreenBtn').style.display='inline-flex';
+  const saved=prefill||localStorage.getItem(PURCHASE_EMAIL_KEY)||'';
+  const savedName=localStorage.getItem(PURCHASE_NAME_KEY)||'';
+  if(saved&&!$('email').value)$('email').value=saved;
+  if(savedName&&!$('name').value)$('name').value=savedName;
+  $('accessGate').className='accessGate';
+  $('accessGate').textContent='Masukkan email yang digunakan saat pembayaran, lalu verifikasi dengan kode OTP.';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function syncHeroSignupToModal(){
+  const n=$('heroPurchaseName')?.value?.trim()||'';
+  const e=$('heroPurchaseEmail')?.value?.trim().toLowerCase()||'';
+  if(n){localStorage.setItem(PURCHASE_NAME_KEY,n);if($('purchaseName'))$('purchaseName').value=n}
+  if(e){localStorage.setItem(PURCHASE_EMAIL_KEY,e);if($('purchaseEmail'))$('purchaseEmail').value=e}
+}
+function openPurchaseFlow(){
+  const savedEmail=localStorage.getItem(PURCHASE_EMAIL_KEY)||'';
+  const savedName=localStorage.getItem(PURCHASE_NAME_KEY)||'';
+  if(savedEmail&&!$('purchaseEmail').value)$('purchaseEmail').value=savedEmail;
+  if(savedName&&!$('purchaseName').value)$('purchaseName').value=savedName;
+  $('purchaseModal').classList.remove('hidden');
+  $('purchaseModal').setAttribute('aria-hidden','false');
+  document.body.classList.add('purchase-open');
+  setTimeout(()=>($('purchaseName').value?$('purchaseEmail'):$('purchaseName')).focus(),80);
+}
+function closePurchaseFlow(){
+  $('purchaseModal').classList.add('hidden');
+  $('purchaseModal').setAttribute('aria-hidden','true');
+  document.body.classList.remove('purchase-open');
+}
+async function createPayment(){
+  const name=$('purchaseName').value.trim();
+  const email=$('purchaseEmail').value.trim().toLowerCase();
+  if(name.length<2){alert('Masukkan nama lengkap terlebih dahulu.');$('purchaseName').focus();return}
+  if(!validEmail(email)){alert('Masukkan email yang valid.');$('purchaseEmail').focus();return}
+  localStorage.setItem(PURCHASE_NAME_KEY,name);
+  localStorage.setItem(PURCHASE_EMAIL_KEY,email);
+  const payWindow=window.open('about:blank','kipToeflPayment');
+  $('createPaymentBtn').disabled=true;
+  $('purchaseStatus').textContent='Membuat transaksi Midtrans…';
+  try{
+    sb=sb||window.supabase.createClient(URL_,KEY_);
+    const {data,error}=await sb.functions.invoke('create-midtrans-transaction',{body:{customer_email:email,product_code:PRODUCT_CODE}});
+    if(error)throw error;
+    if(!data?.success||!data?.redirect_url)throw new Error(data?.error||'Transaksi tidak dapat dibuat.');
+    $('purchaseStatus').textContent='Halaman pembayaran Midtrans sudah dibuka. Setelah pembayaran berhasil, kembali ke halaman ini lalu klik “Saya Sudah Bayar — Akses Tes”.';
+    $('paymentReturnBtn').classList.remove('hidden');
+    if(payWindow)payWindow.location.href=data.redirect_url;
+    else location.href=data.redirect_url;
+  }catch(err){
+    if(payWindow)try{payWindow.close()}catch(_e){}
+    console.error(err);
+    $('purchaseStatus').textContent='Pembayaran belum dapat dibuat: '+(err.message||err);
+  }finally{$('createPaymentBtn').disabled=false}
+}
+async function checkPaidAccess(){
+  const email=normalizeEmail();
+  if(!emailVerification.verified||!emailVerification.verificationToken)return false;
+  paidAccess=null;
+  $('startBtn').disabled=true;
+  $('resumeBox').classList.add('hidden');
+  $('accessGate').className='accessGate';
+  $('accessGate').textContent='Email terverifikasi. Memeriksa pembayaran…';
+  try{
+    const {data,error}=await sb.functions.invoke('check-payment-access',{body:{email,verification_token:emailVerification.verificationToken,product_code:PRODUCT_CODE}});
+    if(error)throw error;
+    if(!data?.allowed){
+      $('accessGate').className='accessGate';
+      $('accessGate').textContent='Pembayaran aktif belum ditemukan untuk email ini. Pastikan pembayaran sudah berhasil atau kembali ke halaman utama untuk membeli akses.';
+      $('emailState').className='emailState bad';
+      $('emailState').textContent='Akses TOEFL belum aktif.';
+      return false;
+    }
+    paidAccess=data;
+    $('accessGate').className='accessGate good';
+    const until=data.access_expires_at?new Date(data.access_expires_at).toLocaleString('id-ID',{dateStyle:'long',timeStyle:'short'}):'masa akses aktif';
+    if(data.can_resume||data.access_status==='in_progress'){
+      $('accessGate').textContent='Pembayaran terverifikasi. Kamu memiliki tes yang sedang berjalan.';
+      $('resumeText').textContent='Session sebelumnya ditemukan · lanjut dari '+(LABEL[data.current_section]||data.current_section||'section terakhir')+' · akses hingga '+until;
+      $('resumeBox').classList.remove('hidden');
+      $('discardBtn').classList.add('hidden');
+      $('resumeBtn').textContent='Lanjutkan TOEFL Test';
+      $('startBtn').disabled=true;
+    }else{
+      $('accessGate').textContent='Pembayaran terverifikasi. Akses aktif hingga '+until+'. Kamu dapat memulai tes saat sudah siap.';
+      $('resumeBox').classList.add('hidden');
+      $('startBtn').textContent='Mulai TOEFL Test';
+      $('startBtn').disabled=false;
+    }
+    return true;
+  }catch(err){
+    console.error(err);
+    $('accessGate').className='accessGate';
+    $('accessGate').textContent='Tidak dapat memeriksa akses saat ini.';
+    $('emailState').className='emailState bad';
+    $('emailState').textContent='Pemeriksaan pembayaran gagal: '+(err.message||err);
+    return false;
+  }
+}
+
+function getFullscreenElement(){
+  return document.fullscreenElement || document.webkitFullscreenElement || null;
+}
+function syncFullscreenUI(){
+  const active=!!getFullscreenElement();
+  document.body.classList.toggle('is-fullscreen',active);
+  const btn=$('fullscreenBtn');
+  if(btn) btn.style.display=active?'none':'inline-flex';
+}
+async function enterFullscreen(showError=true){
+  const el=document.documentElement;
+  document.body.dataset.fullscreenWanted='1';
+  try{
+    if(!getFullscreenElement()){
+      if(el.requestFullscreen) await el.requestFullscreen();
+      else if(el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
+      else throw new Error('Fullscreen API is not supported by this browser.');
+    }
+    syncFullscreenUI();
+    return !!getFullscreenElement();
+  }catch(err){
+    if(showError)alert('Fullscreen could not start. Please allow fullscreen in your browser, then try again.');
+    console.warn('Fullscreen unavailable:',err);
+    syncFullscreenUI();
+    return false;
+  }
+}
+async function exitFullscreen(){
+  document.body.dataset.fullscreenWanted='0';
+  try{
+    if(document.exitFullscreen&&getFullscreenElement()) await document.exitFullscreen();
+    else if(document.webkitExitFullscreen&&getFullscreenElement()) await document.webkitExitFullscreen();
+  }catch(err){
+    console.warn('Could not exit fullscreen:',err);
+  }
+  syncFullscreenUI();
+}
+function updateSecurityBadge(){
+  const b=$('securityBadge');if(!b)return;
+  b.classList.toggle('warn',securityViolationCount>0&&securityViolationCount<3);
+  b.classList.toggle('bad',securityDisqualified||securityViolationCount>=3);
+  b.textContent=securityDisqualified?'SECURITY · DISQUALIFIED':`SECURITY · ${securityViolationCount}/2`;
+}
+function setSecurityArmed(on,section=null,delay=0){
+  if(securityArmTimer){clearTimeout(securityArmTimer);securityArmTimer=null}
+  securitySection=section||securitySection;
+  if(!on||securityDisqualified){securityArmed=false;return}
+  if(delay>0){securityArmed=false;securityArmTimer=setTimeout(()=>{if(!securityDisqualified)securityArmed=true},delay)}
+  else securityArmed=true;
+}
+function showSecurityWarning(count,reason){
+  const finalWarning=count===2;
+  $('securityCard').classList.remove('danger');
+  $('securityTitle').textContent=finalWarning?'Final security warning (2/2)':'Security warning (1/2)';
+  $('securityText').textContent=finalWarning
+    ? 'You left the protected test screen. One more violation will automatically submit your test and no certificate will be issued.'
+    : 'You left the protected test screen. Please remain in fullscreen and do not switch tabs or applications.';
+  $('securityMeta').textContent=`Recorded during ${LABEL[securitySection]||'the test'} · ${reason==='visibility_hidden'?'tab/app switch detected':'fullscreen exited'}`;
+  $('securityReturnBtn').classList.remove('hidden');
+  $('securityReturnBtn').textContent='Return to Fullscreen';
+  $('securityOverlay').classList.remove('hidden');
+  document.body.classList.add('security-locked');
+}
+function showSecurityDisqualified(){
+  $('securityCard').classList.add('danger');
+  $('securityTitle').textContent='Test automatically submitted';
+  $('securityText').textContent='A third security violation was detected. The test is ending now. A completion certificate will not be issued.';
+  $('securityMeta').textContent='Security status: Disqualified';
+  $('securityReturnBtn').classList.add('hidden');
+  $('securityOverlay').classList.remove('hidden');
+  document.body.classList.add('security-locked');
+}
+async function finalizeSecurityDisqualification(){
+  if(!session?.session_id||!session?.session_token)return null;
+  const {data,error}=await sb.rpc('finalize_full_test_security_disqualification',{
+    p_session_id:session.session_id,p_session_token:session.session_token
+  });
+  if(error)throw error;
+  session={...session,...data};saveLocal();return data;
+}
+async function forceSecuritySubmit(){
+  securityDisqualified=true;securityViolationCount=3;setSecurityArmed(false);updateSecurityBadge();showSecurityDisqualified();
+  try{
+    $('frame')?.contentWindow?.postMessage({type:'KIP_SECURITY_FORCE_SUBMIT',full_session:session?.session_id},location.origin);
+  }catch(err){console.warn('Could not request child auto-submit',err)}
+  if(securityFallbackTimer)clearTimeout(securityFallbackTimer);
+  securityFallbackTimer=setTimeout(async()=>{
+    try{
+      const data=await finalizeSecurityDisqualification();
+      if(data)showFinal(data);
+    }catch(err){
+      console.error(err);
+      $('securityText').textContent='The test is disqualified. Please keep this page open while the result is finalized.';
+    }
+  },12000);
+}
+async function reportSecurityViolation(reason){
+  if(!securityArmed||securityDisqualified||!session?.session_id)return;
+  const now=Date.now();
+  if(now-lastSecurityEventAt<1800)return;
+  lastSecurityEventAt=now;
+  securityArmed=false; // prevents one tab/app switch from being double-counted as fullscreen + visibility.
+  const provisional=Math.min(3,securityViolationCount+1);
+  try{
+    const {data,error}=await sb.rpc('record_full_test_security_violation',{
+      p_session_id:session.session_id,
+      p_session_token:session.session_token,
+      p_event_type:reason,
+      p_section:securitySection,
+      p_client_ts:new Date().toISOString(),
+      p_details:{fullscreen:!!getFullscreenElement(),visibility:document.visibilityState,user_agent:navigator.userAgent}
+    });
+    if(error)throw error;
+    securityViolationCount=Number(data?.security_violations??provisional);
+    securityDisqualified=data?.security_status==='disqualified'||securityViolationCount>=3;
+  }catch(err){
+    console.error('Security event could not reach server immediately',err);
+    securityViolationCount=provisional;
+    securityDisqualified=securityViolationCount>=3;
+  }
+  updateSecurityBadge();
+  if(securityDisqualified){await forceSecuritySubmit();return}
+  showSecurityWarning(securityViolationCount,reason);
+}
+async function acknowledgeSecurityWarning(){
+  const ok=getFullscreenElement()?true:await enterFullscreen(false);
+  if(!ok){
+    $('securityText').textContent='Fullscreen is required to continue. Please allow fullscreen, then press the button again.';
+    return;
+  }
+  $('securityOverlay').classList.add('hidden');
+  document.body.classList.remove('security-locked');
+  setSecurityArmed(true,securitySection,900);
+}
+function securityFullscreenChanged(){
+  syncFullscreenUI();
+  if(securityArmed&&!getFullscreenElement())reportSecurityViolation('fullscreen_exit');
+}
+document.addEventListener('fullscreenchange',securityFullscreenChanged);
+document.addEventListener('webkitfullscreenchange',securityFullscreenChanged);
+document.addEventListener('visibilitychange',()=>{
+  if(securityArmed&&document.visibilityState==='hidden')reportSecurityViolation('visibility_hidden');
+});
+
+function saveLocal(){if(session)localStorage.setItem(MASTER_KEY,JSON.stringify({session_id:session.session_id,session_token:session.session_token}))}
+function readLocal(){try{return JSON.parse(localStorage.getItem(MASTER_KEY)||'null')}catch{return null}}
+function clearLocal(){localStorage.removeItem(MASTER_KEY)}
+function setIdentity(x){identity=x;localStorage.setItem(IDENTITY_KEY,JSON.stringify(x))}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function normalizeEmail(){return $('email').value.trim().toLowerCase()}
+function validEmail(email){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}
+function resetEmailVerification(message='Verifikasi email sebelum memulai tes.'){
+  emailVerification={email:'',verificationId:null,verificationToken:null,verified:false};
+  paidAccess=null;
+  $('resumeBox').classList.add('hidden');
+  $('discardBtn').classList.remove('hidden');
+  $('email').readOnly=false;
+  $('otpBox').classList.add('hidden');
+  $('verifiedBox').classList.add('hidden');
+  $('startBtn').disabled=true;
+  $('sendOtpBtn').disabled=false;
+  $('sendOtpBtn').textContent='Kirim Kode';
+  $('emailState').className='emailState';
+  $('emailState').textContent=message;
+  $('otpCode').value='';
+  if(resendTimer){clearInterval(resendTimer);resendTimer=null}
+}
+function beginResendCountdown(seconds=60){
+  let left=seconds;
+  $('sendOtpBtn').disabled=true;
+  $('sendOtpBtn').textContent=`Kirim ulang dalam ${left} dtk`;
+  if(resendTimer)clearInterval(resendTimer);
+  resendTimer=setInterval(()=>{
+    left--;
+    if(left<=0){
+      clearInterval(resendTimer);resendTimer=null;
+      if(!emailVerification.verified){$('sendOtpBtn').disabled=false;$('sendOtpBtn').textContent='Kirim Ulang Kode'}
+    }else $('sendOtpBtn').textContent=`Kirim ulang dalam ${left} dtk`;
+  },1000);
+}
+async function sendEmailOtp(){
+  const email=normalizeEmail();
+  if(!validEmail(email)){alert('Masukkan alamat email yang valid.');return}
+  try{
+    sb=sb||window.supabase.createClient(URL_,KEY_);
+    $('sendOtpBtn').disabled=true;
+    $('emailState').className='emailState';
+    $('emailState').textContent='Mengirim kode verifikasi…';
+    const {data,error}=await sb.functions.invoke('email-otp',{body:{action:'send',email}});
+    if(error)throw error;
+    if(!data?.ok)throw new Error(data?.error||'Kode verifikasi tidak dapat dikirim.');
+    emailVerification={email,verificationId:data.verification_id,verificationToken:null,verified:false};
+    $('otpBox').classList.remove('hidden');
+    $('verifiedBox').classList.add('hidden');
+    $('otpCode').focus();
+    $('emailState').className='emailState good';
+    $('emailState').textContent=`Kode dikirim ke ${data.masked_email||email}. Berlaku selama 10 menit.`;
+    beginResendCountdown(60);
+  }catch(err){
+    console.error(err);
+    $('emailState').className='emailState bad';
+    $('emailState').textContent='Kode tidak dapat dikirim: '+(err.message||err);
+    $('sendOtpBtn').disabled=false;
+    $('sendOtpBtn').textContent='Kirim Kode';
+  }
+}
+async function verifyEmailOtp(){
+  const email=normalizeEmail(),code=$('otpCode').value.replace(/\D/g,'').slice(0,6);
+  if(email!==emailVerification.email||!emailVerification.verificationId){
+    resetEmailVerification('Email berubah. Silakan kirim kode verifikasi baru.');return;
+  }
+  if(!/^\d{6}$/.test(code)){alert('Masukkan kode verifikasi 6 digit.');return}
+  try{
+    $('verifyOtpBtn').disabled=true;
+    $('emailState').className='emailState';
+    $('emailState').textContent='Memeriksa kode verifikasi…';
+    const {data,error}=await sb.functions.invoke('email-otp',{body:{action:'verify',email,verification_id:emailVerification.verificationId,code}});
+    if(error)throw error;
+    if(!data?.ok||!data?.verified)throw new Error(data?.error||'Verifikasi email gagal.');
+    emailVerification.verificationToken=data.verification_token;
+    emailVerification.verified=true;
+    $('email').readOnly=true;
+    $('otpBox').classList.add('hidden');
+    $('verifiedBox').classList.remove('hidden');
+    $('emailState').className='emailState good';
+    $('emailState').textContent='Email verified. Memeriksa akses pembayaran…';
+    $('sendOtpBtn').disabled=true;
+    $('sendOtpBtn').textContent='Terverifikasi';
+    $('startBtn').disabled=true;
+    if(resendTimer){clearInterval(resendTimer);resendTimer=null}
+    await checkPaidAccess();
+  }catch(err){
+    console.error(err);
+    $('emailState').className='emailState bad';
+    $('emailState').textContent='Verifikasi gagal: '+(err.message||err);
+  }finally{$('verifyOtpBtn').disabled=false}
+}
+function stepUI(section){
+  ORDER.forEach((s,i)=>{
+    const el=$('step-'+s),cur=ORDER.indexOf(section),idx=ORDER.indexOf(s);
+    el.classList.toggle('active',s===section);el.classList.toggle('done',idx<cur||section==='complete');
+  });
+}
+function clearSectionFrame(){
+  const frame=$('frame');
+  if(frame){
+    try{frame.src='about:blank'}catch(_e){}
+  }
+}
+function loadSection(section){
+  setSecurityArmed(false,section);
+  $('home').classList.add('hidden');$('final').classList.add('hidden');$('runner').classList.remove('hidden');$('transition').classList.add('hidden');
+  stepUI(section);$('progressTitle').textContent=LABEL[section];$('progressSub').textContent=`Section ${ORDER.indexOf(section)+1} of 3 · ${identity?.name||''}`;
+  $('frame').src=`${FILES[section]}?full=1&full_session=${encodeURIComponent(session.session_id)}&host_fullscreen=1&t=${Date.now()}`;
+  setSecurityArmed(true,section,1600);
+}
+async function startFull(){
+  const name=$('name').value.trim();if(!name){alert('Masukkan nama lengkap terlebih dahulu.');return}
+  if(!$('consent').checked){alert('Centang persetujuan sebelum memulai tes.');return}
+  const email=normalizeEmail();
+  if(!emailVerification.verified||emailVerification.email!==email||!emailVerification.verificationToken){
+    alert('Verifikasi email sebelum memulai TOEFL Test.');return;
+  }
+  if(!paidAccess){
+    const ok=await checkPaidAccess();
+    if(!ok)return;
+  }
+  $('startBtn').disabled=true;$('resumeBtn').disabled=true;$('status').textContent='Menyiapkan mode layar penuh yang aman…';
+  const fullscreenOk=await enterFullscreen();
+  if(!fullscreenOk){$('status').textContent='Mode layar penuh wajib digunakan untuk memulai tes.';$('startBtn').disabled=false;$('resumeBtn').disabled=false;return}
+  $('status').textContent=paidAccess?.can_resume?'Membuka sesi TOEFL yang sedang berjalan…':'Menyiapkan sesi TOEFL kamu…';
+  try{
+    sb=sb||window.supabase.createClient(URL_,KEY_);
+    setIdentity({name,email,whatsapp:$('wa').value.trim(),institution:$('inst').value.trim()});
+    const {data,error}=await sb.functions.invoke('start-paid-test',{body:{
+      email:identity.email,
+      verification_token:emailVerification.verificationToken,
+      product_code:PRODUCT_CODE,
+      participant_name:name,
+      whatsapp:identity.whatsapp||null,
+      institution:identity.institution||null
+    }});
+    if(error)throw error;
+    if(!data?.success||!data?.session_id||!data?.session_token)throw new Error(data?.error||data?.reason||'Sesi tes tidak dapat dibuka.');
+    session={session_id:data.session_id,session_token:data.session_token,current_section:data.current_section||'listening',status:'in_progress'};
+    if(data.action==='resume'){
+      const resumed=await sb.rpc('resume_full_test_session',{p_session_id:data.session_id,p_session_token:data.session_token});
+      if(!resumed.error&&resumed.data)session=resumed.data;
+    }
+    securityViolationCount=Number(session.security_violations||0);
+    securityDisqualified=session.security_status==='disqualified'||securityViolationCount>=3;
+    updateSecurityBadge();saveLocal();
+    if(session.status==='submitted'||session.current_section==='complete'){showFinal(session);return}
+    loadSection(session.current_section||'listening');
+  }catch(err){
+    $('status').textContent='Tes belum dapat dimulai/dilanjutkan: '+(err.message||err);
+    $('startBtn').disabled=!emailVerification.verified;
+    $('resumeBtn').disabled=false;
+  }
+}
+async function resumeFull(){
+  const old=readLocal();if(!old)return;
+  const fullscreenOk=await enterFullscreen();
+  if(!fullscreenOk){alert('Mode layar penuh wajib digunakan untuk melanjutkan tes.');return}
+  try{
+    sb=sb||window.supabase.createClient(URL_,KEY_);
+    const {data,error}=await sb.rpc('resume_full_test_session',{p_session_id:old.session_id,p_session_token:old.session_token});
+    if(error)throw error;session=data;
+    securityViolationCount=Number(data.security_violations||0);securityDisqualified=data.security_status==='disqualified'||securityViolationCount>=3;updateSecurityBadge();
+    setIdentity({name:data.participant_name||'',email:data.email||'',whatsapp:data.whatsapp||'',institution:data.institution||''});
+    if(data.status==='submitted'||data.current_section==='complete'){showFinal(data);return}
+    loadSection(data.current_section||'listening')
+  }catch(err){alert('Tes belum dapat dilanjutkan: '+(err.message||err))}
+}
+async function saveSection(section,result){
+  const {data,error}=await sb.rpc('save_full_test_section',{
+    p_session_id:session.session_id,p_session_token:session.session_token,p_section:section,p_result:result
+  });
+  if(error)throw error;session={...session,...data};saveLocal();return data
+}
+function transitionFor(section,result,next){
+  setSecurityArmed(false);
+  pendingNext=next;lastResult=result;
+  clearSectionFrame();
+  $('runner').classList.add('hidden');
+  $('transition').classList.remove('hidden');
+  // Force the transition card to the top of the current fullscreen document.
+  requestAnimationFrame(()=>{$('continueBtn')?.focus({preventScroll:true})});
+  $('transitionTitle').textContent=`${LABEL[section]} selesai`;
+  const denom=section==='listening'?50:section==='structure'?40:50;
+  $('transitionSummary').innerHTML=`<div class="summaryLine"><span>Skor mentah</span><strong>${Number(result.raw_score||0)}/${denom}</strong></div><div class="summaryLine"><span>Akurasi</span><strong>${Number(result.accuracy||0)}%</strong></div>`;
+  if(section==='structure'&&result.estimated_section2)$('transitionSummary').innerHTML+=`<div class="summaryLine"><span>Estimasi Section 2</span><strong>${result.estimated_section2}/68</strong></div>`;
+  $('transitionCopy').textContent=`Hasil section sudah tersimpan. Lanjutkan ke ${LABEL[next]}.`;
+  $('continueBtn').textContent=`Lanjutkan ke ${LABEL[next]}`;
+}
+
+async function issueCertificate(){
+  if(!session?.session_id||!session?.session_token)return;
+  if(securityDisqualified||session.security_status==='disqualified'||Number(session.security_violations||0)>=3||session.certificate_status==='blocked')return;
+  const panel=$('certificatePanel'),status=$('certStatus'),retry=$('certRetry'),download=$('certDownload');
+  panel?.classList.remove('sent','fail');
+  if(status)status.textContent='Membuat e-sertifikat PDF dan mengirimkannya ke email…';
+  retry?.classList.add('hidden');download?.classList.add('hidden');
+
+  try{
+    const {data,error}=await sb.functions.invoke('issue-certificate',{
+      body:{session_id:session.session_id,session_token:session.session_token}
+    });
+    if(error)throw error;
+    if(!data?.ok)throw new Error(data?.error||'Layanan e-sertifikat mengalami kendala.');
+
+    panel?.classList.add('sent');
+    if(status)status.textContent=`E-sertifikat ${data.certificate_id} telah dikirim ke ${data.email}.`;
+    if(download&&data.download_url){
+      download.href=data.download_url;
+      download.classList.remove('hidden');
+    }
+  }catch(err){
+    console.error(err);
+    panel?.classList.add('fail');
+    if(status)status.textContent='E-sertifikat belum dapat dibuat/dikirim: '+(err.message||err);
+    retry?.classList.remove('hidden');
+  }
+}
+
+function showFinal(data){
+  setSecurityArmed(false);
+  if(securityFallbackTimer){clearTimeout(securityFallbackTimer);securityFallbackTimer=null}
+  $('securityOverlay').classList.add('hidden');document.body.classList.remove('security-locked');
+  securityViolationCount=Number(data.security_violations??securityViolationCount??0);
+  securityDisqualified=data.security_status==='disqualified'||securityViolationCount>=3||data.certificate_status==='blocked';
+  updateSecurityBadge();
+  clearSectionFrame();
+  clearLocal();$('home').classList.add('hidden');$('runner').classList.add('hidden');$('transition').classList.add('hidden');$('final').classList.remove('hidden');stepUI('complete');
+  $('finalWho').textContent=`Peserta: ${identity?.name||data.participant_name||'Peserta'}`;
+  if(securityDisqualified){
+    // An incomplete auto-submitted test must not display converted/estimated scores.
+    // Raw partial performance may still be shown for diagnostic reference only.
+    $('combinedRaw').textContent='—';
+    $('fListening').textContent='—';
+    $('fStructure').textContent='—';
+    $('fReading').textContent='—';
+    $('fRawTotal').textContent=`${data.combined_raw??0}/140`;
+    $('fAccuracy').textContent=`${data.combined_accuracy??0}%`;
+  }else{
+    $('combinedRaw').textContent=data.estimated_toefl_score??'—';
+    $('fListening').textContent=data.listening_scaled!=null?`${data.listening_scaled}/68`:'—';
+    $('fStructure').textContent=data.structure_scaled!=null?`${data.structure_scaled}/68`:'—';
+    $('fReading').textContent=data.reading_scaled!=null?`${data.reading_scaled}/67`:'—';
+    $('fRawTotal').textContent=`${data.combined_raw??0}/140`;
+    $('fAccuracy').textContent=`${data.combined_accuracy??0}%`;
+  }
+  const note=document.querySelector('#final .notice');
+  const panel=$('certificatePanel'),status=$('certStatus'),retry=$('certRetry'),download=$('certDownload');
+  if(securityDisqualified){
+    document.querySelector('#final .eyebrow').textContent='Tes Dihentikan Otomatis';
+    document.querySelector('#final h1').textContent='Tes berakhir karena pelanggaran keamanan.';
+    if(note)note.innerHTML='<strong>Integrity status: Disqualified.</strong> A third security violation triggered automatic submission. Converted and estimated TOEFL practice scores are withheld because the test was not completed. Any raw result shown is partial only, and a completion certificate will not be issued.';
+    panel?.classList.remove('sent');panel?.classList.add('fail');
+    if(status)status.textContent='E-sertifikat tidak diterbitkan karena tes dihentikan otomatis setelah pelanggaran keamanan ketiga.';
+    retry?.classList.add('hidden');download?.classList.add('hidden');
+    return;
+  }
+  if(note){
+    const cert=data.certificate_id?` Certificate ID: ${data.certificate_id}.`:'';
+    const mail=(identity?.email||data.email)?` Certificate email: ${identity?.email||data.email}.`:'';
+    note.innerHTML=`<strong>Scoring note:</strong> the displayed total is an <b>estimated practice-test score</b> calculated from the Longman conversion chart: convert each section, add the three converted scores, divide by 3, then multiply by 10. It is not an official ETS equated TOEFL ITP score.${cert}${mail}`;
+  }
+  setTimeout(issueCertificate,250);
+}
+window.addEventListener('message',async e=>{
+  if(e.origin!==location.origin)return;
+  const msg=e.data;if(!msg||msg.type!=='KIP_FULL_SECTION_COMPLETE'||msg.full_session!==session?.session_id)return;
+  if(!ORDER.includes(msg.section))return;
+  try{
+    const data=await saveSection(msg.section,msg.result||{});
+    if(securityDisqualified){
+      if(securityFallbackTimer){clearTimeout(securityFallbackTimer);securityFallbackTimer=null}
+      const finalData=await finalizeSecurityDisqualification();
+      showFinal(finalData);return;
+    }
+    if(data.status==='submitted'||data.current_section==='complete'){showFinal(data);return}
+    transitionFor(msg.section,msg.result||{},data.current_section)
+  }catch(err){alert('Section result could not be linked to the full test: '+(err.message||err))}
+});
+$('fullscreenBtn').onclick=()=>enterFullscreen();$('fullscreenExit').onclick=exitFullscreen;
+$('securityReturnBtn').onclick=acknowledgeSecurityWarning;
+$('sendOtpBtn').onclick=sendEmailOtp;$('verifyOtpBtn').onclick=verifyEmailOtp;
+$('changeEmailBtn').onclick=()=>resetEmailVerification('Masukkan email baru, lalu kirim kode verifikasi.');
+$('email').addEventListener('input',()=>{if(emailVerification.verificationId||emailVerification.verified)resetEmailVerification('Email berubah. Silakan verifikasi alamat email ini.')});
+$('otpCode').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,6)});
+$('otpCode').addEventListener('keydown',e=>{if(e.key==='Enter')verifyEmailOtp()});
+$('startBtn').onclick=startFull;$('resumeBtn').onclick=()=>emailVerification.verified?startFull():resumeFull();$('discardBtn').onclick=()=>{clearLocal();$('resumeBox').classList.add('hidden')};
+$('buyNowBtn').onclick=openPurchaseFlow;
+if($('heroRegisterBtn'))$('heroRegisterBtn').onclick=async()=>{syncHeroSignupToModal();await createPayment()};
+$('alreadyBoughtBtn').onclick=()=>openAccessFlow();
+$('backToLandingBtn').onclick=showLanding;
+$('cancelPurchaseBtn').onclick=closePurchaseFlow;
+$('closePurchaseBtn').onclick=closePurchaseFlow;
+$('purchaseBackdrop').onclick=closePurchaseFlow;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('purchaseModal').classList.contains('hidden'))closePurchaseFlow()});
+$('createPaymentBtn').onclick=createPayment;
+$('paymentReturnBtn').onclick=()=>openAccessFlow($('purchaseEmail').value.trim().toLowerCase());
+$('continueBtn').onclick=async()=>{
+  if(!pendingNext)return;
+  // If fullscreen was lost because an embedded section had its own fullscreen layer,
+  // the Continue click is a valid user gesture to restore master fullscreen.
+  if(!getFullscreenElement() && document.body.dataset.fullscreenWanted==='1'){
+    await enterFullscreen();
+  }
+  loadSection(pendingNext);
+};
+$('certRetry').onclick=issueCertificate;
+(async function init(){
+  if(!URL_||!KEY_||!window.supabase){$('status').textContent='config.js / Supabase not ready.';$('startBtn').disabled=true;return}
+  sb=window.supabase.createClient(URL_,KEY_);
+  const savedHeroName=localStorage.getItem(PURCHASE_NAME_KEY)||'';
+  const savedHeroEmail=localStorage.getItem(PURCHASE_EMAIL_KEY)||'';
+  if($('heroPurchaseName')&&savedHeroName)$('heroPurchaseName').value=savedHeroName;
+  if($('heroPurchaseEmail')&&savedHeroEmail)$('heroPurchaseEmail').value=savedHeroEmail;
+  showLanding();
+  const old=readLocal();if(old){
+    $('resumeBox').classList.remove('hidden');
+    try{
+      const {data,error}=await sb.rpc('resume_full_test_session',{p_session_id:old.session_id,p_session_token:old.session_token});
+      if(!error&&data){$('resumeText').textContent=`${data.participant_name} · lanjut ke: ${data.current_section==='complete'?'selesai':LABEL[data.current_section]}${Number(data.security_violations||0)?` · keamanan ${data.security_violations}/2`:''}`}
+      else $('resumeText').textContent='Sesi tes tersimpan di perangkat ini.'
+    }catch{ $('resumeText').textContent='Sesi tes tersimpan di perangkat ini.' }
+  }
+})();
+</script>
+</body>
+</html>
