@@ -243,44 +243,148 @@ body.purchase-open .salesSticky{opacity:0;pointer-events:none;transform:translat
 @media(max-width:780px){.heroV6Wrap{width:min(100% - 22px,1460px)}.heroV6Top{gap:12px}.heroV6Meta{font-size:8px;text-align:right}.heroV6Trust{display:block;margin:5px 0 0;padding:5px 8px}.heroV6Grid{grid-template-columns:1fr}.heroV6Copy{padding:18px 8px}.heroV6Copy h1{font-size:44px}.heroV6Benefits{grid-template-columns:repeat(2,1fr)}.heroV6Student{min-height:520px}.heroV6Signup{padding:23px}.heroV6Sections{grid-template-columns:1fr;padding:10px 18px}.heroV6Sections>div{border-right:0;border-bottom:1px solid #e1e8ef;padding:14px 4px}.heroV6Sections>div:last-child{border-bottom:0}}
 
 
-/* ===== FINAL HERO POLISH — approved mockup ===== */
-.heroV6{padding-top:12px;background:
-  radial-gradient(circle at 68% 18%,rgba(82,154,213,.20),transparent 26%),
-  linear-gradient(105deg,#fbfdff 0%,#f5f9fd 38%,#deebf4 70%,#cbdbe7 100%)}
-.heroV6Wrap{width:min(1488px,calc(100% - 34px))}
-.heroV6Top{padding:0 18px 14px}
-.heroV6Brand{font-size:30px}.heroV6Meta{color:#f9fbff;text-shadow:0 1px 3px rgba(14,42,70,.22);font-size:12px}
-.heroV6Grid{grid-template-columns:1.02fr .92fr .84fr;gap:16px}
-.heroV6Copy{padding:28px 14px 24px 22px}
-.heroV6Badge{font-size:12px;padding:13px 20px}
-.heroV6Copy h1{font-size:clamp(48px,4.45vw,68px);line-height:.99;margin:28px 0 24px}
-.heroV6Copy p{font-size:18px;line-height:1.55}
-.heroV6Benefits{margin-top:34px;gap:16px}
-.heroV6Benefits i{width:58px;height:58px;font-size:24px}
-.heroV6Benefits strong{font-size:12px}
-.heroV6Student{min-height:635px}
-.heroV6Student>img{inset:84px 0 16px;height:calc(100% - 100px);object-position:center 38%}
-.heroV6TestScreen{height:270px;top:6px}
-.heroV6Score{width:250px;bottom:140px}
-.heroV6Cert{bottom:22px;right:-8px}
-.heroV6Signup{border-radius:30px;padding:32px;min-height:605px}
+/* ===== Exact-reference hero center ===== */
+.heroV6Wrap{width:min(1500px,calc(100% - 30px))}
+.heroV6Grid{grid-template-columns:minmax(520px,1.08fr) minmax(500px,.98fr) minmax(420px,.84fr);gap:12px}
+.heroV6Copy{padding:26px 18px 20px 20px}
+.heroV6Copy h1{font-size:56px;line-height:1.02;max-width:585px;margin:28px 0 24px}
+.heroV6Copy p{font-size:17px;max-width:560px}
+.heroV6Benefits{margin-top:30px}
+.heroV6Student{min-height:720px;display:flex;align-items:stretch;justify-content:center;overflow:visible}
+.heroV6Student .heroV6Reference{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;border-radius:28px!important;box-shadow:none!important;filter:none!important}
+.heroV6Signup{min-height:640px;padding:30px 34px;border-radius:30px}
 .heroV6Signup h2{font-size:34px}
 .heroV6Signup>p{font-size:13px}
 .heroV6Price{margin-top:24px}
 .heroV6Signup label{font-size:13px}
 .heroV6Signup input{padding:15px 16px;font-size:14px}
-.heroV6Pay{padding:18px 15px;font-size:16px;border-radius:14px}
-.heroV6Security span{font-size:8.5px}
-.heroV6Sections{margin-top:22px;border-radius:34px;padding:26px 32px}
-.heroV6Sections>div{grid-template-columns:62px 1fr;gap:16px;padding:0 30px}
-.heroV6Sections i{width:60px;height:60px;font-size:25px}
-.heroV6Sections strong{font-size:17px}
-.heroV6Sections p{font-size:12px}
+.heroV6Pay{padding:18px 15px;font-size:16px}
+.heroV6Sections{margin-top:18px;border-radius:32px}
+@media(max-width:1250px){
+ .heroV6Grid{grid-template-columns:1fr 1fr}
+ .heroV6Signup{grid-column:1/-1}
+ .heroV6Student{min-height:650px}
+}
+@media(max-width:780px){
+ .heroV6Grid{grid-template-columns:1fr}
+ .heroV6Copy h1{font-size:44px}
+ .heroV6Student{min-height:auto}
+ .heroV6Student .heroV6Reference{height:auto!important;aspect-ratio:580/765}
+}
+
+
+/* ===== FINAL HD PASS ===== */
+.heroV6Student{min-height:650px;position:relative;overflow:visible}
+.heroV6Student .heroV6HdStudent{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:18px!important;
+  top:118px!important;
+  width:100%!important;
+  height:calc(100% - 136px)!important;
+  object-fit:cover!important;
+  object-position:center 42%!important;
+  border-radius:0 0 28px 28px!important;
+  filter:none!important;
+  image-rendering:auto!important;
+  box-shadow:0 24px 54px rgba(12,42,70,.14)!important;
+}
+.heroV6TestScreen{
+  top:4px!important;
+  height:285px!important;
+  z-index:1!important;
+  background:#f9fcff!important;
+}
+.heroV6Score{z-index:5!important;right:-14px!important;bottom:155px!important;width:255px!important}
+.heroV6Certificate{
+  position:absolute;z-index:4;left:28px;bottom:22px;width:250px;height:145px;
+  background:#fff;border:10px solid #1c579e;border-radius:8px;padding:14px 16px;
+  box-shadow:0 18px 38px rgba(9,35,61,.16);transform:rotate(-3.5deg);
+}
+.heroV6CertificateBrand{font-weight:950;color:#174785;font-size:14px;letter-spacing:-.02em}
+.heroV6CertificateTitle{text-align:center;font-size:11px;font-weight:900;color:#213d5d;margin-top:11px}
+.heroV6CertificateName{text-align:center;font-size:17px;font-weight:800;color:#26384d;margin-top:15px}
+.heroV6CertificateSeal{
+  position:absolute;left:50%;bottom:8px;transform:translateX(-50%);
+  width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  background:#f5d66d;color:#805a00;font-weight:950;border:3px double #bd9422;
+}
+.heroV6Cert{z-index:6!important;right:-10px!important;bottom:34px!important}
+
+.storySection.white:first-of-type{padding-top:74px}
+.storySection.white:first-of-type .storyHead{max-width:900px}
+.storySection.white:first-of-type .storyHead h2{
+  font-size:clamp(38px,4.2vw,56px)!important;line-height:1.04!important;
+  max-width:860px!important;margin-bottom:16px!important;
+}
+.painStoryGrid{
+  grid-template-columns:minmax(430px,.92fr) minmax(560px,1.08fr)!important;
+  gap:34px!important;align-items:stretch!important;margin-top:38px!important;
+}
+.painPhoto{
+  min-height:560px!important;max-height:620px!important;border-radius:28px!important;
+  background:#eef3f7!important;overflow:hidden!important;
+}
+.painPhoto img{
+  width:100%!important;height:100%!important;object-fit:cover!important;
+  object-position:center 42%!important;display:block!important;filter:none!important;
+}
+.painPhoto:after{
+  background:linear-gradient(180deg,rgba(8,26,45,0) 48%,rgba(8,26,45,.74) 100%)!important;
+}
+.painQuote{
+  left:26px!important;right:26px!important;bottom:24px!important;
+  font-size:23px!important;line-height:1.25!important;max-width:520px!important;
+  text-shadow:0 2px 10px rgba(0,0,0,.28);
+}
+.painCards{gap:16px!important}
+.painCard{
+  min-height:170px!important;border-radius:24px!important;padding:26px!important;
+  grid-template-columns:54px 1fr!important;gap:16px!important;align-content:center!important;
+}
+.painNum{width:46px!important;height:46px!important}
+.painCard h3{font-size:19px!important;line-height:1.28!important;margin-bottom:8px!important}
+.painCard p{font-size:13.5px!important;line-height:1.62!important}
+
 @media(max-width:1180px){
-  .heroV6Meta{color:#36516d;text-shadow:none}
+  .heroV6Student{min-height:610px}
+  .painStoryGrid{grid-template-columns:1fr!important}
+  .painPhoto{min-height:500px!important;max-height:none!important}
+}
+@media(max-width:780px){
+  .heroV6Student{min-height:520px}
+  .heroV6Student .heroV6HdStudent{top:110px!important;height:calc(100% - 122px)!important}
+  .heroV6Certificate{width:205px;height:125px;left:8px}
+  .heroV6Score{width:220px!important;right:0!important;bottom:145px!important}
+  .heroV6Cert{right:0!important;bottom:20px!important}
+  .painPhoto{min-height:420px!important}
+  .painQuote{font-size:19px!important}
+  .painCard{grid-template-columns:48px 1fr!important;padding:22px!important}
+}
+
+
+/* ===== HERO CLEANUP — remove overlay covering student ===== */
+.heroV6TestScreen{display:none!important}
+.heroV6Student .heroV6HdStudent{
+  top:18px!important;
+  height:calc(100% - 36px)!important;
+  object-position:center 42%!important;
+  border-radius:28px!important;
+}
+.heroV6Score{bottom:155px!important;right:-14px!important}
+.heroV6Certificate{bottom:22px!important;left:28px!important}
+.heroV6Cert{bottom:34px!important;right:-10px!important}
+@media(max-width:780px){
+  .heroV6Student .heroV6HdStudent{
+    top:10px!important;
+    height:calc(100% - 20px)!important;
+  }
 }
 
 </style>
+  <link rel="preconnect" href="https://images.pexels.com" crossorigin>
+  <link rel="preload" as="image" href="https://images.pexels.com/photos/7241361/pexels-photo-7241361.jpeg?auto=compress&cs=tinysrgb&w=2200" fetchpriority="high">
 </head>
 <body>
 <header class="top">
@@ -292,6 +396,8 @@ body.purchase-open .salesSticky{opacity:0;pointer-events:none;transform:translat
 <button id="fullscreenExit" class="fullscreenExit" type="button">KELUAR LAYAR PENUH</button>
 
 <main id="landing" class="salesLanding">
+  <div class="salesBar">Harga normal Rp69.000 · <strong>Launching Rp39.000</strong> · khusus 1.000 peserta pertama</div>
+
   <section class="heroV6">
     <div class="heroV6Wrap">
       <div class="heroV6Top">
@@ -314,19 +420,21 @@ body.purchase-open .salesSticky{opacity:0;pointer-events:none;transform:translat
         </div>
 
         <div class="heroV6Student">
-          <div class="heroV6TestScreen">
-            <div class="miniBrowserDots">● ● ●</div>
-            <strong>Listening Section</strong>
-            <div class="miniAudio">▶  ▮▮▮▮▮▮▮▮▮</div>
-            <small>Question 12 of 50</small>
-            <div class="miniOpts"><span>A</span><span>B</span><span>C</span><span>D</span></div>
-          </div>
-          <img src="https://images.unsplash.com/photo-1759984782199-a4f6d1b6054e?auto=format&fit=crop&w=1400&q=84" alt="Peserta sedang mengerjakan simulasi TOEFL dengan laptop dan headphone">
+          <img class="heroV6HdStudent" src="https://images.pexels.com/photos/7241361/pexels-photo-7241361.jpeg?auto=compress&cs=tinysrgb&w=2200" alt="Peserta pria sedang mengerjakan simulasi TOEFL dengan headphone dan laptop" loading="eager" decoding="async">
+
           <div class="heroV6Score">
             <div class="heroV6ScoreHead"><strong>Hasil Assessment</strong><span>SELESAI</span></div>
             <div class="heroV6ScoreBig">517 <small>Estimasi Practice Score</small></div>
             <div class="heroV6ScoreParts"><span><b>52</b>Listening</span><span><b>49</b>Structure</span><span><b>54</b>Reading</span></div>
           </div>
+
+          <div class="heroV6Certificate">
+            <div class="heroV6CertificateBrand">KIP TOEFL</div>
+            <div class="heroV6CertificateTitle">CERTIFICATE OF COMPLETION</div>
+            <div class="heroV6CertificateName">Ahmad Rizki</div>
+            <div class="heroV6CertificateSeal">✓</div>
+          </div>
+
           <div class="heroV6Cert">✉ <strong>E-sertifikat dikirim</strong><small>ke email setelah tes selesai</small></div>
         </div>
 
@@ -375,8 +483,8 @@ body.purchase-open .salesSticky{opacity:0;pointer-events:none;transform:translat
 
       <div class="painStoryGrid">
         <div class="painPhoto">
-          <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=82" alt="Mahasiswa belajar bersama">
-          <div class="painQuote">“Saya cuma ingin tahu level saya sekarang. Kenapa prosesnya harus serumit itu?”</div>
+          <img src="https://images.pexels.com/photos/7856678/pexels-photo-7856678.jpeg?auto=compress&cs=tinysrgb&w=2200" alt="Peserta pria sedang belajar sendiri dengan laptop" loading="lazy" decoding="async">
+          <div class="painQuote">“Saya cuma ingin tahu level saya sekarang—tanpa harus membuat prosesnya terasa berat.”</div>
         </div>
 
         <div class="painCards">
@@ -1234,7 +1342,7 @@ $('otpCode').addEventListener('input',e=>{e.target.value=e.target.value.replace(
 $('otpCode').addEventListener('keydown',e=>{if(e.key==='Enter')verifyEmailOtp()});
 $('startBtn').onclick=startFull;$('resumeBtn').onclick=()=>emailVerification.verified?startFull():resumeFull();$('discardBtn').onclick=()=>{clearLocal();$('resumeBox').classList.add('hidden')};
 $('buyNowBtn').onclick=openPurchaseFlow;
-if($('heroRegisterBtn'))$('heroRegisterBtn').onclick=async()=>{syncHeroSignupToModal();await createPayment()};
+if($('heroRegisterBtn'))$('heroRegisterBtn').onclick=()=>{syncHeroSignupToModal();openPurchaseFlow()};
 $('alreadyBoughtBtn').onclick=()=>openAccessFlow();
 $('backToLandingBtn').onclick=showLanding;
 $('cancelPurchaseBtn').onclick=closePurchaseFlow;
@@ -1256,10 +1364,6 @@ $('certRetry').onclick=issueCertificate;
 (async function init(){
   if(!URL_||!KEY_||!window.supabase){$('status').textContent='config.js / Supabase not ready.';$('startBtn').disabled=true;return}
   sb=window.supabase.createClient(URL_,KEY_);
-  const savedHeroName=localStorage.getItem(PURCHASE_NAME_KEY)||'';
-  const savedHeroEmail=localStorage.getItem(PURCHASE_EMAIL_KEY)||'';
-  if($('heroPurchaseName')&&savedHeroName)$('heroPurchaseName').value=savedHeroName;
-  if($('heroPurchaseEmail')&&savedHeroEmail)$('heroPurchaseEmail').value=savedHeroEmail;
   showLanding();
   const old=readLocal();if(old){
     $('resumeBox').classList.remove('hidden');
