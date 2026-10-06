@@ -310,6 +310,25 @@ body.purchase-open .salesSticky{opacity:0;pointer-events:none;transform:translat
  .heroV6Student .heroV6Reference{height:auto!important;aspect-ratio:580/765}
 }
 
+
+/* ===== HERO CLEANUP — remove overlay covering student ===== */
+.heroV6TestScreen{display:none!important}
+.heroV6Student .heroV6HdStudent{
+  top:18px!important;
+  height:calc(100% - 36px)!important;
+  object-position:center 42%!important;
+  border-radius:28px!important;
+}
+.heroV6Score{bottom:155px!important;right:-14px!important}
+.heroV6Certificate{bottom:22px!important;left:28px!important}
+.heroV6Cert{bottom:34px!important;right:-10px!important}
+@media(max-width:780px){
+  .heroV6Student .heroV6HdStudent{
+    top:10px!important;
+    height:calc(100% - 20px)!important;
+  }
+}
+
 </style>
 </head>
 <body>
