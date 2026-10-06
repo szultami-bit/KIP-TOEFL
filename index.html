@@ -79,40 +79,58 @@ body.security-locked{overflow:hidden}
 .certActions a{text-decoration:none}
 
 
-/* ===== Payment Landing V1 ===== */
-.salesLanding{max-width:1180px;margin:0 auto;padding:34px 18px 64px}
-.salesHero{display:grid;grid-template-columns:1.12fr .88fr;gap:20px;align-items:stretch}
-.salesMain{background:linear-gradient(145deg,#071633 0%,#0a2243 70%,#0d3148 100%);color:#fff;border-radius:26px;padding:42px;box-shadow:0 24px 70px rgba(7,22,51,.20);position:relative;overflow:hidden}
-.salesMain:after{content:"";position:absolute;width:310px;height:310px;border-radius:50%;right:-110px;top:-120px;background:rgba(61,214,166,.10)}
-.salesBadge{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;background:#b6f52a;color:#11220a;font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
-.salesMain h1{font-size:46px;line-height:1.06;letter-spacing:-1.2px;margin:22px 0 16px;max-width:760px}
-.salesLead{font-size:17px;line-height:1.7;color:#dbe7f6;max-width:720px;margin:0}
-.salesPain{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0}
-.salesPain div{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);border-radius:14px;padding:13px;font-size:12px;line-height:1.45;color:#e6eef8}
-.salesPrice{margin-top:22px;padding:19px;border:1px solid rgba(182,245,42,.35);background:rgba(182,245,42,.07);border-radius:18px}
-.salesNormal{font-size:13px;color:#a9bdd3}.salesNormal s{font-weight:850}
-.salesLaunch{display:flex;align-items:end;gap:10px;margin-top:5px}.salesLaunch strong{font-size:48px;line-height:1;font-weight:950}.salesLaunch span{font-size:14px;color:#b9c9db;padding-bottom:6px}
-.salesLimit{font-size:12px;color:#d8e7b2;margin-top:9px}
-.salesActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-.salesCta{border:0;border-radius:13px;padding:14px 19px;font-weight:950;cursor:pointer;font-size:14px}
-.salesCta.primary{background:#b6f52a;color:#10220a;box-shadow:0 10px 30px rgba(182,245,42,.18)}
-.salesCta.secondary{background:#fff;color:#071633}
-.salesFine{font-size:10.5px;color:#9fb2c8;margin-top:13px;line-height:1.5}
-.salesSide{background:#fff;border:1px solid var(--line);border-radius:26px;padding:30px;box-shadow:0 18px 45px rgba(7,22,51,.08)}
-.salesSide h2{margin:0 0 6px;font-size:25px}.salesSide>p{margin:0 0 20px;color:var(--muted);font-size:13px}
-.salesBenefit{display:flex;gap:12px;padding:15px 0;border-bottom:1px solid #edf1f6}.salesBenefit:last-of-type{border-bottom:0}
-.salesIcon{width:38px;height:38px;border-radius:11px;background:#eef4ff;color:#1d4ed8;display:grid;place-items:center;font-weight:950;flex:0 0 auto}
-.salesBenefit strong{display:block;font-size:14px}.salesBenefit span{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.45}
-.salesSteps{margin-top:18px;border-radius:15px;background:#f8fafc;padding:15px}.salesSteps b{display:block;font-size:12px;margin-bottom:9px}.salesSteps ol{margin:0;padding-left:20px;color:#475569;font-size:11px;line-height:1.8}
-.purchaseCard{max-width:680px;margin:20px auto 0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 16px 38px rgba(7,22,51,.09)}
+/* ===== Payment Landing V2 — pain-point-first ===== */
+.salesLanding{max-width:1180px;margin:0 auto;padding:34px 18px 70px}
+.salesHero{display:grid;grid-template-columns:1.12fr .88fr;gap:22px;align-items:stretch}
+.salesStory{background:linear-gradient(145deg,#071633 0%,#0a2243 62%,#0d3148 100%);color:#fff;border-radius:28px;padding:42px;box-shadow:0 24px 70px rgba(7,22,51,.20);position:relative;overflow:hidden}
+.salesStory:after{content:"";position:absolute;width:330px;height:330px;border-radius:50%;right:-125px;top:-135px;background:rgba(61,214,166,.10)}
+.salesBadge{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;background:#b6f52a;color:#10220a;font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;position:relative;z-index:1}
+.salesStory h1{font-size:48px;line-height:1.04;letter-spacing:-1.35px;margin:22px 0 14px;max-width:760px;position:relative;z-index:1}
+.salesLead{font-size:17px;line-height:1.68;color:#dbe7f6;max-width:720px;margin:0;position:relative;z-index:1}
+.painStack{display:grid;gap:9px;margin:24px 0 0;position:relative;z-index:1}
+.painItem{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055);border-radius:15px;padding:13px 14px}
+.painNo{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:rgba(255,255,255,.10);font-size:14px;font-weight:950}
+.painItem strong{display:block;font-size:13px;margin:1px 0 3px}.painItem span{font-size:11.5px;line-height:1.5;color:#cbd8e8}
+.bridge{margin-top:22px;padding:18px 19px;border-radius:17px;background:linear-gradient(90deg,rgba(182,245,42,.11),rgba(61,214,166,.08));border:1px solid rgba(182,245,42,.32);position:relative;z-index:1}
+.bridgeEyebrow{font-size:10px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;color:#d9ff75}.bridge h2{font-size:24px;margin:5px 0 6px}.bridge p{font-size:12px;color:#d9e5f2;margin:0;line-height:1.55}
+.proofRow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px;position:relative;z-index:1}
+.proof{border-radius:13px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);padding:11px 10px}
+.proof strong{display:block;font-size:16px}.proof span{font-size:9.5px;color:#aebed0}
+
+.offerCard{background:#fff;border:1px solid var(--line);border-radius:28px;padding:30px;box-shadow:0 18px 48px rgba(7,22,51,.10);display:flex;flex-direction:column;position:relative;overflow:hidden}
+.offerTag{display:inline-flex;align-self:flex-start;padding:8px 12px;border-radius:999px;background:#eef4ff;color:#1d4ed8;font-size:10px;font-weight:950;letter-spacing:.06em;text-transform:uppercase}
+.offerCard h2{font-size:28px;margin:18px 0 5px}.offerSub{font-size:12px;color:var(--muted);line-height:1.55;margin:0 0 22px}
+.offerPriceBox{border-radius:18px;background:#071633;color:#fff;padding:22px;margin-bottom:18px}
+.offerNormal{font-size:12px;color:#a8bad0}.offerNormal s{font-weight:850}.offerLaunchLabel{font-size:10px;font-weight:950;letter-spacing:.08em;color:#d9ff75;text-transform:uppercase;margin-top:14px}
+.offerPrice{display:flex;align-items:end;gap:8px;margin:5px 0}.offerPrice strong{font-size:48px;line-height:1;font-weight:950}.offerPrice span{font-size:13px;color:#b6c7d9;padding-bottom:5px}
+.offerLimit{font-size:11px;line-height:1.5;color:#d7e1ed}
+.offerChecks{display:grid;gap:10px;margin:2px 0 20px}
+.offerCheck{display:grid;grid-template-columns:28px 1fr;gap:9px;align-items:start}
+.offerTick{width:24px;height:24px;border-radius:8px;background:#ecfccb;color:#3f6212;display:grid;place-items:center;font-size:12px;font-weight:950}
+.offerCheck strong{font-size:12px;display:block}.offerCheck span{display:block;font-size:10.5px;color:var(--muted);line-height:1.45;margin-top:2px}
+.salesActions{display:grid;gap:9px;margin-top:auto}
+.salesCta{border:0;border-radius:13px;padding:14px 17px;font-weight:950;cursor:pointer;font-size:13px}
+.salesCta.primary{background:#b6f52a;color:#10220a;box-shadow:0 10px 30px rgba(182,245,42,.20)}
+.salesCta.secondary{background:#f8fafc;color:#071633;border:1px solid #dbe3ef}
+.salesFine{font-size:9.8px;color:#7c8ea4;margin-top:11px;line-height:1.5;text-align:center}
+
+.salesSection{margin-top:26px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:0 14px 36px rgba(7,22,51,.06)}
+.sectionEyebrow{font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;color:#2454e6}
+.salesSection h2{font-size:29px;margin:7px 0 8px;letter-spacing:-.45px}.sectionLead{margin:0;color:var(--muted);font-size:13px;line-height:1.6;max-width:760px}
+.benefitGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+.benefitCard{border:1px solid #e7edf5;border-radius:16px;padding:18px;background:#fbfcfe}
+.benefitCard b{display:block;font-size:14px;margin-bottom:6px}.benefitCard p{font-size:11px;color:var(--muted);margin:0;line-height:1.55}
+.testGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}.testCard{border:1px solid #e3eaf4;border-radius:17px;padding:18px}.testCard .num{font-size:10px;font-weight:950;color:#2454e6}.testCard strong{display:block;font-size:17px;margin:6px 0 4px}.testCard span{font-size:11px;color:var(--muted);line-height:1.5}
+.flowGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}.flowStep{border-radius:15px;background:#f8fafc;padding:16px;border:1px solid #edf1f6}.flowStep em{font-style:normal;width:30px;height:30px;border-radius:9px;background:#071633;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:950;margin-bottom:10px}.flowStep strong{font-size:12px;display:block}.flowStep span{font-size:10.5px;color:var(--muted);line-height:1.45;display:block;margin-top:4px}
+.faqGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.faqItem{border:1px solid #e5ebf3;border-radius:15px;padding:16px}.faqItem strong{font-size:12px;display:block;margin-bottom:5px}.faqItem span{font-size:10.5px;color:var(--muted);line-height:1.5}
+.finalCta{margin-top:26px;background:#071633;color:#fff;border-radius:24px;padding:28px;display:flex;justify-content:space-between;align-items:center;gap:18px}.finalCta h2{margin:0 0 5px;font-size:27px}.finalCta p{margin:0;color:#c9d6e6;font-size:12px}.finalCta .salesCta{min-width:220px}
+.purchaseCard{max-width:680px;margin:22px auto 0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 16px 38px rgba(7,22,51,.09)}
 .purchaseCard h2{margin:0 0 6px}.purchaseHelp{font-size:12px;color:var(--muted);margin:0 0 14px}
-.purchaseActions{display:flex;gap:9px;flex-wrap:wrap}
-.purchaseStatus{font-size:11px;line-height:1.5;margin-top:10px;color:var(--muted)}
+.purchaseActions{display:flex;gap:9px;flex-wrap:wrap}.purchaseStatus{font-size:11px;line-height:1.5;margin-top:10px;color:var(--muted)}
 .homeNav{max-width:1160px;margin:18px auto -8px;padding:0 18px}.homeNav .btn{font-size:11px}
-.accessGate{margin:0 0 14px;padding:11px 12px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11px;line-height:1.45}
-.accessGate.good{background:#f0fdf4;border-color:#86efac;color:#166534}
-@media(max-width:900px){.salesHero{grid-template-columns:1fr}.salesMain{padding:30px}.salesMain h1{font-size:38px}.salesPain{grid-template-columns:1fr}.salesLaunch strong{font-size:42px}}
-@media(max-width:560px){.salesLanding{padding:20px 10px 42px}.salesMain,.salesSide{border-radius:20px;padding:22px}.salesMain h1{font-size:34px}.salesActions,.purchaseActions{display:grid}.salesCta{width:100%}.salesLaunch strong{font-size:38px}}
+.accessGate{margin:0 0 14px;padding:11px 12px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11px;line-height:1.45}.accessGate.good{background:#f0fdf4;border-color:#86efac;color:#166534}
+@media(max-width:950px){.salesHero{grid-template-columns:1fr}.proofRow{grid-template-columns:repeat(2,1fr)}.benefitGrid,.testGrid{grid-template-columns:1fr}.flowGrid{grid-template-columns:1fr 1fr}.faqGrid{grid-template-columns:1fr}}
+@media(max-width:560px){.salesLanding{padding:18px 10px 44px}.salesStory,.offerCard,.salesSection{border-radius:20px;padding:22px}.salesStory h1{font-size:35px}.proofRow,.flowGrid{grid-template-columns:1fr 1fr}.offerPrice strong{font-size:40px}.finalCta{display:block;padding:22px}.finalCta .salesCta{width:100%;margin-top:16px}.purchaseActions{display:grid}.salesCta{width:100%}}
 
 </style>
 </head>
@@ -127,36 +145,115 @@ body.security-locked{overflow:hidden}
 
 <main id="landing" class="salesLanding">
   <div class="salesHero">
-    <section class="salesMain">
-      <div class="salesBadge">Harga Launching · 1.000 Peserta Pertama</div>
-      <h1>Sudah pernah tes TOEFL, tapi harus menunggu berhari-hari untuk mengetahui hasilnya?</h1>
-      <p class="salesLead">Sekarang kamu bisa mengukur kemampuan TOEFL dari mana saja, tanpa bentrok jadwal dan tanpa harus datang ke lokasi tes. Begitu tes selesai, hasil langsung tampil dan e-sertifikat dikirim ke email.</p>
-      <div class="salesPain">
-        <div>Tes resmi bisa menghabiskan sekitar <b>Rp600 ribuan</b> hanya untuk mengetahui level kemampuan.</div>
-        <div>Tes offline sering terkendala <b>waktu, lokasi, dan jadwal</b> yang kurang fleksibel.</div>
-        <div>Setelah tes, peserta sering kali masih harus <b>menunggu hasil</b> sebelum mengetahui skornya.</div>
+    <section class="salesStory">
+      <div class="salesBadge">TOEFL TEST TANPA RIBET</div>
+      <h1>Pernah tes TOEFL, lalu harus menunggu berhari-hari hanya untuk mengetahui hasilnya?</h1>
+      <p class="salesLead">Atau ingin ikut tes, tapi harga tes resmi terasa mahal, jadwal offline bentrok, dan lokasinya tidak selalu dekat?</p>
+
+      <div class="painStack">
+        <div class="painItem">
+          <div class="painNo">1</div>
+          <div><strong>Hasil tidak langsung diketahui</strong><span>Sudah mengerjakan tes, tetapi masih harus menunggu sebelum tahu kemampuan dan skor.</span></div>
+        </div>
+        <div class="painItem">
+          <div class="painNo">2</div>
+          <div><strong>Tes resmi bisa sekitar Rp600 ribuan</strong><span>Biaya sebesar itu terasa berat jika tujuan awalnya hanya ingin mengukur kemampuan.</span></div>
+        </div>
+        <div class="painItem">
+          <div class="painNo">3</div>
+          <div><strong>Jadwal dan lokasi tes offline tidak selalu cocok</strong><span>Harus menyesuaikan waktu, datang ke lokasi, dan belum tentu bisa dikerjakan saat benar-benar siap.</span></div>
+        </div>
       </div>
-      <div class="salesPrice">
-        <div class="salesNormal">Harga normal <s>Rp69.000</s></div>
-        <div class="salesLaunch"><strong>Rp39.000</strong><span>/ test</span></div>
-        <div class="salesLimit">Harga launching hanya untuk 1.000 peserta pertama. Setelah kuota terpenuhi, harga kembali menjadi Rp69.000.</div>
+
+      <div class="bridge">
+        <div class="bridgeEyebrow">TENANG, SEKARANG ADA PILIHAN YANG LEBIH PRAKTIS</div>
+        <h2>KIP TOEFL Online Assessment</h2>
+        <p>Kerjakan dari mana saja, pilih waktu sendiri, selesai tes hasil langsung tampil, dan e-sertifikat dikirim ke email.</p>
       </div>
+
+      <div class="proofRow">
+        <div class="proof"><strong>140</strong><span>Total soal</span></div>
+        <div class="proof"><strong>3</strong><span>Section lengkap</span></div>
+        <div class="proof"><strong>±112 menit</strong><span>Waktu aktif</span></div>
+        <div class="proof"><strong>Instan</strong><span>Hasil setelah selesai</span></div>
+      </div>
+    </section>
+
+    <aside class="offerCard">
+      <div class="offerTag">Harga Launching</div>
+      <h2>Full TOEFL Online Assessment</h2>
+      <p class="offerSub">Listening, Structure &amp; Written Expression, dan Reading dalam satu rangkaian tes.</p>
+
+      <div class="offerPriceBox">
+        <div class="offerNormal">Harga normal <s>Rp69.000</s></div>
+        <div class="offerLaunchLabel">Harga launching</div>
+        <div class="offerPrice"><strong>Rp39.000</strong><span>/ test</span></div>
+        <div class="offerLimit">Khusus 1.000 peserta pertama. Setelah kuota terpenuhi, harga kembali menjadi Rp69.000.</div>
+      </div>
+
+      <div class="offerChecks">
+        <div class="offerCheck"><div class="offerTick">✓</div><div><strong>Bisa dikerjakan dari mana saja</strong><span>Tidak perlu datang ke lokasi tes.</span></div></div>
+        <div class="offerCheck"><div class="offerTick">✓</div><div><strong>Tes saat kamu siap</strong><span>Sudah bayar sekarang, mau mulai nanti juga bisa.</span></div></div>
+        <div class="offerCheck"><div class="offerTick">✓</div><div><strong>Hasil langsung tampil</strong><span>Tidak perlu menunggu berhari-hari.</span></div></div>
+        <div class="offerCheck"><div class="offerTick">✓</div><div><strong>E-sertifikat via email</strong><span>Dikirim setelah assessment selesai.</span></div></div>
+      </div>
+
       <div class="salesActions">
         <button id="buyNowBtn" class="salesCta primary" type="button">MULAI TOEFL — Rp39.000</button>
         <button id="alreadyBoughtBtn" class="salesCta secondary" type="button">SUDAH MEMBELI? AKSES TES SAYA</button>
       </div>
       <div class="salesFine">KIP TOEFL adalah assessment diagnostik bergaya TOEFL ITP untuk latihan dan pemetaan kemampuan. Hasilnya bukan skor resmi ETS TOEFL ITP.</div>
-    </section>
-    <aside class="salesSide">
-      <h2>TOEFL Online Assessment Lengkap</h2>
-      <p>Satu tes lengkap, tiga section, hasil langsung, dan e-sertifikat melalui email.</p>
-      <div class="salesBenefit"><div class="salesIcon">1</div><div><strong>Listening · 50 soal</strong><span>Listening lengkap sebagai bagian dari satu rangkaian full test.</span></div></div>
-      <div class="salesBenefit"><div class="salesIcon">2</div><div><strong>Structure · 40 soal</strong><span>Structure & Written Expression dengan waktu pengerjaan terukur.</span></div></div>
-      <div class="salesBenefit"><div class="salesIcon">3</div><div><strong>Reading · 50 soal</strong><span>Reading lengkap sebagai section terakhir dalam assessment.</span></div></div>
-      <div class="salesBenefit"><div class="salesIcon">✓</div><div><strong>Hasil langsung + e-sertifikat</strong><span>Hasil practice ditampilkan segera dan e-sertifikat dikirim melalui email.</span></div></div>
-      <div class="salesSteps"><b>Bayar sekarang, kerjakan tes saat kamu siap.</b><ol><li>Daftar dan lakukan pembayaran.</li><li>Tes sekarang atau kembali kapan saja selama akses aktif.</li><li>Jika browser tertutup, lanjutkan sesi yang sama tanpa mengulang dari awal.</li></ol></div>
     </aside>
   </div>
+
+  <section class="salesSection">
+    <div class="sectionEyebrow">KENAPA KIP TOEFL?</div>
+    <h2>Lebih fleksibel untuk mengetahui kemampuanmu sekarang.</h2>
+    <p class="sectionLead">Dibuat untuk kamu yang ingin assessment lengkap tanpa harus menunggu jadwal tes offline atau hasil berhari-hari.</p>
+    <div class="benefitGrid">
+      <div class="benefitCard"><b>Kerjakan dari mana saja</b><p>Cukup gunakan perangkat dan koneksi internet yang stabil. Tidak perlu datang ke lokasi.</p></div>
+      <div class="benefitCard"><b>Bayar sekarang, tes nanti</b><p>Akses tetap tersimpan. Saat sudah siap, masuk kembali dengan email dan kode OTP.</p></div>
+      <div class="benefitCard"><b>Keluar? Lanjutkan lagi</b><p>Jika browser tertutup, sistem dapat membuka kembali sesi tes yang sedang berjalan.</p></div>
+    </div>
+  </section>
+
+  <section class="salesSection">
+    <div class="sectionEyebrow">ISI ASSESSMENT</div>
+    <h2>Satu tes. Tiga section. 140 soal.</h2>
+    <div class="testGrid">
+      <div class="testCard"><div class="num">SECTION 1</div><strong>Listening</strong><span>50 soal · sekitar 32 menit.</span></div>
+      <div class="testCard"><div class="num">SECTION 2</div><strong>Structure &amp; Written Expression</strong><span>40 soal · 25 menit.</span></div>
+      <div class="testCard"><div class="num">SECTION 3</div><strong>Reading</strong><span>50 soal · 55 menit.</span></div>
+    </div>
+  </section>
+
+  <section class="salesSection">
+    <div class="sectionEyebrow">CARA KERJA</div>
+    <h2>Dari pembayaran sampai hasil, semuanya online.</h2>
+    <div class="flowGrid">
+      <div class="flowStep"><em>1</em><strong>Daftar &amp; bayar</strong><span>Gunakan email aktif lalu selesaikan pembayaran melalui Midtrans.</span></div>
+      <div class="flowStep"><em>2</em><strong>Verifikasi email</strong><span>Kode OTP dikirim ke email yang digunakan untuk mengakses tes.</span></div>
+      <div class="flowStep"><em>3</em><strong>Mulai atau lanjutkan</strong><span>Mulai saat siap. Jika sudah pernah mulai, lanjutkan sesi yang sama.</span></div>
+      <div class="flowStep"><em>4</em><strong>Lihat hasil</strong><span>Hasil tampil setelah selesai dan e-sertifikat dikirim melalui email.</span></div>
+    </div>
+  </section>
+
+  <section class="salesSection">
+    <div class="sectionEyebrow">PERTANYAAN UMUM</div>
+    <h2>Sebelum mulai, ini yang paling sering ditanyakan.</h2>
+    <div class="faqGrid">
+      <div class="faqItem"><strong>Harus langsung tes setelah bayar?</strong><span>Tidak. Kamu bisa bayar sekarang dan kembali saat sudah siap selama akses masih aktif.</span></div>
+      <div class="faqItem"><strong>Kalau browser tertutup bagaimana?</strong><span>Jika sesi sudah dimulai, sistem dapat melanjutkan sesi yang sama setelah kamu masuk kembali.</span></div>
+      <div class="faqItem"><strong>Apakah ini skor resmi ETS TOEFL ITP?</strong><span>Tidak. Ini assessment diagnostik bergaya TOEFL ITP untuk latihan dan pemetaan kemampuan.</span></div>
+      <div class="faqItem"><strong>Kapan e-sertifikat dikirim?</strong><span>Setelah seluruh assessment selesai dan proses penerbitan berhasil.</span></div>
+    </div>
+  </section>
+
+  <div class="finalCta">
+    <div><h2>Siap mengetahui kemampuan TOEFL kamu?</h2><p>Harga launching Rp39.000 untuk 1.000 peserta pertama.</p></div>
+    <button class="salesCta primary" type="button" onclick="openPurchaseFlow()">MULAI TOEFL — Rp39.000</button>
+  </div>
+
   <section id="purchaseCard" class="purchaseCard hidden">
     <h2>Daftar KIP TOEFL Assessment</h2>
     <p class="purchaseHelp">Gunakan email yang aktif. Email ini akan dipakai untuk verifikasi akses dan pengiriman e-sertifikat.</p>
