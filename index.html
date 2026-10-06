@@ -363,6 +363,25 @@ body.purchase-open .salesSticky{opacity:0;pointer-events:none;transform:translat
   .painCard{grid-template-columns:48px 1fr!important;padding:22px!important}
 }
 
+
+/* ===== HERO CLEANUP — remove overlay covering student ===== */
+.heroV6TestScreen{display:none!important}
+.heroV6Student .heroV6HdStudent{
+  top:18px!important;
+  height:calc(100% - 36px)!important;
+  object-position:center 42%!important;
+  border-radius:28px!important;
+}
+.heroV6Score{bottom:155px!important;right:-14px!important}
+.heroV6Certificate{bottom:22px!important;left:28px!important}
+.heroV6Cert{bottom:34px!important;right:-10px!important}
+@media(max-width:780px){
+  .heroV6Student .heroV6HdStudent{
+    top:10px!important;
+    height:calc(100% - 20px)!important;
+  }
+}
+
 </style>
   <link rel="preconnect" href="https://images.pexels.com" crossorigin>
   <link rel="preload" as="image" href="https://images.pexels.com/photos/7241361/pexels-photo-7241361.jpeg?auto=compress&cs=tinysrgb&w=2200" fetchpriority="high">
@@ -401,14 +420,6 @@ body.purchase-open .salesSticky{opacity:0;pointer-events:none;transform:translat
         </div>
 
         <div class="heroV6Student">
-          <div class="heroV6TestScreen">
-            <div class="miniBrowserDots">● ● ●</div>
-            <strong>Listening Section</strong>
-            <div class="miniAudio">▶ &nbsp; ▮▮▮▮▮▮▮▮▮</div>
-            <small>Question 12 of 50</small>
-            <div class="miniOpts"><span>A</span><span>B</span><span>C</span><span>D</span></div>
-          </div>
-
           <img class="heroV6HdStudent" src="https://images.pexels.com/photos/7241361/pexels-photo-7241361.jpeg?auto=compress&cs=tinysrgb&w=2200" alt="Peserta pria sedang mengerjakan simulasi TOEFL dengan headphone dan laptop" loading="eager" decoding="async">
 
           <div class="heroV6Score">
